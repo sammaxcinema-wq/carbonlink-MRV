@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
-  <title>CarbonLink MRV – Ultra Pro</title>
+  <title>CarbonLink MRV – Enterprise Ultra Pro</title>
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -85,12 +85,10 @@
     .toast-undo button { background: rgba(255,255,255,0.2); border: none; padding: 0.25rem 0.75rem; border-radius: 6px; font-weight: 600; font-size: 0.8rem; color: #fff; cursor: pointer; transition: background 0.2s; }
     .toast-undo button:hover { background: rgba(255,255,255,0.3); }
 
-    /* Profile tabs */
     .profile-tab { cursor: pointer; transition: all 0.2s ease; }
     .profile-tab.active { border-bottom: 3px solid #43a047; color: #43a047; font-weight: 600; }
     .dark .profile-tab.active { border-bottom-color: #66bb6a; color: #66bb6a; }
 
-    /* Custom scroll for farmer details */
     .detail-scroll { max-height: 70vh; overflow-y: auto; }
     @media (max-width: 768px) { .detail-scroll { max-height: 60vh; } }
   </style>
@@ -209,9 +207,10 @@
     <!-- Page Container -->
     <main id="pageContainer" class="flex-1 overflow-y-auto p-3 md:p-6 space-y-4 md:space-y-6 pb-20 md:pb-6">
 
-      <!-- ===== DASHBOARD ===== -->
+      <!-- ============================================================ -->
+      <!-- DASHBOARD (existing) -->
+      <!-- ============================================================ -->
       <div id="page-dashboard" class="page-content space-y-4 md:space-y-6">
-        <!-- Stats Grid -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
           <div class="stat-card bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm">
             <div class="stat-card-body flex items-center justify-between">
@@ -255,7 +254,6 @@
           </div>
         </div>
 
-        <!-- Charts Row -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
           <div class="lg:col-span-2 bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-3 md:mb-4">
@@ -273,7 +271,6 @@
           </div>
         </div>
 
-        <!-- Map + Activity -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
           <div class="lg:col-span-2 bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-3 md:mb-4">
@@ -293,7 +290,6 @@
           </div>
         </div>
 
-        <!-- Recent Payments & Pending Verification -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm">
             <div class="flex items-center justify-between mb-3 md:mb-4"><h3 class="text-sm md:text-base font-bold dark:text-white">Recent Payments</h3><a href="#" class="text-xs text-brand-600 dark:text-brand-400 hover:underline">View all</a></div>
@@ -314,47 +310,34 @@
           </div>
         </div>
 
-        <!-- Farmer Growth Chart -->
         <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm">
           <h3 class="text-sm md:text-base font-bold dark:text-white mb-3 md:mb-4">Farmer Registration Growth</h3>
           <div class="w-full h-[160px] md:h-[200px]"><canvas id="farmerGrowthChart"></canvas></div>
         </div>
       </div>
 
-      <!-- ===== FARMERS ===== -->
+      <!-- ============================================================ -->
+      <!-- FARMERS (existing with details) -->
+      <!-- ============================================================ -->
       <div id="page-farmers" class="page-content hidden space-y-4 md:space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div><h2 class="text-lg md:text-xl font-bold dark:text-white">Farmers Directory</h2><p class="text-xs text-slate-400">Manage registered farmers and their profiles</p></div>
           <button id="addFarmerBtn" class="inline-flex items-center justify-center px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm gap-2"><i class="fas fa-plus"></i> Register Farmer</button>
         </div>
-        <!-- Search & filter -->
         <div class="flex flex-col sm:flex-row gap-3">
           <div class="relative flex-1"><i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i><input type="text" id="farmerSearch" placeholder="Search by name, ID, phone..." class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-charcoal-600 bg-white dark:bg-charcoal-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"></div>
           <select id="communityFilter" class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-charcoal-600 bg-white dark:bg-charcoal-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
             <option value="all">All Communities</option>
-            <option value="Machakos">Machakos</option>
-            <option value="Makueni">Makueni</option>
-            <option value="Kitui">Kitui</option>
-            <option value="Kajiado">Kajiado</option>
+            <option value="Machakos">Machakos</option><option value="Makueni">Makueni</option><option value="Kitui">Kitui</option><option value="Kajiado">Kajiado</option>
           </select>
         </div>
-        <!-- Table -->
         <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm overflow-hidden">
           <div class="overflow-x-auto">
             <table class="w-full text-sm">
               <thead class="bg-slate-50 dark:bg-charcoal-850 border-b border-slate-200 dark:border-charcoal-700">
-                <tr>
-                  <th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">ID</th>
-                  <th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">Name</th>
-                  <th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden sm:table-cell">Phone</th>
-                  <th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden md:table-cell">Community</th>
-                  <th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden lg:table-cell">Status</th>
-                  <th class="px-4 py-3 text-right font-semibold text-slate-600 dark:text-slate-300">Actions</th>
-                </tr>
+                <tr><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">ID</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">Name</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden sm:table-cell">Phone</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden md:table-cell">Community</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden lg:table-cell">Status</th><th class="px-4 py-3 text-right font-semibold text-slate-600 dark:text-slate-300">Actions</th></tr>
               </thead>
-              <tbody id="farmerTableBody" class="divide-y divide-slate-100 dark:divide-charcoal-700">
-                <!-- Rows rendered by JS -->
-              </tbody>
+              <tbody id="farmerTableBody" class="divide-y divide-slate-100 dark:divide-charcoal-700"></tbody>
             </table>
           </div>
           <div class="px-4 py-3 border-t border-slate-200 dark:border-charcoal-700 flex flex-col sm:flex-row justify-between items-center gap-2 text-xs text-slate-500">
@@ -364,7 +347,9 @@
         </div>
       </div>
 
-      <!-- ===== FARMS & GIS ===== -->
+      <!-- ============================================================ -->
+      <!-- FARMS & GIS -->
+      <!-- ============================================================ -->
       <div id="page-farms" class="page-content hidden space-y-4 md:space-y-6">
         <div><h2 class="text-lg md:text-xl font-bold dark:text-white">Farms & GIS</h2><p class="text-xs text-slate-400">Spatial data, polygons, and farm boundaries</p></div>
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
@@ -385,20 +370,52 @@
         </div>
       </div>
 
-      <!-- ===== CARBON PROJECTS ===== -->
+      <!-- ============================================================ -->
+      <!-- CARBON PROJECTS (full CRUD) -->
+      <!-- ============================================================ -->
       <div id="page-carbon" class="page-content hidden space-y-4 md:space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div><h2 class="text-lg md:text-xl font-bold dark:text-white">Carbon Projects</h2><p class="text-xs text-slate-400">Project lifecycle & carbon accounting</p></div>
-          <button class="inline-flex items-center justify-center px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm gap-2"><i class="fas fa-plus"></i> New Project</button>
+          <button id="addProjectBtn" class="inline-flex items-center justify-center px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm gap-2"><i class="fas fa-plus"></i> New Project</button>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-          <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm"><div class="flex justify-between items-start"><div><h3 class="font-bold dark:text-white">Agroforestry Phase II</h3><p class="text-xs text-slate-400">Machakos · 1,240 ha</p></div><span class="text-xs bg-brand-100 text-brand-800 dark:bg-brand-900/40 dark:text-brand-300 px-2 py-0.5 rounded-full">Active</span></div><div class="mt-3 grid grid-cols-2 gap-2 text-sm"><div><span class="text-slate-400">Baseline</span><p class="font-medium dark:text-white">2.4K tCO₂e</p></div><div><span class="text-slate-400">Verified</span><p class="font-medium text-emerald-600 dark:text-emerald-400">1.8K tCO₂e</p></div></div></div>
-          <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm"><div class="flex justify-between items-start"><div><h3 class="font-bold dark:text-white">Soil Carbon Initiative</h3><p class="text-xs text-slate-400">Makueni · 860 ha</p></div><span class="text-xs bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300 px-2 py-0.5 rounded-full">Monitoring</span></div><div class="mt-3 grid grid-cols-2 gap-2 text-sm"><div><span class="text-slate-400">Baseline</span><p class="font-medium dark:text-white">1.1K tCO₂e</p></div><div><span class="text-slate-400">Verified</span><p class="font-medium text-amber-600 dark:text-amber-400">620 tCO₂e</p></div></div></div>
-          <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm"><div class="flex justify-between items-start"><div><h3 class="font-bold dark:text-white">Silvopasture Pilot</h3><p class="text-xs text-slate-400">Kitui · 430 ha</p></div><span class="text-xs bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300 px-2 py-0.5 rounded-full">Verification</span></div><div class="mt-3 grid grid-cols-2 gap-2 text-sm"><div><span class="text-slate-400">Baseline</span><p class="font-medium dark:text-white">940 tCO₂e</p></div><div><span class="text-slate-400">Verified</span><p class="font-medium text-blue-600 dark:text-blue-400">340 tCO₂e</p></div></div></div>
+        <!-- Search & filter -->
+        <div class="flex flex-col sm:flex-row gap-3">
+          <div class="relative flex-1"><i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i><input type="text" id="projectSearch" placeholder="Search projects..." class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-charcoal-600 bg-white dark:bg-charcoal-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"></div>
+          <select id="projectStatusFilter" class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-charcoal-600 bg-white dark:bg-charcoal-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+            <option value="all">All Statuses</option>
+            <option value="Active">Active</option>
+            <option value="Monitoring">Monitoring</option>
+            <option value="Verification">Verification</option>
+            <option value="Completed">Completed</option>
+          </select>
+        </div>
+        <!-- Table -->
+        <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead class="bg-slate-50 dark:bg-charcoal-850 border-b border-slate-200 dark:border-charcoal-700">
+                <tr>
+                  <th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">Name</th>
+                  <th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden sm:table-cell">Community</th>
+                  <th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden md:table-cell">Area (ha)</th>
+                  <th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden lg:table-cell">Verified (tCO₂e)</th>
+                  <th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">Status</th>
+                  <th class="px-4 py-3 text-right font-semibold text-slate-600 dark:text-slate-300">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="projectTableBody" class="divide-y divide-slate-100 dark:divide-charcoal-700"></tbody>
+            </table>
+          </div>
+          <div class="px-4 py-3 border-t border-slate-200 dark:border-charcoal-700 flex flex-col sm:flex-row justify-between items-center gap-2 text-xs text-slate-500">
+            <span>Showing <span id="projectStart">1</span>-<span id="projectEnd">5</span> of <span id="projectTotal">0</span></span>
+            <div class="flex gap-2"><button id="projectPrev" class="px-3 py-1 rounded-lg border border-slate-200 dark:border-charcoal-600 hover:bg-slate-50 dark:hover:bg-charcoal-700 disabled:opacity-50">Prev</button><button id="projectNext" class="px-3 py-1 rounded-lg border border-slate-200 dark:border-charcoal-600 hover:bg-slate-50 dark:hover:bg-charcoal-700 disabled:opacity-50">Next</button></div>
+          </div>
         </div>
       </div>
 
-      <!-- ===== MRV MONITORING ===== -->
+      <!-- ============================================================ -->
+      <!-- MRV MONITORING (existing with more data) -->
+      <!-- ============================================================ -->
       <div id="page-mrv" class="page-content hidden space-y-4 md:space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div><h2 class="text-lg md:text-xl font-bold dark:text-white">MRV Monitoring</h2><p class="text-xs text-slate-400">Evidence collection & verification pipeline</p></div>
@@ -408,86 +425,108 @@
           <div class="overflow-x-auto">
             <table class="w-full text-sm">
               <thead class="bg-slate-50 dark:bg-charcoal-850 border-b border-slate-200 dark:border-charcoal-700">
-                <tr>
-                  <th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">ID</th>
-                  <th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">Farm</th>
-                  <th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden sm:table-cell">Type</th>
-                  <th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden md:table-cell">Date</th>
-                  <th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">Status</th>
-                  <th class="px-4 py-3 text-right font-semibold text-slate-600 dark:text-slate-300">Actions</th>
-                </tr>
+                <tr><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">ID</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">Farm</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden sm:table-cell">Type</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden md:table-cell">Date</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">Status</th><th class="px-4 py-3 text-right font-semibold text-slate-600 dark:text-slate-300">Actions</th></tr>
               </thead>
-              <tbody id="mrvTableBody" class="divide-y divide-slate-100 dark:divide-charcoal-700">
-                <!-- Rows rendered by JS -->
-              </tbody>
+              <tbody id="mrvTableBody" class="divide-y divide-slate-100 dark:divide-charcoal-700"></tbody>
             </table>
           </div>
         </div>
       </div>
 
-      <!-- ===== CONTRACTS ===== -->
+      <!-- ============================================================ -->
+      <!-- CONTRACTS (existing) -->
+      <!-- ============================================================ -->
       <div id="page-contracts" class="page-content hidden space-y-4 md:space-y-6">
         <div><h2 class="text-lg md:text-xl font-bold dark:text-white">Contracts</h2><p class="text-xs text-slate-400">Carbon rights, benefit sharing & agreements</p></div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6" id="contractList">
-          <!-- Rendered by JS -->
-        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6" id="contractList"></div>
       </div>
 
-      <!-- ===== COMMUNITIES ===== -->
+      <!-- ============================================================ -->
+      <!-- COMMUNITIES (existing) -->
+      <!-- ============================================================ -->
       <div id="page-communities" class="page-content hidden space-y-4 md:space-y-6">
         <div><h2 class="text-lg md:text-xl font-bold dark:text-white">Communities</h2><p class="text-xs text-slate-400">Community management & CDA tracking</p></div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6" id="communityList">
-          <!-- Rendered by JS -->
-        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6" id="communityList"></div>
       </div>
 
-      <!-- ===== PAYMENTS ===== -->
+      <!-- ============================================================ -->
+      <!-- PAYMENTS (full CRUD) -->
+      <!-- ============================================================ -->
       <div id="page-payments" class="page-content hidden space-y-4 md:space-y-6">
-        <div><h2 class="text-lg md:text-xl font-bold dark:text-white">Payments</h2><p class="text-xs text-slate-400">Benefit sharing & disbursement tracking</p></div>
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div><h2 class="text-lg md:text-xl font-bold dark:text-white">Payments</h2><p class="text-xs text-slate-400">Benefit sharing & disbursement tracking</p></div>
+          <button id="addPaymentBtn" class="inline-flex items-center justify-center px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm gap-2"><i class="fas fa-plus"></i> New Payment</button>
+        </div>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
           <div class="bg-white dark:bg-charcoal-800 rounded-xl p-4 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center"><p class="text-xs text-slate-400">Total Paid</p><p class="text-xl font-bold dark:text-white">KSh 342.9K</p></div>
           <div class="bg-white dark:bg-charcoal-800 rounded-xl p-4 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center"><p class="text-xs text-slate-400">Pending</p><p class="text-xl font-bold text-amber-600 dark:text-amber-400">KSh 48.2K</p></div>
           <div class="bg-white dark:bg-charcoal-800 rounded-xl p-4 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center"><p class="text-xs text-slate-400">Beneficiaries</p><p class="text-xl font-bold dark:text-white">1,284</p></div>
           <div class="bg-white dark:bg-charcoal-800 rounded-xl p-4 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center"><p class="text-xs text-slate-400">Community Share</p><p class="text-xl font-bold text-emerald-600 dark:text-emerald-400">42%</p></div>
         </div>
+        <!-- Table -->
+        <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead class="bg-slate-50 dark:bg-charcoal-850 border-b border-slate-200 dark:border-charcoal-700">
+                <tr><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">Ref</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">Recipient</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden sm:table-cell">Amount</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden md:table-cell">Date</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">Status</th><th class="px-4 py-3 text-right font-semibold text-slate-600 dark:text-slate-300">Actions</th></tr>
+              </thead>
+              <tbody id="paymentTableBody" class="divide-y divide-slate-100 dark:divide-charcoal-700"></tbody>
+            </table>
+          </div>
+        </div>
       </div>
 
-      <!-- ===== VERIFICATION ===== -->
+      <!-- ============================================================ -->
+      <!-- VERIFICATION (full CRUD) -->
+      <!-- ============================================================ -->
       <div id="page-verification" class="page-content hidden space-y-4 md:space-y-6">
         <div><h2 class="text-lg md:text-xl font-bold dark:text-white">Verification</h2><p class="text-xs text-slate-400">MRV verification workflow & approvals</p></div>
-        <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-6 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm">
-          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div><h3 class="font-semibold dark:text-white">Pending Review</h3><p class="text-sm text-slate-400">12 items awaiting verification</p></div>
-            <button class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-xl transition-colors">Start Review</button>
-          </div>
-          <div class="mt-4 space-y-2">
-            <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2"><span class="text-sm">MRV-002 · Farm F-2034</span><span class="text-xs bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300 px-2 py-0.5 rounded-full">Review</span></div>
-            <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2"><span class="text-sm">MRV-005 · Farm F-112</span><span class="text-xs bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300 px-2 py-0.5 rounded-full">Review</span></div>
-            <div class="flex items-center justify-between"><span class="text-sm">MRV-008 · Farm F-056</span><span class="text-xs bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300 px-2 py-0.5 rounded-full">Assigned</span></div>
+        <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead class="bg-slate-50 dark:bg-charcoal-850 border-b border-slate-200 dark:border-charcoal-700">
+                <tr><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">ID</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">Farm</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden sm:table-cell">Type</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden md:table-cell">Submitted</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">Status</th><th class="px-4 py-3 text-right font-semibold text-slate-600 dark:text-slate-300">Actions</th></tr>
+              </thead>
+              <tbody id="verificationTableBody" class="divide-y divide-slate-100 dark:divide-charcoal-700"></tbody>
+            </table>
           </div>
         </div>
       </div>
 
-      <!-- ===== AUDIT RECORDS ===== -->
+      <!-- ============================================================ -->
+      <!-- AUDIT RECORDS (with search) -->
+      <!-- ============================================================ -->
       <div id="page-audit" class="page-content hidden space-y-4 md:space-y-6">
         <div><h2 class="text-lg md:text-xl font-bold dark:text-white">Audit Records</h2><p class="text-xs text-slate-400">Full audit trail of all system actions</p></div>
+        <div class="relative"><i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i><input type="text" id="auditSearch" placeholder="Search audit logs..." class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-charcoal-600 bg-white dark:bg-charcoal-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"></div>
         <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm overflow-hidden">
-          <div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50 dark:bg-charcoal-850 border-b"><tr><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">Time</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">User</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden sm:table-cell">Action</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden md:table-cell">Target</th></tr></thead><tbody class="divide-y divide-slate-100 dark:divide-charcoal-700"><tr><td class="px-4 py-3 text-xs">10:34</td><td class="px-4 py-3 text-xs">J. Doe</td><td class="px-4 py-3 text-xs hidden sm:table-cell">Verified MRV-001</td><td class="px-4 py-3 text-xs hidden md:table-cell">Farm F-102</td></tr><tr><td class="px-4 py-3 text-xs">09:15</td><td class="px-4 py-3 text-xs">S. Kiprop</td><td class="px-4 py-3 text-xs hidden sm:table-cell">Registered Farmer</td><td class="px-4 py-3 text-xs hidden md:table-cell">Janet Auma</td></tr></tbody></table></div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead class="bg-slate-50 dark:bg-charcoal-850 border-b border-slate-200 dark:border-charcoal-700">
+                <tr><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">Time</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">User</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden sm:table-cell">Action</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden md:table-cell">Target</th></tr>
+              </thead>
+              <tbody id="auditTableBody" class="divide-y divide-slate-100 dark:divide-charcoal-700"></tbody>
+            </table>
+          </div>
         </div>
       </div>
 
-      <!-- ===== REPORTS ===== -->
+      <!-- ============================================================ -->
+      <!-- REPORTS (enhanced) -->
+      <!-- ============================================================ -->
       <div id="page-reports" class="page-content hidden space-y-4 md:space-y-6">
         <div><h2 class="text-lg md:text-xl font-bold dark:text-white">Reports</h2><p class="text-xs text-slate-400">Exportable MRV & carbon reports</p></div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <button class="bg-white dark:bg-charcoal-800 rounded-xl p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center hover:shadow-md transition-shadow"><i class="fas fa-file-pdf text-2xl text-red-500 mb-2"></i><p class="font-medium dark:text-white text-sm">Farm Report</p><p class="text-xs text-slate-400">PDF</p></button>
-          <button class="bg-white dark:bg-charcoal-800 rounded-xl p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center hover:shadow-md transition-shadow"><i class="fas fa-file-pdf text-2xl text-red-500 mb-2"></i><p class="font-medium dark:text-white text-sm">Carbon Summary</p><p class="text-xs text-slate-400">PDF</p></button>
-          <button class="bg-white dark:bg-charcoal-800 rounded-xl p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center hover:shadow-md transition-shadow"><i class="fas fa-file-csv text-2xl text-green-600 mb-2"></i><p class="font-medium dark:text-white text-sm">MRV Evidence</p><p class="text-xs text-slate-400">CSV</p></button>
-          <button class="bg-white dark:bg-charcoal-800 rounded-xl p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center hover:shadow-md transition-shadow"><i class="fas fa-file-pdf text-2xl text-red-500 mb-2"></i><p class="font-medium dark:text-white text-sm">Audit Trail</p><p class="text-xs text-slate-400">PDF</p></button>
+          <button onclick="generateReport('Farm Report')" class="bg-white dark:bg-charcoal-800 rounded-xl p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center hover:shadow-md transition-shadow"><i class="fas fa-file-pdf text-2xl text-red-500 mb-2"></i><p class="font-medium dark:text-white text-sm">Farm Report</p><p class="text-xs text-slate-400">PDF</p></button>
+          <button onclick="generateReport('Carbon Summary')" class="bg-white dark:bg-charcoal-800 rounded-xl p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center hover:shadow-md transition-shadow"><i class="fas fa-file-pdf text-2xl text-red-500 mb-2"></i><p class="font-medium dark:text-white text-sm">Carbon Summary</p><p class="text-xs text-slate-400">PDF</p></button>
+          <button onclick="generateReport('MRV Evidence')" class="bg-white dark:bg-charcoal-800 rounded-xl p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center hover:shadow-md transition-shadow"><i class="fas fa-file-csv text-2xl text-green-600 mb-2"></i><p class="font-medium dark:text-white text-sm">MRV Evidence</p><p class="text-xs text-slate-400">CSV</p></button>
+          <button onclick="generateReport('Audit Trail')" class="bg-white dark:bg-charcoal-800 rounded-xl p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center hover:shadow-md transition-shadow"><i class="fas fa-file-pdf text-2xl text-red-500 mb-2"></i><p class="font-medium dark:text-white text-sm">Audit Trail</p><p class="text-xs text-slate-400">PDF</p></button>
         </div>
       </div>
 
-      <!-- ===== SETTINGS ===== -->
+      <!-- ============================================================ -->
+      <!-- SETTINGS (existing) -->
+      <!-- ============================================================ -->
       <div id="page-settings" class="page-content hidden space-y-4 md:space-y-6">
         <div><h2 class="text-lg md:text-xl font-bold dark:text-white">Settings</h2><p class="text-xs text-slate-400">System configuration & preferences</p></div>
         <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-6 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm space-y-4">
@@ -526,10 +565,7 @@
       <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">National ID *</label><input type="text" id="fNationalId" required class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"></div>
       <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Community</label>
         <select id="fCommunity" class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
-          <option value="Machakos">Machakos</option>
-          <option value="Makueni">Makueni</option>
-          <option value="Kitui">Kitui</option>
-          <option value="Kajiado">Kajiado</option>
+          <option value="Machakos">Machakos</option><option value="Makueni">Makueni</option><option value="Kitui">Kitui</option><option value="Kajiado">Kajiado</option>
         </select>
       </div>
       <div class="flex gap-3 pt-2"><button type="button" onclick="closeModal('farmerModal')" class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 dark:border-charcoal-600 text-sm font-medium hover:bg-slate-50 dark:hover:bg-charcoal-700">Cancel</button><button type="submit" class="flex-1 px-4 py-2.5 rounded-xl bg-brand-600 text-white text-sm font-medium hover:bg-brand-700">Register</button></div>
@@ -537,23 +573,17 @@
   </div>
 </div>
 
-<!-- ===== FARMER DETAILS MODAL (TABS) ===== -->
+<!-- Farmer Details Modal (existing) -->
 <div id="farmerDetailModal" class="modal hidden fixed inset-0 z-[75] flex items-center justify-center p-4">
   <div class="modal-backdrop absolute inset-0" onclick="closeModal('farmerDetailModal')"></div>
   <div class="relative bg-white dark:bg-charcoal-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[92vh] overflow-hidden flex flex-col">
-    <!-- Header -->
     <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-charcoal-700 shrink-0">
       <div class="flex items-center space-x-3">
         <div class="w-10 h-10 rounded-full bg-brand-100 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 flex items-center justify-center text-lg font-bold" id="detailAvatar">JM</div>
-        <div>
-          <h2 class="text-lg font-bold dark:text-white" id="detailName">James Mwangi</h2>
-          <p class="text-xs text-slate-400" id="detailId">F-1001</p>
-        </div>
+        <div><h2 class="text-lg font-bold dark:text-white" id="detailName">James Mwangi</h2><p class="text-xs text-slate-400" id="detailId">F-1001</p></div>
       </div>
       <button onclick="closeModal('farmerDetailModal')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fas fa-times text-xl"></i></button>
     </div>
-
-    <!-- Tabs -->
     <div class="flex overflow-x-auto border-b border-slate-200 dark:border-charcoal-700 px-4 shrink-0 no-scrollbar">
       <button class="profile-tab active px-4 py-3 text-sm font-medium text-slate-600 dark:text-slate-400" data-tab="personal">Personal</button>
       <button class="profile-tab px-4 py-3 text-sm font-medium text-slate-600 dark:text-slate-400" data-tab="farms">Farms</button>
@@ -563,157 +593,69 @@
       <button class="profile-tab px-4 py-3 text-sm font-medium text-slate-600 dark:text-slate-400" data-tab="mrv">MRV Evidence</button>
       <button class="profile-tab px-4 py-3 text-sm font-medium text-slate-600 dark:text-slate-400" data-tab="activity">Activity</button>
     </div>
-
-    <!-- Tab Content -->
     <div class="flex-1 overflow-y-auto p-6 detail-scroll">
-      <!-- Personal -->
-      <div id="tab-personal" class="tab-content space-y-4">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div><label class="text-xs text-slate-400">Full Name</label><p class="font-medium dark:text-white" id="dpName">-</p></div>
-          <div><label class="text-xs text-slate-400">Unique ID</label><p class="font-medium dark:text-white" id="dpId">-</p></div>
-          <div><label class="text-xs text-slate-400">Phone</label><p class="font-medium dark:text-white" id="dpPhone">-</p></div>
-          <div><label class="text-xs text-slate-400">Email</label><p class="font-medium dark:text-white" id="dpEmail">-</p></div>
-          <div><label class="text-xs text-slate-400">National ID</label><p class="font-medium dark:text-white" id="dpNational">-</p></div>
-          <div><label class="text-xs text-slate-400">Community</label><p class="font-medium dark:text-white" id="dpCommunity">-</p></div>
-          <div><label class="text-xs text-slate-400">Registration Date</label><p class="font-medium dark:text-white" id="dpDate">-</p></div>
-          <div><label class="text-xs text-slate-400">Status</label><span class="inline-flex px-2 py-0.5 rounded-full text-xs" id="dpStatus">-</span></div>
-        </div>
-      </div>
-
-      <!-- Farms -->
-      <div id="tab-farms" class="tab-content hidden space-y-3">
-        <div id="dpFarmsList" class="space-y-3">
-          <!-- Rendered by JS -->
-        </div>
-      </div>
-
-      <!-- Carbon -->
-      <div id="tab-carbon" class="tab-content hidden space-y-3">
-        <div id="dpCarbonList" class="space-y-3">
-          <!-- Rendered by JS -->
-        </div>
-      </div>
-
-      <!-- Contracts -->
-      <div id="tab-contracts" class="tab-content hidden space-y-3">
-        <div id="dpContractsList" class="space-y-3">
-          <!-- Rendered by JS -->
-        </div>
-      </div>
-
-      <!-- Payments -->
-      <div id="tab-payments" class="tab-content hidden space-y-3">
-        <div id="dpPaymentsList" class="space-y-3">
-          <!-- Rendered by JS -->
-        </div>
-      </div>
-
-      <!-- MRV Evidence -->
-      <div id="tab-mrv" class="tab-content hidden space-y-3">
-        <div id="dpMrvList" class="space-y-3">
-          <!-- Rendered by JS -->
-        </div>
-      </div>
-
-      <!-- Activity -->
-      <div id="tab-activity" class="tab-content hidden space-y-3">
-        <div id="dpActivityList" class="space-y-2">
-          <!-- Rendered by JS -->
-        </div>
-      </div>
+      <div id="tab-personal" class="tab-content space-y-4"></div>
+      <div id="tab-farms" class="tab-content hidden space-y-3"></div>
+      <div id="tab-carbon" class="tab-content hidden space-y-3"></div>
+      <div id="tab-contracts" class="tab-content hidden space-y-3"></div>
+      <div id="tab-payments" class="tab-content hidden space-y-3"></div>
+      <div id="tab-mrv" class="tab-content hidden space-y-3"></div>
+      <div id="tab-activity" class="tab-content hidden space-y-3"></div>
     </div>
   </div>
 </div>
 
-<!-- ===== ENHANCED MRV EVIDENCE MODAL (Manual Entry) ===== -->
+<!-- MRV Evidence Modal (manual entry) -->
 <div id="evidenceModal" class="modal hidden fixed inset-0 z-[70] flex items-center justify-center p-4">
   <div class="modal-backdrop absolute inset-0" onclick="closeModal('evidenceModal')"></div>
   <div class="relative bg-white dark:bg-charcoal-800 rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 md:p-8">
     <div class="flex items-center justify-between mb-5"><h2 class="text-xl font-bold dark:text-white">Submit MRV Evidence</h2><button onclick="closeModal('evidenceModal')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fas fa-times text-xl"></i></button></div>
     <form id="evidenceForm" class="space-y-4">
-      <!-- Farm ID - Manual Entry -->
-      <div>
-        <label class="block text-sm font-medium mb-1 dark:text-slate-300">Farm ID *</label>
-        <div class="flex gap-2">
-          <input type="text" id="mrvFarmId" placeholder="e.g. F-102 or enter manually" required class="flex-1 rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
-          <select id="mrvFarmSelect" class="rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
-            <option value="">Quick select</option>
-            <option value="F-102">F-102 – J. Mwangi</option>
-            <option value="F-2034">F-2034 – J. Otieno</option>
-            <option value="F-087">F-087 – S. Kiprop</option>
-            <option value="F-1001">F-1001 – J. Mwangi</option>
-          </select>
-        </div>
-        <p class="text-[10px] text-slate-400 mt-1">Enter a custom Farm ID or select from dropdown</p>
-      </div>
-
-      <!-- Evidence Type - Manual Entry -->
-      <div>
-        <label class="block text-sm font-medium mb-1 dark:text-slate-300">Evidence Type *</label>
-        <div class="flex gap-2">
-          <input type="text" id="mrvEvidenceType" placeholder="e.g. Satellite, Field Survey, Soil Sample..." required class="flex-1 rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
-          <select id="mrvTypeSelect" class="rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
-            <option value="">Quick select</option>
-            <option value="Satellite Imagery">Satellite Imagery</option>
-            <option value="Field Survey">Field Survey</option>
-            <option value="Soil Sample">Soil Sample</option>
-            <option value="Photographic">Photographic</option>
-            <option value="Farmer Declaration">Farmer Declaration</option>
-            <option value="Drone Survey">Drone Survey</option>
-            <option value="Ground Truthing">Ground Truthing</option>
-          </select>
-        </div>
-        <p class="text-[10px] text-slate-400 mt-1">Enter custom type or select from dropdown</p>
-      </div>
-
-      <!-- Manual GPS Coordinates -->
-      <div>
-        <label class="block text-sm font-medium mb-1 dark:text-slate-300">GPS Coordinates</label>
-        <div class="grid grid-cols-2 gap-3">
-          <input type="text" id="mrvLatitude" placeholder="Latitude (e.g. -1.2921)" class="rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
-          <input type="text" id="mrvLongitude" placeholder="Longitude (e.g. 36.8219)" class="rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
-        </div>
-      </div>
-
-      <!-- Carbon Amount -->
-      <div>
-        <label class="block text-sm font-medium mb-1 dark:text-slate-300">Carbon Amount (tCO₂e)</label>
-        <input type="number" id="mrvCarbon" step="0.01" placeholder="e.g. 12.5" class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
-      </div>
-
-      <!-- Date -->
-      <div>
-        <label class="block text-sm font-medium mb-1 dark:text-slate-300">Measurement Date</label>
-        <input type="date" id="mrvDate" class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
-      </div>
-
-      <!-- File Upload -->
-      <div>
-        <label class="block text-sm font-medium mb-1 dark:text-slate-300">Upload Files</label>
-        <div class="border-2 border-dashed border-slate-300 dark:border-charcoal-600 rounded-xl p-6 text-center">
-          <i class="fas fa-cloud-upload-alt text-3xl text-slate-400 mb-2"></i>
-          <p class="text-sm text-slate-500 dark:text-slate-400">Drag & drop or click to browse</p>
-          <input type="file" multiple accept=".jpg,.png,.pdf,.geojson,.kml" class="hidden" id="evidenceFileInput">
-          <button type="button" onclick="document.getElementById('evidenceFileInput').click()" class="mt-2 text-brand-600 dark:text-brand-400 hover:underline text-sm">Browse Files</button>
-          <p class="text-[10px] text-slate-400 mt-1">Supported: JPG, PNG, PDF, GEOJSON, KML</p>
-        </div>
-      </div>
-
-      <!-- Verification Notes -->
-      <div>
-        <label class="block text-sm font-medium mb-1 dark:text-slate-300">Verification Notes</label>
-        <textarea id="mrvNotes" rows="3" placeholder="Enter any observations, methodology notes, or additional context..." class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"></textarea>
-      </div>
-
-      <div class="flex gap-3 pt-2">
-        <button type="button" onclick="closeModal('evidenceModal')" class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 dark:border-charcoal-600 text-sm font-medium hover:bg-slate-50 dark:hover:bg-charcoal-700">Cancel</button>
-        <button type="submit" class="flex-1 px-4 py-2.5 rounded-xl bg-brand-600 text-white text-sm font-medium hover:bg-brand-700">Submit Evidence</button>
-      </div>
+      <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Farm ID *</label><div class="flex gap-2"><input type="text" id="mrvFarmId" placeholder="e.g. F-102" required class="flex-1 rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"><select id="mrvFarmSelect" class="rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"><option value="">Quick</option><option value="F-102">F-102 – J. Mwangi</option><option value="F-2034">F-2034 – J. Otieno</option><option value="F-087">F-087 – S. Kiprop</option></select></div></div>
+      <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Evidence Type *</label><div class="flex gap-2"><input type="text" id="mrvEvidenceType" placeholder="e.g. Satellite" required class="flex-1 rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"><select id="mrvTypeSelect" class="rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"><option value="">Quick</option><option value="Satellite Imagery">Satellite</option><option value="Field Survey">Field Survey</option><option value="Soil Sample">Soil Sample</option><option value="Photographic">Photographic</option><option value="Farmer Declaration">Declaration</option></select></div></div>
+      <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">GPS Coordinates</label><div class="grid grid-cols-2 gap-3"><input type="text" id="mrvLatitude" placeholder="Latitude" class="rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm"><input type="text" id="mrvLongitude" placeholder="Longitude" class="rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm"></div></div>
+      <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Carbon (tCO₂e)</label><input type="number" id="mrvCarbon" step="0.01" placeholder="e.g. 12.5" class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm"></div>
+      <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Measurement Date</label><input type="date" id="mrvDate" class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm"></div>
+      <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Upload Files</label><div class="border-2 border-dashed border-slate-300 dark:border-charcoal-600 rounded-xl p-6 text-center"><i class="fas fa-cloud-upload-alt text-3xl text-slate-400 mb-2"></i><p class="text-sm text-slate-500 dark:text-slate-400">Drag & drop or click to browse</p><input type="file" multiple accept=".jpg,.png,.pdf,.geojson" class="hidden" id="evidenceFileInput"><button type="button" onclick="document.getElementById('evidenceFileInput').click()" class="mt-2 text-brand-600 dark:text-brand-400 hover:underline text-sm">Browse</button></div></div>
+      <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Verification Notes</label><textarea id="mrvNotes" rows="3" placeholder="Additional context..." class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm"></textarea></div>
+      <div class="flex gap-3 pt-2"><button type="button" onclick="closeModal('evidenceModal')" class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 dark:border-charcoal-600 text-sm font-medium hover:bg-slate-50 dark:hover:bg-charcoal-700">Cancel</button><button type="submit" class="flex-1 px-4 py-2.5 rounded-xl bg-brand-600 text-white text-sm font-medium hover:bg-brand-700">Submit</button></div>
     </form>
   </div>
 </div>
 
-<!-- Notification Configuration Modal -->
+<!-- Project Modal (Add/Edit) -->
+<div id="projectModal" class="modal hidden fixed inset-0 z-[70] flex items-center justify-center p-4">
+  <div class="modal-backdrop absolute inset-0" onclick="closeModal('projectModal')"></div>
+  <div class="relative bg-white dark:bg-charcoal-800 rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 md:p-8">
+    <div class="flex items-center justify-between mb-5"><h2 id="projectModalTitle" class="text-xl font-bold dark:text-white">New Carbon Project</h2><button onclick="closeModal('projectModal')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fas fa-times text-xl"></i></button></div>
+    <form id="projectForm" class="space-y-4">
+      <input type="hidden" id="projectEditId">
+      <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Project Name *</label><input type="text" id="projName" required class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm"></div>
+      <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Community</label><select id="projCommunity" class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm"><option value="Machakos">Machakos</option><option value="Makueni">Makueni</option><option value="Kitui">Kitui</option><option value="Kajiado">Kajiado</option></select></div>
+      <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Area (ha)</label><input type="number" id="projArea" step="0.1" class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm"></div>
+      <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Verified Carbon (tCO₂e)</label><input type="number" id="projVerified" step="0.1" class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm"></div>
+      <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Status</label><select id="projStatus" class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm"><option value="Active">Active</option><option value="Monitoring">Monitoring</option><option value="Verification">Verification</option><option value="Completed">Completed</option></select></div>
+      <div class="flex gap-3 pt-2"><button type="button" onclick="closeModal('projectModal')" class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 dark:border-charcoal-600 text-sm font-medium hover:bg-slate-50 dark:hover:bg-charcoal-700">Cancel</button><button type="submit" class="flex-1 px-4 py-2.5 rounded-xl bg-brand-600 text-white text-sm font-medium hover:bg-brand-700">Save</button></div>
+    </form>
+  </div>
+</div>
+
+<!-- Payment Modal -->
+<div id="paymentModal" class="modal hidden fixed inset-0 z-[70] flex items-center justify-center p-4">
+  <div class="modal-backdrop absolute inset-0" onclick="closeModal('paymentModal')"></div>
+  <div class="relative bg-white dark:bg-charcoal-800 rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 md:p-8">
+    <div class="flex items-center justify-between mb-5"><h2 class="text-xl font-bold dark:text-white">New Payment</h2><button onclick="closeModal('paymentModal')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fas fa-times text-xl"></i></button></div>
+    <form id="paymentForm" class="space-y-4">
+      <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Recipient *</label><input type="text" id="payRecipient" required class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm"></div>
+      <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Amount (KSh) *</label><input type="number" id="payAmount" required step="0.01" class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm"></div>
+      <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Date</label><input type="date" id="payDate" class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm"></div>
+      <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Status</label><select id="payStatus" class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm"><option value="Pending">Pending</option><option value="Completed">Completed</option><option value="Failed">Failed</option></select></div>
+      <div class="flex gap-3 pt-2"><button type="button" onclick="closeModal('paymentModal')" class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 dark:border-charcoal-600 text-sm font-medium hover:bg-slate-50 dark:hover:bg-charcoal-700">Cancel</button><button type="submit" class="flex-1 px-4 py-2.5 rounded-xl bg-brand-600 text-white text-sm font-medium hover:bg-brand-700">Add Payment</button></div>
+    </form>
+  </div>
+</div>
+
+<!-- Notification Config Modal -->
 <div id="notificationModal" class="modal hidden fixed inset-0 z-[75] flex items-center justify-center p-4">
   <div class="modal-backdrop absolute inset-0" onclick="closeModal('notificationModal')"></div>
   <div class="relative bg-white dark:bg-charcoal-800 rounded-2xl shadow-2xl max-w-md w-full p-6 md:p-8">
@@ -723,35 +665,22 @@
       <div class="flex items-center justify-between"><span class="text-sm dark:text-white">Push Notifications</span><label class="relative inline-flex items-center cursor-pointer"><input type="checkbox" id="pushNotif" checked class="sr-only peer"><div class="w-11 h-6 bg-slate-200 peer-focus:ring-2 peer-focus:ring-brand-500 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-600"></div></label></div>
       <div class="flex items-center justify-between"><span class="text-sm dark:text-white">SMS Alerts</span><label class="relative inline-flex items-center cursor-pointer"><input type="checkbox" id="smsNotif" class="sr-only peer"><div class="w-11 h-6 bg-slate-200 peer-focus:ring-2 peer-focus:ring-brand-500 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-600"></div></label></div>
     </div>
-    <div class="flex gap-3 mt-6 pt-4 border-t border-slate-200 dark:border-charcoal-700">
-      <button onclick="closeModal('notificationModal')" class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 dark:border-charcoal-600 text-sm font-medium hover:bg-slate-50 dark:hover:bg-charcoal-700">Cancel</button>
-      <button id="saveNotificationsBtn" class="flex-1 px-4 py-2.5 rounded-xl bg-brand-600 text-white text-sm font-medium hover:bg-brand-700">Save</button>
-    </div>
+    <div class="flex gap-3 mt-6 pt-4 border-t border-slate-200 dark:border-charcoal-700"><button onclick="closeModal('notificationModal')" class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 dark:border-charcoal-600 text-sm font-medium hover:bg-slate-50 dark:hover:bg-charcoal-700">Cancel</button><button id="saveNotificationsBtn" class="flex-1 px-4 py-2.5 rounded-xl bg-brand-600 text-white text-sm font-medium hover:bg-brand-700">Save</button></div>
   </div>
 </div>
 
-<!-- ===== DELETE CONFIRMATION MODAL ===== -->
+<!-- Delete Confirmation Modal -->
 <div id="deleteModal" class="modal hidden fixed inset-0 z-[80] flex items-center justify-center p-4">
   <div class="modal-backdrop absolute inset-0" onclick="closeModal('deleteModal')"></div>
   <div class="relative bg-white dark:bg-charcoal-800 rounded-2xl shadow-2xl max-w-md w-full p-6 md:p-8">
-    <div class="text-center">
-      <div class="w-16 h-16 rounded-full bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 flex items-center justify-center text-3xl mx-auto mb-4"><i class="fas fa-trash-alt"></i></div>
-      <h3 class="text-xl font-bold dark:text-white">Confirm Deletion</h3>
-      <p class="text-sm text-slate-500 dark:text-slate-400 mt-2" id="deleteMessage">Are you sure you want to delete this item? This action cannot be undone.</p>
-      <div class="flex gap-3 mt-6">
-        <button onclick="closeModal('deleteModal')" class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 dark:border-charcoal-600 text-sm font-medium hover:bg-slate-50 dark:hover:bg-charcoal-700">Cancel</button>
-        <button id="deleteConfirmBtn" class="flex-1 px-4 py-2.5 rounded-xl bg-red-600 text-white text-sm font-medium hover:bg-red-700">Delete</button>
-      </div>
-    </div>
+    <div class="text-center"><div class="w-16 h-16 rounded-full bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 flex items-center justify-center text-3xl mx-auto mb-4"><i class="fas fa-trash-alt"></i></div><h3 class="text-xl font-bold dark:text-white">Confirm Deletion</h3><p class="text-sm text-slate-500 dark:text-slate-400 mt-2" id="deleteMessage">Are you sure? This action can be undone within 5 seconds.</p><div class="flex gap-3 mt-6"><button onclick="closeModal('deleteModal')" class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 dark:border-charcoal-600 text-sm font-medium hover:bg-slate-50 dark:hover:bg-charcoal-700">Cancel</button><button id="deleteConfirmBtn" class="flex-1 px-4 py-2.5 rounded-xl bg-red-600 text-white text-sm font-medium hover:bg-red-700">Delete</button></div></div>
   </div>
 </div>
 
-<!-- ===== TOAST with UNDO ===== -->
+<!-- Toast -->
 <div id="toast" class="fixed bottom-20 md:bottom-6 left-1/2 -translate-x-1/2 z-[90] bg-charcoal-900 text-white px-6 py-3 rounded-xl shadow-lg text-sm font-medium transition-all duration-300 opacity-0 translate-y-4 pointer-events-none flex items-center gap-4 max-w-[90vw]">
   <span id="toastMessage">Action completed</span>
-  <span id="toastUndoContainer" class="hidden">
-    <button id="toastUndoBtn" class="bg-white/20 hover:bg-white/30 text-white px-3 py-1 rounded-lg text-xs font-semibold transition">Undo</button>
-  </span>
+  <span id="toastUndoContainer" class="hidden"><button id="toastUndoBtn" class="bg-white/20 hover:bg-white/30 text-white px-3 py-1 rounded-lg text-xs font-semibold transition">Undo</button></span>
 </div>
 
 <!-- ============================================================ -->
@@ -761,24 +690,24 @@
 (function() {
   'use strict';
 
-  // --- STATE ---
+  // ================================================================
+  // STATE
+  // ================================================================
   const state = {
     isDark: localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches),
     sidebarCollapsed: false,
     currentPage: 'dashboard',
-    farmerPage: 0,
-    farmerPageSize: 5,
     farmers: [
-      { id: 'F-1001', name: 'James Mwangi', phone: '+254 712 345 678', email: 'james@example.com', nationalId: '12345678', community: 'Machakos', status: 'Active', registered: '2026-01-15', farms: [{ name: 'Karatina Agroforestry', acres: 142.5, carbon: 1245, status: 'Verified' }, { name: 'Machakos Valley', acres: 87.3, carbon: 620, status: 'Monitoring' }], carbonRecords: [{ project: 'Agroforestry Phase II', baseline: 2400, estimated: 2100, verified: 1800, date: '2026-08-20' }], contracts: [{ id: 'C-2026-01', project: 'Agroforestry Phase II', term: '5 yrs', share: '60%', signed: '2026-01-15', status: 'Active' }], payments: [{ ref: 'PY-2026-0842', amount: 1245, date: '2026-08-25', status: 'Completed' }], mrv: [{ id: 'MRV-001', type: 'Satellite', date: '2026-08-25', status: 'Verified' }], activity: ['Registered farmer', 'Added farm Karatina Agroforestry', 'Carbon record submitted', 'Payment received KSh 1,245'] },
+      { id: 'F-1001', name: 'James Mwangi', phone: '+254 712 345 678', email: 'james@example.com', nationalId: '12345678', community: 'Machakos', status: 'Active', registered: '2026-01-15', farms: [{ name: 'Karatina Agroforestry', acres: 142.5, carbon: 1245, status: 'Verified' }], carbonRecords: [{ project: 'Agroforestry Phase II', baseline: 2400, estimated: 2100, verified: 1800, date: '2026-08-20' }], contracts: [{ id: 'C-2026-01', project: 'Agroforestry Phase II', term: '5 yrs', share: '60%', signed: '2026-01-15', status: 'Active' }], payments: [{ ref: 'PY-2026-0842', amount: 1245, date: '2026-08-25', status: 'Completed' }], mrv: [{ id: 'MRV-001', type: 'Satellite', date: '2026-08-25', status: 'Verified' }], activity: ['Registered farmer', 'Added farm', 'Carbon record submitted'] },
       { id: 'F-1002', name: 'Grace Akinyi', phone: '+254 723 456 789', email: 'grace@example.com', nationalId: '23456789', community: 'Makueni', status: 'Active', registered: '2026-02-10', farms: [], carbonRecords: [], contracts: [], payments: [], mrv: [], activity: ['Registered farmer'] },
       { id: 'F-1003', name: 'Samuel Kiprop', phone: '+254 734 567 890', email: 'samuel@example.com', nationalId: '34567890', community: 'Kitui', status: 'Active', registered: '2026-03-22', farms: [], carbonRecords: [], contracts: [{ id: 'C-2026-04', project: 'Soil Carbon Initiative', term: '7 yrs', share: '55%', signed: '2026-07-10', status: 'Pending' }], payments: [{ ref: 'PY-2026-0835', amount: 2100, date: '2026-08-23', status: 'Completed' }], mrv: [{ id: 'MRV-002', type: 'Field Survey', date: '2026-08-24', status: 'Review' }], activity: ['Registered farmer', 'Contract signed'] },
-      { id: 'F-1004', name: 'Mary Wanjiru', phone: '+254 745 678 901', email: 'mary@example.com', nationalId: '45678901', community: 'Machakos', status: 'Inactive', registered: '2025-11-05', farms: [], carbonRecords: [], contracts: [], payments: [{ ref: 'PY-2026-0830', amount: 675, date: '2026-08-20', status: 'Completed' }], mrv: [], activity: ['Registered farmer', 'Status changed to Inactive'] },
-      { id: 'F-1005', name: 'John Otieno', phone: '+254 756 789 012', email: 'john@example.com', nationalId: '56789012', community: 'Kajiado', status: 'Pending', registered: '2026-07-01', farms: [], carbonRecords: [], contracts: [], payments: [], mrv: [{ id: 'MRV-003', type: 'Soil Sample', date: '2026-08-22', status: 'Rejected' }], activity: ['Registered farmer', 'MRV evidence rejected - resubmit required'] },
+      { id: 'F-1004', name: 'Mary Wanjiru', phone: '+254 745 678 901', email: 'mary@example.com', nationalId: '45678901', community: 'Machakos', status: 'Inactive', registered: '2025-11-05', farms: [], carbonRecords: [], contracts: [], payments: [{ ref: 'PY-2026-0830', amount: 675, date: '2026-08-20', status: 'Completed' }], mrv: [], activity: ['Registered farmer', 'Status inactive'] },
+      { id: 'F-1005', name: 'John Otieno', phone: '+254 756 789 012', email: 'john@example.com', nationalId: '56789012', community: 'Kajiado', status: 'Pending', registered: '2026-07-01', farms: [], carbonRecords: [], contracts: [], payments: [], mrv: [{ id: 'MRV-003', type: 'Soil Sample', date: '2026-08-22', status: 'Rejected' }], activity: ['Registered farmer', 'MRV rejected'] },
       { id: 'F-1006', name: 'Janet Auma', phone: '+254 767 890 123', email: 'janet@example.com', nationalId: '67890123', community: 'Makueni', status: 'Active', registered: '2026-06-18', farms: [], carbonRecords: [], contracts: [], payments: [], mrv: [], activity: ['Registered farmer'] },
       { id: 'F-1007', name: 'Peter Njoroge', phone: '+254 778 901 234', email: 'peter@example.com', nationalId: '78901234', community: 'Kitui', status: 'Active', registered: '2026-05-09', farms: [], carbonRecords: [], contracts: [], payments: [], mrv: [], activity: ['Registered farmer'] },
     ],
     mrvEvidence: [
-      { id: 'MRV-001', farm: 'F-102', type: 'Satellite', date: '2026-08-25', status: 'Verified' },
+      { id: 'MRV-001', farm: 'F-102', type: 'Satellite Imagery', date: '2026-08-25', status: 'Verified' },
       { id: 'MRV-002', farm: 'F-2034', type: 'Field Survey', date: '2026-08-24', status: 'Review' },
       { id: 'MRV-003', farm: 'F-087', type: 'Soil Sample', date: '2026-08-22', status: 'Rejected' },
     ],
@@ -792,16 +721,42 @@
       { name: 'Kitui', area: '430 ha', farmers: 108, cda: 1, projects: 1, paid: 'KSh 38.6K' },
       { name: 'Kajiado', area: '520 ha', farmers: 156, cda: 2, projects: 2, paid: 'KSh 92.3K' },
     ],
+    projects: [
+      { id: 1, name: 'Agroforestry Phase II', community: 'Machakos', area: 1240, verified: 1800, status: 'Active' },
+      { id: 2, name: 'Soil Carbon Initiative', community: 'Makueni', area: 860, verified: 620, status: 'Monitoring' },
+      { id: 3, name: 'Silvopasture Pilot', community: 'Kitui', area: 430, verified: 340, status: 'Verification' },
+    ],
+    payments: [
+      { ref: 'PY-2026-0842', recipient: 'James Mwangi', amount: 1245, date: '2026-08-25', status: 'Completed' },
+      { ref: 'PY-2026-0839', recipient: 'Grace Akinyi', amount: 890, date: '2026-08-24', status: 'Completed' },
+      { ref: 'PY-2026-0835', recipient: 'Samuel Kiprop', amount: 2100, date: '2026-08-23', status: 'Completed' },
+      { ref: 'PY-2026-0830', recipient: 'Mary Wanjiru', amount: 675, date: '2026-08-20', status: 'Completed' },
+    ],
+    verifications: [
+      { id: 'VRF-001', farm: 'F-102', type: 'Satellite', submitted: '2026-08-25', status: 'Approved' },
+      { id: 'VRF-002', farm: 'F-2034', type: 'Field Survey', submitted: '2026-08-24', status: 'Pending' },
+      { id: 'VRF-003', farm: 'F-087', type: 'Soil Sample', submitted: '2026-08-22', status: 'Rejected' },
+    ],
+    auditLogs: [
+      { time: '10:34', user: 'J. Doe', action: 'Verified MRV-001', target: 'Farm F-102' },
+      { time: '09:15', user: 'S. Kiprop', action: 'Registered Farmer', target: 'Janet Auma' },
+      { time: '08:42', user: 'Admin', action: 'Approved Payment', target: 'PY-2026-0835' },
+      { time: '07:20', user: 'J. Doe', action: 'Updated Project', target: 'Agroforestry Phase II' },
+    ],
     deletedItems: [],
     charts: {},
     map: null,
     farmMap: null,
     toastTimer: null,
     undoCallback: null,
-    currentFarmer: null,
+    // Pagination
+    farmerPage: 0, farmerPageSize: 5,
+    projectPage: 0, projectPageSize: 5,
   };
 
-  // --- DOM REFS ---
+  // ================================================================
+  // DOM REFS
+  // ================================================================
   const $ = (s) => document.querySelector(s);
   const $$ = (s) => document.querySelectorAll(s);
 
@@ -820,19 +775,39 @@
     saveNotifBtn: $('#saveNotificationsBtn'),
     pageTitle: $('#pageTitle'),
     mobilePageTitle: $('#mobilePageTitle'),
+    // Farmers
     farmerTableBody: $('#farmerTableBody'),
-    farmerStart: $('#farmerStart'),
-    farmerEnd: $('#farmerEnd'),
-    farmerTotal: $('#farmerTotal'),
-    farmerPrev: $('#farmerPrev'),
-    farmerNext: $('#farmerNext'),
-    farmerSearch: $('#farmerSearch'),
-    communityFilter: $('#communityFilter'),
+    farmerStart: $('#farmerStart'), farmerEnd: $('#farmerEnd'), farmerTotal: $('#farmerTotal'),
+    farmerPrev: $('#farmerPrev'), farmerNext: $('#farmerNext'),
+    farmerSearch: $('#farmerSearch'), communityFilter: $('#communityFilter'),
     addFarmerBtn: $('#addFarmerBtn'),
+    // Projects
+    projectTableBody: $('#projectTableBody'),
+    projectStart: $('#projectStart'), projectEnd: $('#projectEnd'), projectTotal: $('#projectTotal'),
+    projectPrev: $('#projectPrev'), projectNext: $('#projectNext'),
+    projectSearch: $('#projectSearch'), projectStatusFilter: $('#projectStatusFilter'),
+    addProjectBtn: $('#addProjectBtn'),
+    // MRV
+    mrvTableBody: $('#mrvTableBody'),
     addEvidenceBtn: $('#addEvidenceBtn'),
+    // Contracts
+    contractList: $('#contractList'),
+    // Communities
+    communityList: $('#communityList'),
+    // Payments
+    paymentTableBody: $('#paymentTableBody'),
+    addPaymentBtn: $('#addPaymentBtn'),
+    // Verification
+    verificationTableBody: $('#verificationTableBody'),
+    // Audit
+    auditTableBody: $('#auditTableBody'),
+    auditSearch: $('#auditSearch'),
+    // Modals
     farmerModal: $('#farmerModal'),
     farmerDetailModal: $('#farmerDetailModal'),
     evidenceModal: $('#evidenceModal'),
+    projectModal: $('#projectModal'),
+    paymentModal: $('#paymentModal'),
     notificationModal: $('#notificationModal'),
     deleteModal: $('#deleteModal'),
     deleteMessage: $('#deleteMessage'),
@@ -843,29 +818,21 @@
     toastUndoBtn: $('#toastUndoBtn'),
     bottomNavBtns: $$('.bottom-nav-btn'),
     navLinks: $$('.nav-link'),
-    mrvTableBody: $('#mrvTableBody'),
-    contractList: $('#contractList'),
-    communityList: $('#communityList'),
     dashFarmerCount: $('#dashFarmerCount'),
-    // Detail modal elements
-    detailAvatar: $('#detailAvatar'),
-    detailName: $('#detailName'),
-    detailId: $('#detailId'),
-    dpName: $('#dpName'),
-    dpId: $('#dpId'),
-    dpPhone: $('#dpPhone'),
-    dpEmail: $('#dpEmail'),
-    dpNational: $('#dpNational'),
-    dpCommunity: $('#dpCommunity'),
-    dpDate: $('#dpDate'),
-    dpStatus: $('#dpStatus'),
-    dpFarmsList: $('#dpFarmsList'),
-    dpCarbonList: $('#dpCarbonList'),
-    dpContractsList: $('#dpContractsList'),
-    dpPaymentsList: $('#dpPaymentsList'),
-    dpMrvList: $('#dpMrvList'),
-    dpActivityList: $('#dpActivityList'),
-    // MRV manual fields
+    // Project form
+    projectEditId: $('#projectEditId'),
+    projName: $('#projName'),
+    projCommunity: $('#projCommunity'),
+    projArea: $('#projArea'),
+    projVerified: $('#projVerified'),
+    projStatus: $('#projStatus'),
+    projectModalTitle: $('#projectModalTitle'),
+    // Payment form
+    payRecipient: $('#payRecipient'),
+    payAmount: $('#payAmount'),
+    payDate: $('#payDate'),
+    payStatus: $('#payStatus'),
+    // MRV manual
     mrvFarmId: $('#mrvFarmId'),
     mrvFarmSelect: $('#mrvFarmSelect'),
     mrvEvidenceType: $('#mrvEvidenceType'),
@@ -875,306 +842,172 @@
     mrvCarbon: $('#mrvCarbon'),
     mrvDate: $('#mrvDate'),
     mrvNotes: $('#mrvNotes'),
+    // Farmer detail
+    detailAvatar: $('#detailAvatar'),
+    detailName: $('#detailName'),
+    detailId: $('#detailId'),
   };
 
-  // --- THEME ---
+  // ================================================================
+  // THEME
+  // ================================================================
   function applyTheme() {
-    if (state.isDark) {
-      DOM.html.classList.add('dark');
-      DOM.themeIcon.className = 'fas fa-sun text-base md:text-lg text-amber-400';
-    } else {
-      DOM.html.classList.remove('dark');
-      DOM.themeIcon.className = 'fas fa-moon text-base md:text-lg text-slate-600';
-    }
+    if (state.isDark) { DOM.html.classList.add('dark'); DOM.themeIcon.className = 'fas fa-sun text-amber-400'; }
+    else { DOM.html.classList.remove('dark'); DOM.themeIcon.className = 'fas fa-moon text-slate-600'; }
   }
-
   function toggleTheme() {
-    state.isDark = !state.isDark;
-    localStorage.setItem('theme', state.isDark ? 'dark' : 'light');
-    applyTheme();
-    updateChartsTheme();
-    showToast(`🌓 Theme switched to ${state.isDark ? 'Dark' : 'Light'} mode`);
+    state.isDark = !state.isDark; localStorage.setItem('theme', state.isDark ? 'dark' : 'light');
+    applyTheme(); updateChartsTheme(); showToast('🌓 Theme switched');
   }
 
-  // --- TOAST with UNDO ---
+  // ================================================================
+  // TOAST
+  // ================================================================
   function showToast(msg, undoCallback = null, duration = 4000) {
-    const t = DOM.toast;
-    const msgEl = DOM.toastMessage;
-    const undoContainer = DOM.toastUndoContainer;
-    const undoBtn = DOM.toastUndoBtn;
+    const t = DOM.toast, msgEl = DOM.toastMessage, undoContainer = DOM.toastUndoContainer, undoBtn = DOM.toastUndoBtn;
     if (!t) return;
-
     msgEl.textContent = msg;
     if (undoCallback) {
       undoContainer.classList.remove('hidden');
       state.undoCallback = undoCallback;
-      undoBtn.onclick = function(e) {
-        e.stopPropagation();
-        if (state.undoCallback) {
-          state.undoCallback();
-          state.undoCallback = null;
-          hideToast();
-        }
-      };
-    } else {
-      undoContainer.classList.add('hidden');
-      state.undoCallback = null;
-    }
-
+      undoBtn.onclick = function(e) { e.stopPropagation(); if (state.undoCallback) { state.undoCallback(); state.undoCallback = null; hideToast(); } };
+    } else { undoContainer.classList.add('hidden'); state.undoCallback = null; }
     clearTimeout(state.toastTimer);
     t.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
     t.classList.add('opacity-100', 'translate-y-0');
-    state.toastTimer = setTimeout(() => {
-      hideToast();
-    }, duration);
+    state.toastTimer = setTimeout(hideToast, duration);
   }
-
   function hideToast() {
-    const t = DOM.toast;
-    if (!t) return;
+    const t = DOM.toast; if (!t) return;
     t.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
     t.classList.remove('opacity-100', 'translate-y-0');
-    state.undoCallback = null;
-    DOM.toastUndoContainer.classList.add('hidden');
+    state.undoCallback = null; DOM.toastUndoContainer.classList.add('hidden');
   }
 
-  // --- MODALS ---
-  window.closeModal = function(id) {
-    const el = document.getElementById(id);
-    if (el) el.classList.add('hidden');
-  };
+  // ================================================================
+  // MODALS
+  // ================================================================
+  window.closeModal = function(id) { const el = document.getElementById(id); if (el) el.classList.add('hidden'); };
+  function openModal(id) { const el = document.getElementById(id); if (el) el.classList.remove('hidden'); }
 
-  function openModal(id) {
-    const el = document.getElementById(id);
-    if (el) el.classList.remove('hidden');
-  }
-
-  // --- DELETE LOGIC ---
+  // ================================================================
+  // DELETE CONFIRM
+  // ================================================================
   let pendingDelete = null;
-
   function confirmDelete(type, index, item, name) {
     pendingDelete = { type, index, item };
-    DOM.deleteMessage.textContent = `Are you sure you want to delete "${name}"? This action can be undone within 5 seconds.`;
+    DOM.deleteMessage.textContent = `Delete "${name}"? Undo available for 5 seconds.`;
     openModal('deleteModal');
   }
-
   DOM.deleteConfirmBtn.addEventListener('click', function() {
     if (!pendingDelete) return;
     const { type, index, item } = pendingDelete;
     let undoData = null;
-
     if (type === 'farmer') {
       const removed = state.farmers.splice(index, 1);
       if (removed.length) {
         undoData = { type: 'farmer', item: removed[0], index };
-        state.deletedItems.push({ type: 'farmer', item: removed[0], timestamp: Date.now() });
-        renderFarmers();
-        updateDashboardCount();
-        showToast(`🗑️ Deleted farmer ${removed[0].name}`, function() {
+        renderFarmers(); updateDashboardCount();
+        showToast(`🗑️ Deleted ${removed[0].name}`, function() {
           state.farmers.splice(undoData.index, 0, undoData.item);
-          renderFarmers();
-          updateDashboardCount();
-          showToast(`↩️ Undo successful: ${undoData.item.name} restored`);
+          renderFarmers(); updateDashboardCount();
+          showToast(`↩️ Restored ${undoData.item.name}`);
+        }, 5000);
+      }
+    } else if (type === 'project') {
+      const removed = state.projects.splice(index, 1);
+      if (removed.length) {
+        undoData = { type: 'project', item: removed[0], index };
+        renderProjects();
+        showToast(`🗑️ Deleted project ${removed[0].name}`, function() {
+          state.projects.splice(undoData.index, 0, undoData.item);
+          renderProjects();
+          showToast(`↩️ Restored ${undoData.item.name}`);
+        }, 5000);
+      }
+    } else if (type === 'payment') {
+      const removed = state.payments.splice(index, 1);
+      if (removed.length) {
+        undoData = { type: 'payment', item: removed[0], index };
+        renderPayments();
+        showToast(`🗑️ Deleted payment ${removed[0].ref}`, function() {
+          state.payments.splice(undoData.index, 0, undoData.item);
+          renderPayments();
+          showToast(`↩️ Restored ${undoData.item.ref}`);
         }, 5000);
       }
     } else if (type === 'mrv') {
       const removed = state.mrvEvidence.splice(index, 1);
       if (removed.length) {
         undoData = { type: 'mrv', item: removed[0], index };
-        state.deletedItems.push({ type: 'mrv', item: removed[0], timestamp: Date.now() });
         renderMRV();
-        showToast(`🗑️ Deleted evidence ${removed[0].id}`, function() {
+        showToast(`🗑️ Deleted ${removed[0].id}`, function() {
           state.mrvEvidence.splice(undoData.index, 0, undoData.item);
           renderMRV();
-          showToast(`↩️ Undo successful: ${undoData.item.id} restored`);
+          showToast(`↩️ Restored ${undoData.item.id}`);
         }, 5000);
       }
     } else if (type === 'contract') {
       const removed = state.contracts.splice(index, 1);
       if (removed.length) {
         undoData = { type: 'contract', item: removed[0], index };
-        state.deletedItems.push({ type: 'contract', item: removed[0], timestamp: Date.now() });
         renderContracts();
-        showToast(`🗑️ Deleted contract ${removed[0].id}`, function() {
+        showToast(`🗑️ Deleted ${removed[0].id}`, function() {
           state.contracts.splice(undoData.index, 0, undoData.item);
           renderContracts();
-          showToast(`↩️ Undo successful: ${undoData.item.id} restored`);
+          showToast(`↩️ Restored ${undoData.item.id}`);
         }, 5000);
       }
     }
-
     closeModal('deleteModal');
     pendingDelete = null;
   });
 
-  // --- NAVIGATION ---
+  // ================================================================
+  // NAVIGATION
+  // ================================================================
   function navigateTo(page) {
     $$('.page-content').forEach(el => el.classList.add('hidden'));
     const target = $(`#page-${page}`);
     if (target) target.classList.remove('hidden');
-    const titles = {
-      dashboard: 'Dashboard', farmers: 'Farmers', farms: 'Farms & GIS',
-      carbon: 'Carbon Projects', mrv: 'MRV Monitoring', contracts: 'Contracts',
-      communities: 'Communities', payments: 'Payments', verification: 'Verification',
-      audit: 'Audit Records', reports: 'Reports', settings: 'Settings'
-    };
+    const titles = { dashboard: 'Dashboard', farmers: 'Farmers', farms: 'Farms & GIS', carbon: 'Carbon Projects', mrv: 'MRV Monitoring', contracts: 'Contracts', communities: 'Communities', payments: 'Payments', verification: 'Verification', audit: 'Audit Records', reports: 'Reports', settings: 'Settings' };
     const title = titles[page] || 'Dashboard';
     if (DOM.pageTitle) DOM.pageTitle.textContent = title;
     if (DOM.mobilePageTitle) DOM.mobilePageTitle.textContent = title;
-
-    DOM.navLinks.forEach(link => {
-      link.classList.toggle('active', link.dataset.page === page);
-    });
+    DOM.navLinks.forEach(link => link.classList.toggle('active', link.dataset.page === page));
     DOM.bottomNavBtns.forEach(btn => {
       btn.classList.toggle('active', btn.dataset.page === page);
-      if (btn.dataset.page === page) {
-        btn.classList.add('text-brand-600', 'dark:text-brand-400');
-      } else {
-        btn.classList.remove('text-brand-600', 'dark:text-brand-400');
-      }
+      if (btn.dataset.page === page) btn.classList.add('text-brand-600', 'dark:text-brand-400');
+      else btn.classList.remove('text-brand-600', 'dark:text-brand-400');
     });
-
     state.currentPage = page;
     closeMobileDrawer();
-    if (page === 'farms') {
-      setTimeout(initFarmMap, 200);
-    }
-    if (page === 'dashboard') {
-      updateDashboardCount();
-    }
+    if (page === 'farms') setTimeout(initFarmMap, 200);
+    if (page === 'dashboard') updateDashboardCount();
   }
 
-  // --- SIDEBAR ---
+  // ================================================================
+  // SIDEBAR
+  // ================================================================
   function toggleSidebar() {
     state.sidebarCollapsed = !state.sidebarCollapsed;
     if (state.sidebarCollapsed) {
-      DOM.sidebar.classList.add('w-20');
-      DOM.sidebar.classList.remove('w-64');
+      DOM.sidebar.classList.add('w-20'); DOM.sidebar.classList.remove('w-64');
       DOM.toggleIcon?.classList.add('rotate-180');
-      hideSidebarTexts(true);
+      document.querySelectorAll('.nav-text, .brand-text, .profile-text').forEach(el => el.style.display = 'none');
     } else {
-      DOM.sidebar.classList.remove('w-20');
-      DOM.sidebar.classList.add('w-64');
+      DOM.sidebar.classList.remove('w-20'); DOM.sidebar.classList.add('w-64');
       DOM.toggleIcon?.classList.remove('rotate-180');
-      hideSidebarTexts(false);
+      document.querySelectorAll('.nav-text, .brand-text, .profile-text').forEach(el => el.style.display = '');
     }
     setTimeout(() => window.dispatchEvent(new Event('resize')), 300);
   }
+  function openMobileDrawer() { DOM.sidebar.classList.remove('-translate-x-full'); }
+  function closeMobileDrawer() { DOM.sidebar.classList.add('-translate-x-full'); }
 
-  function hideSidebarTexts(hide) {
-    const els = [...document.querySelectorAll('.nav-text, .brand-text, .profile-text')];
-    els.forEach(el => el.style.display = hide ? 'none' : '');
-  }
-
-  function openMobileDrawer() {
-    DOM.sidebar.classList.remove('-translate-x-full');
-  }
-
-  function closeMobileDrawer() {
-    DOM.sidebar.classList.add('-translate-x-full');
-  }
-
-  // --- FARMER DETAILS (TABS) ---
-  function openFarmerDetails(farmerId) {
-    const farmer = state.farmers.find(f => f.id === farmerId);
-    if (!farmer) {
-      showToast('❌ Farmer not found');
-      return;
-    }
-    state.currentFarmer = farmer;
-
-    // Set header
-    const initials = farmer.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
-    DOM.detailAvatar.textContent = initials;
-    DOM.detailName.textContent = farmer.name;
-    DOM.detailId.textContent = farmer.id;
-
-    // Personal info
-    DOM.dpName.textContent = farmer.name;
-    DOM.dpId.textContent = farmer.id;
-    DOM.dpPhone.textContent = farmer.phone || '—';
-    DOM.dpEmail.textContent = farmer.email || '—';
-    DOM.dpNational.textContent = farmer.nationalId || '—';
-    DOM.dpCommunity.textContent = farmer.community || '—';
-    DOM.dpDate.textContent = farmer.registered || '—';
-    const statusColors = {
-      'Active': 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300',
-      'Inactive': 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300',
-      'Pending': 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300'
-    };
-    DOM.dpStatus.textContent = farmer.status || '—';
-    DOM.dpStatus.className = `inline-flex px-2 py-0.5 rounded-full text-xs ${statusColors[farmer.status] || 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300'}`;
-
-    // Farms
-    DOM.dpFarmsList.innerHTML = (farmer.farms && farmer.farms.length) ? farmer.farms.map(f => `
-      <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2">
-        <div><p class="font-medium dark:text-white">${f.name}</p><p class="text-xs text-slate-400">${f.acres} ha · ${f.carbon} tCO₂e</p></div>
-        <span class="inline-flex px-2 py-0.5 rounded-full text-xs ${f.status === 'Verified' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300'}">${f.status}</span>
-      </div>
-    `).join('') : '<p class="text-sm text-slate-400">No farms registered</p>';
-
-    // Carbon records
-    DOM.dpCarbonList.innerHTML = (farmer.carbonRecords && farmer.carbonRecords.length) ? farmer.carbonRecords.map(c => `
-      <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2">
-        <div><p class="font-medium dark:text-white">${c.project}</p><p class="text-xs text-slate-400">Baseline: ${c.baseline} · Est: ${c.estimated} · Verified: ${c.verified}</p></div>
-        <span class="text-xs text-slate-400">${c.date}</span>
-      </div>
-    `).join('') : '<p class="text-sm text-slate-400">No carbon records</p>';
-
-    // Contracts
-    DOM.dpContractsList.innerHTML = (farmer.contracts && farmer.contracts.length) ? farmer.contracts.map(c => `
-      <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2">
-        <div><p class="font-medium dark:text-white">${c.id}</p><p class="text-xs text-slate-400">${c.project} · Term: ${c.term} · Share: ${c.share}</p></div>
-        <span class="inline-flex px-2 py-0.5 rounded-full text-xs ${c.status === 'Active' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300'}">${c.status}</span>
-      </div>
-    `).join('') : '<p class="text-sm text-slate-400">No contracts</p>';
-
-    // Payments
-    DOM.dpPaymentsList.innerHTML = (farmer.payments && farmer.payments.length) ? farmer.payments.map(p => `
-      <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2">
-        <div><p class="font-medium dark:text-white">${p.ref}</p><p class="text-xs text-slate-400">${p.date}</p></div>
-        <span class="font-medium text-emerald-600 dark:text-emerald-400">KSh ${p.amount.toLocaleString()}</span>
-      </div>
-    `).join('') : '<p class="text-sm text-slate-400">No payments</p>';
-
-    // MRV Evidence
-    DOM.dpMrvList.innerHTML = (farmer.mrv && farmer.mrv.length) ? farmer.mrv.map(m => `
-      <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2">
-        <div><p class="font-medium dark:text-white">${m.id}</p><p class="text-xs text-slate-400">${m.type} · ${m.date}</p></div>
-        <span class="inline-flex px-2 py-0.5 rounded-full text-xs ${m.status === 'Verified' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' : m.status === 'Review' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'}">${m.status}</span>
-      </div>
-    `).join('') : '<p class="text-sm text-slate-400">No MRV evidence</p>';
-
-    // Activity
-    DOM.dpActivityList.innerHTML = (farmer.activity && farmer.activity.length) ? farmer.activity.map((a, i) => `
-      <div class="flex items-start space-x-3 border-b border-slate-100 dark:border-charcoal-700 pb-2 last:border-0">
-        <div class="w-5 h-5 rounded-full bg-brand-100 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 flex items-center justify-center text-[10px] shrink-0 mt-0.5">${i + 1}</div>
-        <p class="text-sm dark:text-white">${a}</p>
-      </div>
-    `).join('') : '<p class="text-sm text-slate-400">No activity recorded</p>';
-
-    // Reset tabs to Personal
-    document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
-    document.querySelector('.profile-tab[data-tab="personal"]').classList.add('active');
-    document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
-    document.getElementById('tab-personal').classList.remove('hidden');
-
-    openModal('farmerDetailModal');
-  }
-
-  // Tab switching
-  document.querySelectorAll('.profile-tab').forEach(tab => {
-    tab.addEventListener('click', function() {
-      document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
-      this.classList.add('active');
-      const target = this.dataset.tab;
-      document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
-      const content = document.getElementById(`tab-${target}`);
-      if (content) content.classList.remove('hidden');
-    });
-  });
-
-  // --- RENDER FUNCTIONS ---
+  // ================================================================
+  // RENDER FUNCTIONS
+  // ================================================================
   function renderFarmers() {
     const search = (DOM.farmerSearch?.value || '').toLowerCase();
     const community = DOM.communityFilter?.value || 'all';
@@ -1187,13 +1020,11 @@
     const start = state.farmerPage * state.farmerPageSize;
     const end = Math.min(start + state.farmerPageSize, total);
     const pageItems = filtered.slice(start, end);
-
     if (DOM.farmerTotal) DOM.farmerTotal.textContent = total;
     if (DOM.farmerStart) DOM.farmerStart.textContent = total > 0 ? start + 1 : 0;
     if (DOM.farmerEnd) DOM.farmerEnd.textContent = end;
     if (DOM.farmerPrev) DOM.farmerPrev.disabled = state.farmerPage === 0;
     if (DOM.farmerNext) DOM.farmerNext.disabled = end >= total;
-
     if (!DOM.farmerTableBody) return;
     if (pageItems.length === 0) {
       DOM.farmerTableBody.innerHTML = `<tr><td colspan="6" class="px-4 py-8 text-center text-slate-400 text-sm">No farmers found</td></tr>`;
@@ -1212,12 +1043,52 @@
           <button onclick="window.openFarmerDetails('${f.id}')" class="text-brand-600 dark:text-brand-400 hover:underline text-xs"><i class="fas fa-eye mr-1"></i>View</button>
           <button onclick="confirmDelete('farmer', ${realIndex}, null, '${f.name}')" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-trash-alt"></i></button>
         </td>
-      </tr>
-    `}).join('');
+      </tr>`;
+    }).join('');
   }
 
-  // Expose openFarmerDetails globally
-  window.openFarmerDetails = openFarmerDetails;
+  function renderProjects() {
+    const search = (DOM.projectSearch?.value || '').toLowerCase();
+    const statusFilter = DOM.projectStatusFilter?.value || 'all';
+    let filtered = state.projects.filter(p => {
+      const matchName = p.name.toLowerCase().includes(search);
+      const matchStatus = statusFilter === 'all' || p.status === statusFilter;
+      return matchName && matchStatus;
+    });
+    const total = filtered.length;
+    const start = state.projectPage * state.projectPageSize;
+    const end = Math.min(start + state.projectPageSize, total);
+    const pageItems = filtered.slice(start, end);
+    if (DOM.projectTotal) DOM.projectTotal.textContent = total;
+    if (DOM.projectStart) DOM.projectStart.textContent = total > 0 ? start + 1 : 0;
+    if (DOM.projectEnd) DOM.projectEnd.textContent = end;
+    if (DOM.projectPrev) DOM.projectPrev.disabled = state.projectPage === 0;
+    if (DOM.projectNext) DOM.projectNext.disabled = end >= total;
+    if (!DOM.projectTableBody) return;
+    if (pageItems.length === 0) {
+      DOM.projectTableBody.innerHTML = `<tr><td colspan="6" class="px-4 py-8 text-center text-slate-400 text-sm">No projects found</td></tr>`;
+      return;
+    }
+    DOM.projectTableBody.innerHTML = pageItems.map((p, idx) => {
+      const realIndex = state.projects.indexOf(p);
+      const statusColor = p.status === 'Active' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' :
+                          p.status === 'Monitoring' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' :
+                          p.status === 'Verification' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300' :
+                          'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300';
+      return `
+      <tr class="table-row-hover">
+        <td class="px-4 py-3 font-medium">${p.name}</td>
+        <td class="px-4 py-3 hidden sm:table-cell">${p.community}</td>
+        <td class="px-4 py-3 hidden md:table-cell">${p.area}</td>
+        <td class="px-4 py-3 hidden lg:table-cell">${p.verified}</td>
+        <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${statusColor}">${p.status}</span></td>
+        <td class="px-4 py-3 text-right space-x-2">
+          <button onclick="editProject(${realIndex})" class="text-blue-600 dark:text-blue-400 hover:underline text-xs"><i class="fas fa-edit"></i></button>
+          <button onclick="confirmDelete('project', ${realIndex}, null, '${p.name}')" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-trash-alt"></i></button>
+        </td>
+      </tr>`;
+    }).join('');
+  }
 
   function renderMRV() {
     if (!DOM.mrvTableBody) return;
@@ -1240,8 +1111,8 @@
           <button class="text-brand-600 dark:text-brand-400 hover:underline text-xs"><i class="fas fa-eye mr-1"></i>View</button>
           <button onclick="confirmDelete('mrv', ${idx}, null, '${m.id}')" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-trash-alt"></i></button>
         </td>
-      </tr>
-    `}).join('');
+      </tr>`;
+    }).join('');
   }
 
   function renderContracts() {
@@ -1273,24 +1144,256 @@
     `).join('');
   }
 
-  function updateDashboardCount() {
-    if (DOM.dashFarmerCount) {
-      DOM.dashFarmerCount.textContent = state.farmers.length.toLocaleString();
+  function renderPayments() {
+    if (!DOM.paymentTableBody) return;
+    if (state.payments.length === 0) {
+      DOM.paymentTableBody.innerHTML = `<tr><td colspan="6" class="px-4 py-8 text-center text-slate-400 text-sm">No payments</td></tr>`;
+      return;
     }
+    DOM.paymentTableBody.innerHTML = state.payments.map((p, idx) => {
+      const statusColor = p.status === 'Completed' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' :
+                          p.status === 'Pending' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' :
+                          'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300';
+      return `
+      <tr class="table-row-hover">
+        <td class="px-4 py-3 font-mono text-xs">${p.ref}</td>
+        <td class="px-4 py-3 font-medium">${p.recipient}</td>
+        <td class="px-4 py-3 hidden sm:table-cell">KSh ${p.amount.toLocaleString()}</td>
+        <td class="px-4 py-3 hidden md:table-cell">${p.date}</td>
+        <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${statusColor}">${p.status}</span></td>
+        <td class="px-4 py-3 text-right space-x-2">
+          <button onclick="confirmDelete('payment', ${idx}, null, '${p.ref}')" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-trash-alt"></i></button>
+        </td>
+      </tr>`;
+    }).join('');
   }
 
-  // --- SETTINGS BUTTONS ---
-  function configureNotifications() {
-    openModal('notificationModal');
+  function renderVerifications() {
+    if (!DOM.verificationTableBody) return;
+    if (state.verifications.length === 0) {
+      DOM.verificationTableBody.innerHTML = `<tr><td colspan="6" class="px-4 py-8 text-center text-slate-400 text-sm">No verification tasks</td></tr>`;
+      return;
+    }
+    DOM.verificationTableBody.innerHTML = state.verifications.map((v, idx) => {
+      const statusColor = v.status === 'Approved' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' :
+                          v.status === 'Pending' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' :
+                          'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300';
+      return `
+      <tr class="table-row-hover">
+        <td class="px-4 py-3 font-mono text-xs">${v.id}</td>
+        <td class="px-4 py-3">${v.farm}</td>
+        <td class="px-4 py-3 hidden sm:table-cell">${v.type}</td>
+        <td class="px-4 py-3 hidden md:table-cell">${v.submitted}</td>
+        <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${statusColor}">${v.status}</span></td>
+        <td class="px-4 py-3 text-right space-x-2">
+          ${v.status === 'Pending' ? `<button onclick="approveVerification(${idx})" class="text-emerald-600 hover:text-emerald-700 text-xs"><i class="fas fa-check mr-1"></i>Approve</button><button onclick="rejectVerification(${idx})" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-times mr-1"></i>Reject</button>` : ''}
+          <button onclick="confirmDelete('verification', ${idx}, null, '${v.id}')" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-trash-alt"></i></button>
+        </td>
+      </tr>`;
+    }).join('');
   }
 
+  function renderAudit() {
+    if (!DOM.auditTableBody) return;
+    const search = (DOM.auditSearch?.value || '').toLowerCase();
+    let logs = state.auditLogs.filter(l => 
+      l.user.toLowerCase().includes(search) || l.action.toLowerCase().includes(search) || l.target.toLowerCase().includes(search)
+    );
+    if (logs.length === 0) {
+      DOM.auditTableBody.innerHTML = `<tr><td colspan="4" class="px-4 py-8 text-center text-slate-400 text-sm">No audit records found</td></tr>`;
+      return;
+    }
+    DOM.auditTableBody.innerHTML = logs.map(l => `
+      <tr class="table-row-hover">
+        <td class="px-4 py-3 text-xs">${l.time}</td>
+        <td class="px-4 py-3 text-xs">${l.user}</td>
+        <td class="px-4 py-3 text-xs hidden sm:table-cell">${l.action}</td>
+        <td class="px-4 py-3 text-xs hidden md:table-cell">${l.target}</td>
+      </tr>
+    `).join('');
+  }
+
+  function updateDashboardCount() {
+    if (DOM.dashFarmerCount) DOM.dashFarmerCount.textContent = state.farmers.length.toLocaleString();
+  }
+
+  // ================================================================
+  // FARMER DETAILS
+  // ================================================================
+  window.openFarmerDetails = function(id) {
+    const farmer = state.farmers.find(f => f.id === id);
+    if (!farmer) { showToast('❌ Farmer not found'); return; }
+    const initials = farmer.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+    DOM.detailAvatar.textContent = initials;
+    DOM.detailName.textContent = farmer.name;
+    DOM.detailId.textContent = farmer.id;
+    // Personal
+    const personal = document.getElementById('tab-personal');
+    personal.innerHTML = `
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div><label class="text-xs text-slate-400">Full Name</label><p class="font-medium dark:text-white">${farmer.name}</p></div>
+        <div><label class="text-xs text-slate-400">Unique ID</label><p class="font-medium dark:text-white">${farmer.id}</p></div>
+        <div><label class="text-xs text-slate-400">Phone</label><p class="font-medium dark:text-white">${farmer.phone || '—'}</p></div>
+        <div><label class="text-xs text-slate-400">Email</label><p class="font-medium dark:text-white">${farmer.email || '—'}</p></div>
+        <div><label class="text-xs text-slate-400">National ID</label><p class="font-medium dark:text-white">${farmer.nationalId || '—'}</p></div>
+        <div><label class="text-xs text-slate-400">Community</label><p class="font-medium dark:text-white">${farmer.community || '—'}</p></div>
+        <div><label class="text-xs text-slate-400">Registration Date</label><p class="font-medium dark:text-white">${farmer.registered || '—'}</p></div>
+        <div><label class="text-xs text-slate-400">Status</label><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${farmer.status === 'Active' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' : farmer.status === 'Pending' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'}">${farmer.status}</span></div>
+      </div>`;
+    // Farms
+    const farmsDiv = document.getElementById('tab-farms');
+    farmsDiv.innerHTML = (farmer.farms && farmer.farms.length) ? farmer.farms.map(f => `
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2"><div><p class="font-medium dark:text-white">${f.name}</p><p class="text-xs text-slate-400">${f.acres} ha · ${f.carbon} tCO₂e</p></div><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${f.status === 'Verified' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300'}">${f.status}</span></div>
+    `).join('') : '<p class="text-sm text-slate-400">No farms registered</p>';
+    // Carbon
+    const carbonDiv = document.getElementById('tab-carbon');
+    carbonDiv.innerHTML = (farmer.carbonRecords && farmer.carbonRecords.length) ? farmer.carbonRecords.map(c => `
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2"><div><p class="font-medium dark:text-white">${c.project}</p><p class="text-xs text-slate-400">Baseline: ${c.baseline} · Est: ${c.estimated} · Verified: ${c.verified}</p></div><span class="text-xs text-slate-400">${c.date}</span></div>
+    `).join('') : '<p class="text-sm text-slate-400">No carbon records</p>';
+    // Contracts
+    const contractsDiv = document.getElementById('tab-contracts');
+    contractsDiv.innerHTML = (farmer.contracts && farmer.contracts.length) ? farmer.contracts.map(c => `
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2"><div><p class="font-medium dark:text-white">${c.id}</p><p class="text-xs text-slate-400">${c.project} · Term: ${c.term} · Share: ${c.share}</p></div><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${c.status === 'Active' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300'}">${c.status}</span></div>
+    `).join('') : '<p class="text-sm text-slate-400">No contracts</p>';
+    // Payments
+    const paymentsDiv = document.getElementById('tab-payments');
+    paymentsDiv.innerHTML = (farmer.payments && farmer.payments.length) ? farmer.payments.map(p => `
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2"><div><p class="font-medium dark:text-white">${p.ref}</p><p class="text-xs text-slate-400">${p.date}</p></div><span class="font-medium text-emerald-600 dark:text-emerald-400">KSh ${p.amount.toLocaleString()}</span></div>
+    `).join('') : '<p class="text-sm text-slate-400">No payments</p>';
+    // MRV
+    const mrvDiv = document.getElementById('tab-mrv');
+    mrvDiv.innerHTML = (farmer.mrv && farmer.mrv.length) ? farmer.mrv.map(m => `
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2"><div><p class="font-medium dark:text-white">${m.id}</p><p class="text-xs text-slate-400">${m.type} · ${m.date}</p></div><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${m.status === 'Verified' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' : m.status === 'Review' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'}">${m.status}</span></div>
+    `).join('') : '<p class="text-sm text-slate-400">No MRV evidence</p>';
+    // Activity
+    const activityDiv = document.getElementById('tab-activity');
+    activityDiv.innerHTML = (farmer.activity && farmer.activity.length) ? farmer.activity.map((a, i) => `
+      <div class="flex items-start space-x-3 border-b border-slate-100 dark:border-charcoal-700 pb-2 last:border-0"><div class="w-5 h-5 rounded-full bg-brand-100 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 flex items-center justify-center text-[10px] shrink-0 mt-0.5">${i+1}</div><p class="text-sm dark:text-white">${a}</p></div>
+    `).join('') : '<p class="text-sm text-slate-400">No activity recorded</p>';
+
+    // Reset tabs
+    document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
+    document.querySelector('.profile-tab[data-tab="personal"]').classList.add('active');
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
+    document.getElementById('tab-personal').classList.remove('hidden');
+    openModal('farmerDetailModal');
+  };
+
+  // Tab switching
+  document.querySelectorAll('.profile-tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+      const target = this.dataset.tab;
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
+      const content = document.getElementById(`tab-${target}`);
+      if (content) content.classList.remove('hidden');
+    });
+  });
+
+  // ================================================================
+  // PROJECT CRUD
+  // ================================================================
+  function editProject(index) {
+    const p = state.projects[index];
+    DOM.projectEditId.value = index;
+    DOM.projectModalTitle.textContent = 'Edit Project';
+    DOM.projName.value = p.name;
+    DOM.projCommunity.value = p.community;
+    DOM.projArea.value = p.area;
+    DOM.projVerified.value = p.verified;
+    DOM.projStatus.value = p.status;
+    openModal('projectModal');
+  }
+
+  DOM.addProjectBtn.addEventListener('click', function() {
+    DOM.projectEditId.value = '';
+    DOM.projectModalTitle.textContent = 'New Carbon Project';
+    DOM.projName.value = '';
+    DOM.projCommunity.value = 'Machakos';
+    DOM.projArea.value = '';
+    DOM.projVerified.value = '';
+    DOM.projStatus.value = 'Active';
+    openModal('projectModal');
+  });
+
+  document.getElementById('projectForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const name = DOM.projName.value.trim();
+    const community = DOM.projCommunity.value;
+    const area = parseFloat(DOM.projArea.value) || 0;
+    const verified = parseFloat(DOM.projVerified.value) || 0;
+    const status = DOM.projStatus.value;
+    const editIndex = DOM.projectEditId.value;
+    if (!name) { showToast('⚠️ Project name required'); return; }
+    if (editIndex !== '') {
+      const idx = parseInt(editIndex);
+      state.projects[idx] = { ...state.projects[idx], name, community, area, verified, status };
+      showToast('✅ Project updated');
+    } else {
+      const newId = state.projects.length ? Math.max(...state.projects.map(p => p.id)) + 1 : 1;
+      state.projects.push({ id: newId, name, community, area, verified, status });
+      showToast('✅ Project created');
+    }
+    closeModal('projectModal');
+    renderProjects();
+  });
+
+  // ================================================================
+  // PAYMENT CRUD
+  // ================================================================
+  DOM.addPaymentBtn.addEventListener('click', function() {
+    DOM.payRecipient.value = '';
+    DOM.payAmount.value = '';
+    DOM.payDate.value = new Date().toISOString().slice(0,10);
+    DOM.payStatus.value = 'Pending';
+    openModal('paymentModal');
+  });
+
+  document.getElementById('paymentForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const recipient = DOM.payRecipient.value.trim();
+    const amount = parseFloat(DOM.payAmount.value);
+    const date = DOM.payDate.value || new Date().toISOString().slice(0,10);
+    const status = DOM.payStatus.value;
+    if (!recipient || !amount) { showToast('⚠️ Recipient and amount required'); return; }
+    const ref = `PY-${Date.now().toString().slice(-6)}`;
+    state.payments.unshift({ ref, recipient, amount, date, status });
+    renderPayments();
+    closeModal('paymentModal');
+    showToast(`💰 Payment of KSh ${amount.toLocaleString()} added`);
+  });
+
+  // ================================================================
+  // VERIFICATION ACTIONS
+  // ================================================================
+  function approveVerification(index) {
+    state.verifications[index].status = 'Approved';
+    renderVerifications();
+    showToast('✅ Verification approved');
+  }
+  function rejectVerification(index) {
+    state.verifications[index].status = 'Rejected';
+    renderVerifications();
+    showToast('❌ Verification rejected');
+  }
+
+  // ================================================================
+  // REPORT GENERATION
+  // ================================================================
+  window.generateReport = function(type) {
+    showToast(`📄 Generating ${type}... (simulated)`);
+    setTimeout(() => showToast(`✅ ${type} exported successfully`), 1500);
+  };
+
+  // ================================================================
+  // SETTINGS
+  // ================================================================
+  function configureNotifications() { openModal('notificationModal'); }
   function exportData() {
     showToast('📦 Exporting all MRV data... (simulated)');
-    setTimeout(() => {
-      showToast('✅ Data export completed! (simulated)');
-    }, 1500);
+    setTimeout(() => showToast('✅ Data export completed!'), 1500);
   }
-
   function saveNotifications() {
     const email = document.getElementById('emailNotif').checked;
     const push = document.getElementById('pushNotif').checked;
@@ -1299,27 +1402,18 @@
     showToast(`🔔 Notifications saved: Email ${email ? 'ON' : 'OFF'}, Push ${push ? 'ON' : 'OFF'}, SMS ${sms ? 'ON' : 'OFF'}`);
   }
 
-  // --- MRV Manual Entry Logic ---
-  DOM.mrvFarmSelect.addEventListener('change', function() {
-    if (this.value) {
-      DOM.mrvFarmId.value = this.value;
-    }
-  });
+  // ================================================================
+  // MRV MANUAL ENTRY HELPERS
+  // ================================================================
+  DOM.mrvFarmSelect.addEventListener('change', function() { if (this.value) DOM.mrvFarmId.value = this.value; });
+  DOM.mrvTypeSelect.addEventListener('change', function() { if (this.value) DOM.mrvEvidenceType.value = this.value; });
 
-  DOM.mrvTypeSelect.addEventListener('change', function() {
-    if (this.value) {
-      DOM.mrvEvidenceType.value = this.value;
-    }
-  });
-
-  // --- CHARTS ---
+  // ================================================================
+  // CHARTS
+  // ================================================================
   function getChartColors() {
-    return {
-      text: state.isDark ? '#cbd5e1' : '#475569',
-      grid: state.isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)',
-    };
+    return { text: state.isDark ? '#cbd5e1' : '#475569', grid: state.isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)' };
   }
-
   function initCharts() {
     const { text, grid } = getChartColors();
     const ctx1 = document.getElementById('carbonTrendChart')?.getContext('2d');
@@ -1370,7 +1464,6 @@
       });
     }
   }
-
   function updateChartsTheme() {
     const { text, grid } = getChartColors();
     Object.values(state.charts).forEach(chart => {
@@ -1385,7 +1478,9 @@
     });
   }
 
-  // --- MAPS ---
+  // ================================================================
+  // MAPS
+  // ================================================================
   function initDashboardMap() {
     const container = document.getElementById('map');
     if (!container) return;
@@ -1404,7 +1499,6 @@
     });
     setTimeout(() => state.map?.invalidateSize(), 300);
   }
-
   function initFarmMap() {
     const container = document.getElementById('farmMap');
     if (!container) return;
@@ -1417,7 +1511,9 @@
     setTimeout(() => state.farmMap?.invalidateSize(), 300);
   }
 
-  // --- EVENT BINDING ---
+  // ================================================================
+  // EVENTS
+  // ================================================================
   function initEvents() {
     DOM.themeToggle?.addEventListener('click', toggleTheme);
     DOM.settingsThemeToggle?.addEventListener('click', toggleTheme);
@@ -1426,26 +1522,18 @@
     document.addEventListener('click', (e) => {
       if (window.innerWidth < 768) {
         const sidebar = DOM.sidebar;
-        if (sidebar && !sidebar.contains(e.target) && !DOM.mobileMenuBtn?.contains(e.target)) {
-          closeMobileDrawer();
-        }
+        if (sidebar && !sidebar.contains(e.target) && !DOM.mobileMenuBtn?.contains(e.target)) closeMobileDrawer();
       }
     });
 
     DOM.navLinks.forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const page = link.dataset.page;
-        if (page) navigateTo(page);
-      });
+      link.addEventListener('click', (e) => { e.preventDefault(); const page = link.dataset.page; if (page) navigateTo(page); });
     });
     DOM.bottomNavBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const page = btn.dataset.page;
-        if (page) navigateTo(page);
-      });
+      btn.addEventListener('click', () => { const page = btn.dataset.page; if (page) navigateTo(page); });
     });
 
+    // Farmer pagination
     DOM.farmerPrev?.addEventListener('click', () => { if (state.farmerPage > 0) { state.farmerPage--; renderFarmers(); } });
     DOM.farmerNext?.addEventListener('click', () => {
       const search = (DOM.farmerSearch?.value || '').toLowerCase();
@@ -1455,105 +1543,96 @@
         const matchCommunity = community === 'all' || f.community === community;
         return matchName && matchCommunity;
       });
-      if ((state.farmerPage + 1) * state.farmerPageSize < filtered.length) {
-        state.farmerPage++;
-        renderFarmers();
-      }
+      if ((state.farmerPage + 1) * state.farmerPageSize < filtered.length) { state.farmerPage++; renderFarmers(); }
     });
     DOM.farmerSearch?.addEventListener('input', () => { state.farmerPage = 0; renderFarmers(); });
     DOM.communityFilter?.addEventListener('change', () => { state.farmerPage = 0; renderFarmers(); });
-
     DOM.addFarmerBtn?.addEventListener('click', () => openModal('farmerModal'));
     DOM.addEvidenceBtn?.addEventListener('click', () => openModal('evidenceModal'));
 
-    // Settings buttons
+    // Project pagination
+    DOM.projectPrev?.addEventListener('click', () => { if (state.projectPage > 0) { state.projectPage--; renderProjects(); } });
+    DOM.projectNext?.addEventListener('click', () => {
+      const search = (DOM.projectSearch?.value || '').toLowerCase();
+      const statusFilter = DOM.projectStatusFilter?.value || 'all';
+      const filtered = state.projects.filter(p => {
+        const matchName = p.name.toLowerCase().includes(search);
+        const matchStatus = statusFilter === 'all' || p.status === statusFilter;
+        return matchName && matchStatus;
+      });
+      if ((state.projectPage + 1) * state.projectPageSize < filtered.length) { state.projectPage++; renderProjects(); }
+    });
+    DOM.projectSearch?.addEventListener('input', () => { state.projectPage = 0; renderProjects(); });
+    DOM.projectStatusFilter?.addEventListener('change', () => { state.projectPage = 0; renderProjects(); });
+
+    // Settings
     DOM.configureNotifBtn?.addEventListener('click', configureNotifications);
     DOM.exportDataBtn?.addEventListener('click', exportData);
     DOM.saveNotifBtn?.addEventListener('click', saveNotifications);
 
-    document.getElementById('farmerForm')?.addEventListener('submit', (e) => {
+    // Farmer form
+    document.getElementById('farmerForm')?.addEventListener('submit', function(e) {
       e.preventDefault();
-      const name = document.getElementById('fName')?.value;
-      const phone = document.getElementById('fPhone')?.value;
-      const email = document.getElementById('fEmail')?.value;
-      const nationalId = document.getElementById('fNationalId')?.value;
+      const name = document.getElementById('fName')?.value.trim();
+      const phone = document.getElementById('fPhone')?.value.trim();
+      const email = document.getElementById('fEmail')?.value.trim();
+      const nationalId = document.getElementById('fNationalId')?.value.trim();
       const community = document.getElementById('fCommunity')?.value;
-      if (name && phone && nationalId) {
-        const newFarmer = {
-          id: `F-${String(state.farmers.length + 1001).padStart(4, '0')}`,
-          name, phone, email: email || '', nationalId, community: community || 'Machakos',
-          status: 'Pending', registered: new Date().toISOString().slice(0, 10),
-          farms: [], carbonRecords: [], contracts: [], payments: [], mrv: [], activity: ['Registered farmer']
-        };
-        state.farmers.unshift(newFarmer);
-        renderFarmers();
-        updateDashboardCount();
-        closeModal('farmerModal');
-        showToast(`✅ Farmer ${name} registered successfully!`);
-        document.getElementById('farmerForm')?.reset();
-      }
+      if (!name || !phone || !nationalId) { showToast('⚠️ Name, Phone, and National ID required'); return; }
+      const newFarmer = {
+        id: `F-${String(state.farmers.length + 1001).padStart(4, '0')}`,
+        name, phone, email: email || '', nationalId, community: community || 'Machakos',
+        status: 'Pending', registered: new Date().toISOString().slice(0,10),
+        farms: [], carbonRecords: [], contracts: [], payments: [], mrv: [], activity: ['Registered farmer']
+      };
+      state.farmers.unshift(newFarmer);
+      renderFarmers(); updateDashboardCount();
+      closeModal('farmerModal');
+      showToast(`✅ Farmer ${name} registered`);
+      this.reset();
     });
 
-    // Enhanced MRV Evidence submission with manual entry
-    document.getElementById('evidenceForm')?.addEventListener('submit', (e) => {
+    // MRV evidence
+    document.getElementById('evidenceForm')?.addEventListener('submit', function(e) {
       e.preventDefault();
       const farmId = DOM.mrvFarmId.value.trim();
       const evType = DOM.mrvEvidenceType.value.trim();
       const lat = DOM.mrvLatitude.value.trim();
       const lng = DOM.mrvLongitude.value.trim();
       const carbon = DOM.mrvCarbon.value.trim();
-      const date = DOM.mrvDate.value || new Date().toISOString().slice(0, 10);
+      const date = DOM.mrvDate.value || new Date().toISOString().slice(0,10);
       const notes = DOM.mrvNotes.value.trim();
-
-      if (!farmId || !evType) {
-        showToast('⚠️ Please enter Farm ID and Evidence Type', null, 3000);
-        return;
-      }
-
-      // Find farmer by ID
-      const farmer = state.farmers.find(f => f.id === farmId || f.name.includes(farmId));
-      const farmerName = farmer ? farmer.name : farmId;
-
-      // Create new evidence entry
+      if (!farmId || !evType) { showToast('⚠️ Farm ID and Evidence Type required'); return; }
       const newEvidence = {
         id: `MRV-${String(state.mrvEvidence.length + 1).padStart(3, '0')}`,
-        farm: farmId,
-        type: evType,
-        date: date,
-        status: 'Pending',
-        latitude: lat,
-        longitude: lng,
-        carbon: carbon,
-        notes: notes,
-        farmerName: farmerName
+        farm: farmId, type: evType, date: date, status: 'Pending',
+        latitude: lat, longitude: lng, carbon: carbon, notes: notes
       };
-
       state.mrvEvidence.unshift(newEvidence);
       renderMRV();
-
-      // Also add to farmer's MRV if found
+      // Add to farmer if exists
+      const farmer = state.farmers.find(f => f.id === farmId || f.name.includes(farmId));
       if (farmer) {
         if (!farmer.mrv) farmer.mrv = [];
         farmer.mrv.unshift({ id: newEvidence.id, type: evType, date: date, status: 'Pending' });
         if (!farmer.activity) farmer.activity = [];
         farmer.activity.unshift(`MRV evidence ${newEvidence.id} submitted (${evType})`);
       }
-
       closeModal('evidenceModal');
-      showToast(`📤 Evidence submitted! ${evType} for ${farmerName}`);
-      document.getElementById('evidenceForm')?.reset();
-      DOM.mrvFarmId.value = '';
-      DOM.mrvEvidenceType.value = '';
-      DOM.mrvLatitude.value = '';
-      DOM.mrvLongitude.value = '';
-      DOM.mrvCarbon.value = '';
-      DOM.mrvDate.value = '';
-      DOM.mrvNotes.value = '';
+      showToast(`📤 Evidence submitted for ${farmId}`);
+      this.reset();
+      DOM.mrvFarmId.value = ''; DOM.mrvEvidenceType.value = '';
+      DOM.mrvLatitude.value = ''; DOM.mrvLongitude.value = '';
+      DOM.mrvCarbon.value = ''; DOM.mrvDate.value = ''; DOM.mrvNotes.value = '';
     });
 
+    // Time range select
     document.getElementById('timeRangeSelect')?.addEventListener('change', function() {
       showToast(`📊 Showing data for ${this.value === '6m' ? '6 months' : '1 year'}`);
     });
+
+    // Audit search
+    DOM.auditSearch?.addEventListener('input', renderAudit);
 
     window.addEventListener('resize', () => {
       clearTimeout(window._resizeTimer);
@@ -1564,24 +1643,34 @@
     });
   }
 
-  // --- INIT ---
+  // ================================================================
+  // INIT
+  // ================================================================
   function init() {
     applyTheme();
     renderFarmers();
+    renderProjects();
     renderMRV();
     renderContracts();
     renderCommunities();
+    renderPayments();
+    renderVerifications();
+    renderAudit();
     updateDashboardCount();
     initCharts();
     initDashboardMap();
     initEvents();
     navigateTo('dashboard');
     setTimeout(() => { if (state.map) state.map.invalidateSize(); }, 500);
-    setTimeout(() => showToast('🌿 CarbonLink MRV Ultra Pro ready', 3000), 600);
+    setTimeout(() => showToast('🌿 CarbonLink MRV Enterprise Ultra Pro ready', 3000), 600);
   }
 
-  // Expose confirmDelete globally
+  // Expose functions globally
   window.confirmDelete = confirmDelete;
+  window.generateReport = generateReport;
+  window.approveVerification = approveVerification;
+  window.rejectVerification = rejectVerification;
+  window.editProject = editProject;
 
   document.addEventListener('DOMContentLoaded', init);
 })();
