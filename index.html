@@ -84,6 +84,15 @@
     .toast-undo { display: inline-flex; align-items: center; gap: 0.75rem; }
     .toast-undo button { background: rgba(255,255,255,0.2); border: none; padding: 0.25rem 0.75rem; border-radius: 6px; font-weight: 600; font-size: 0.8rem; color: #fff; cursor: pointer; transition: background 0.2s; }
     .toast-undo button:hover { background: rgba(255,255,255,0.3); }
+
+    /* Profile tabs */
+    .profile-tab { cursor: pointer; transition: all 0.2s ease; }
+    .profile-tab.active { border-bottom: 3px solid #43a047; color: #43a047; font-weight: 600; }
+    .dark .profile-tab.active { border-bottom-color: #66bb6a; color: #66bb6a; }
+
+    /* Custom scroll for farmer details */
+    .detail-scroll { max-height: 70vh; overflow-y: auto; }
+    @media (max-width: 768px) { .detail-scroll { max-height: 60vh; } }
   </style>
 </head>
 
@@ -528,27 +537,178 @@
   </div>
 </div>
 
-<!-- MRV Evidence Modal -->
+<!-- ===== FARMER DETAILS MODAL (TABS) ===== -->
+<div id="farmerDetailModal" class="modal hidden fixed inset-0 z-[75] flex items-center justify-center p-4">
+  <div class="modal-backdrop absolute inset-0" onclick="closeModal('farmerDetailModal')"></div>
+  <div class="relative bg-white dark:bg-charcoal-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[92vh] overflow-hidden flex flex-col">
+    <!-- Header -->
+    <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-charcoal-700 shrink-0">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-full bg-brand-100 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 flex items-center justify-center text-lg font-bold" id="detailAvatar">JM</div>
+        <div>
+          <h2 class="text-lg font-bold dark:text-white" id="detailName">James Mwangi</h2>
+          <p class="text-xs text-slate-400" id="detailId">F-1001</p>
+        </div>
+      </div>
+      <button onclick="closeModal('farmerDetailModal')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fas fa-times text-xl"></i></button>
+    </div>
+
+    <!-- Tabs -->
+    <div class="flex overflow-x-auto border-b border-slate-200 dark:border-charcoal-700 px-4 shrink-0 no-scrollbar">
+      <button class="profile-tab active px-4 py-3 text-sm font-medium text-slate-600 dark:text-slate-400" data-tab="personal">Personal</button>
+      <button class="profile-tab px-4 py-3 text-sm font-medium text-slate-600 dark:text-slate-400" data-tab="farms">Farms</button>
+      <button class="profile-tab px-4 py-3 text-sm font-medium text-slate-600 dark:text-slate-400" data-tab="carbon">Carbon</button>
+      <button class="profile-tab px-4 py-3 text-sm font-medium text-slate-600 dark:text-slate-400" data-tab="contracts">Contracts</button>
+      <button class="profile-tab px-4 py-3 text-sm font-medium text-slate-600 dark:text-slate-400" data-tab="payments">Payments</button>
+      <button class="profile-tab px-4 py-3 text-sm font-medium text-slate-600 dark:text-slate-400" data-tab="mrv">MRV Evidence</button>
+      <button class="profile-tab px-4 py-3 text-sm font-medium text-slate-600 dark:text-slate-400" data-tab="activity">Activity</button>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="flex-1 overflow-y-auto p-6 detail-scroll">
+      <!-- Personal -->
+      <div id="tab-personal" class="tab-content space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div><label class="text-xs text-slate-400">Full Name</label><p class="font-medium dark:text-white" id="dpName">-</p></div>
+          <div><label class="text-xs text-slate-400">Unique ID</label><p class="font-medium dark:text-white" id="dpId">-</p></div>
+          <div><label class="text-xs text-slate-400">Phone</label><p class="font-medium dark:text-white" id="dpPhone">-</p></div>
+          <div><label class="text-xs text-slate-400">Email</label><p class="font-medium dark:text-white" id="dpEmail">-</p></div>
+          <div><label class="text-xs text-slate-400">National ID</label><p class="font-medium dark:text-white" id="dpNational">-</p></div>
+          <div><label class="text-xs text-slate-400">Community</label><p class="font-medium dark:text-white" id="dpCommunity">-</p></div>
+          <div><label class="text-xs text-slate-400">Registration Date</label><p class="font-medium dark:text-white" id="dpDate">-</p></div>
+          <div><label class="text-xs text-slate-400">Status</label><span class="inline-flex px-2 py-0.5 rounded-full text-xs" id="dpStatus">-</span></div>
+        </div>
+      </div>
+
+      <!-- Farms -->
+      <div id="tab-farms" class="tab-content hidden space-y-3">
+        <div id="dpFarmsList" class="space-y-3">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+
+      <!-- Carbon -->
+      <div id="tab-carbon" class="tab-content hidden space-y-3">
+        <div id="dpCarbonList" class="space-y-3">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+
+      <!-- Contracts -->
+      <div id="tab-contracts" class="tab-content hidden space-y-3">
+        <div id="dpContractsList" class="space-y-3">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+
+      <!-- Payments -->
+      <div id="tab-payments" class="tab-content hidden space-y-3">
+        <div id="dpPaymentsList" class="space-y-3">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+
+      <!-- MRV Evidence -->
+      <div id="tab-mrv" class="tab-content hidden space-y-3">
+        <div id="dpMrvList" class="space-y-3">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+
+      <!-- Activity -->
+      <div id="tab-activity" class="tab-content hidden space-y-3">
+        <div id="dpActivityList" class="space-y-2">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ENHANCED MRV EVIDENCE MODAL (Manual Entry) ===== -->
 <div id="evidenceModal" class="modal hidden fixed inset-0 z-[70] flex items-center justify-center p-4">
   <div class="modal-backdrop absolute inset-0" onclick="closeModal('evidenceModal')"></div>
   <div class="relative bg-white dark:bg-charcoal-800 rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 md:p-8">
     <div class="flex items-center justify-between mb-5"><h2 class="text-xl font-bold dark:text-white">Submit MRV Evidence</h2><button onclick="closeModal('evidenceModal')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fas fa-times text-xl"></i></button></div>
     <form id="evidenceForm" class="space-y-4">
-      <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Farm *</label>
-        <select required class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
-          <option value="F-102">F-102 – J. Mwangi</option>
-          <option value="F-2034">F-2034 – J. Otieno</option>
-          <option value="F-087">F-087 – S. Kiprop</option>
-        </select>
+      <!-- Farm ID - Manual Entry -->
+      <div>
+        <label class="block text-sm font-medium mb-1 dark:text-slate-300">Farm ID *</label>
+        <div class="flex gap-2">
+          <input type="text" id="mrvFarmId" placeholder="e.g. F-102 or enter manually" required class="flex-1 rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+          <select id="mrvFarmSelect" class="rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+            <option value="">Quick select</option>
+            <option value="F-102">F-102 – J. Mwangi</option>
+            <option value="F-2034">F-2034 – J. Otieno</option>
+            <option value="F-087">F-087 – S. Kiprop</option>
+            <option value="F-1001">F-1001 – J. Mwangi</option>
+          </select>
+        </div>
+        <p class="text-[10px] text-slate-400 mt-1">Enter a custom Farm ID or select from dropdown</p>
       </div>
-      <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Evidence Type *</label>
-        <select required class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
-          <option>Satellite Imagery</option><option>Field Survey</option><option>Soil Sample</option><option>Photographic</option><option>Farmer Declaration</option>
-        </select>
+
+      <!-- Evidence Type - Manual Entry -->
+      <div>
+        <label class="block text-sm font-medium mb-1 dark:text-slate-300">Evidence Type *</label>
+        <div class="flex gap-2">
+          <input type="text" id="mrvEvidenceType" placeholder="e.g. Satellite, Field Survey, Soil Sample..." required class="flex-1 rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+          <select id="mrvTypeSelect" class="rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+            <option value="">Quick select</option>
+            <option value="Satellite Imagery">Satellite Imagery</option>
+            <option value="Field Survey">Field Survey</option>
+            <option value="Soil Sample">Soil Sample</option>
+            <option value="Photographic">Photographic</option>
+            <option value="Farmer Declaration">Farmer Declaration</option>
+            <option value="Drone Survey">Drone Survey</option>
+            <option value="Ground Truthing">Ground Truthing</option>
+          </select>
+        </div>
+        <p class="text-[10px] text-slate-400 mt-1">Enter custom type or select from dropdown</p>
       </div>
-      <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Upload Files</label><div class="border-2 border-dashed border-slate-300 dark:border-charcoal-600 rounded-xl p-6 text-center"><i class="fas fa-cloud-upload-alt text-3xl text-slate-400 mb-2"></i><p class="text-sm text-slate-500 dark:text-slate-400">Drag & drop or click to browse</p><input type="file" multiple accept=".jpg,.png,.pdf,.geojson" class="hidden" id="evidenceFileInput"><button type="button" onclick="document.getElementById('evidenceFileInput').click()" class="mt-2 text-brand-600 dark:text-brand-400 hover:underline text-sm">Browse</button></div></div>
-      <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Verification Notes</label><textarea rows="3" class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"></textarea></div>
-      <div class="flex gap-3 pt-2"><button type="button" onclick="closeModal('evidenceModal')" class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 dark:border-charcoal-600 text-sm font-medium hover:bg-slate-50 dark:hover:bg-charcoal-700">Cancel</button><button type="submit" class="flex-1 px-4 py-2.5 rounded-xl bg-brand-600 text-white text-sm font-medium hover:bg-brand-700">Submit</button></div>
+
+      <!-- Manual GPS Coordinates -->
+      <div>
+        <label class="block text-sm font-medium mb-1 dark:text-slate-300">GPS Coordinates</label>
+        <div class="grid grid-cols-2 gap-3">
+          <input type="text" id="mrvLatitude" placeholder="Latitude (e.g. -1.2921)" class="rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+          <input type="text" id="mrvLongitude" placeholder="Longitude (e.g. 36.8219)" class="rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+        </div>
+      </div>
+
+      <!-- Carbon Amount -->
+      <div>
+        <label class="block text-sm font-medium mb-1 dark:text-slate-300">Carbon Amount (tCO₂e)</label>
+        <input type="number" id="mrvCarbon" step="0.01" placeholder="e.g. 12.5" class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+      </div>
+
+      <!-- Date -->
+      <div>
+        <label class="block text-sm font-medium mb-1 dark:text-slate-300">Measurement Date</label>
+        <input type="date" id="mrvDate" class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+      </div>
+
+      <!-- File Upload -->
+      <div>
+        <label class="block text-sm font-medium mb-1 dark:text-slate-300">Upload Files</label>
+        <div class="border-2 border-dashed border-slate-300 dark:border-charcoal-600 rounded-xl p-6 text-center">
+          <i class="fas fa-cloud-upload-alt text-3xl text-slate-400 mb-2"></i>
+          <p class="text-sm text-slate-500 dark:text-slate-400">Drag & drop or click to browse</p>
+          <input type="file" multiple accept=".jpg,.png,.pdf,.geojson,.kml" class="hidden" id="evidenceFileInput">
+          <button type="button" onclick="document.getElementById('evidenceFileInput').click()" class="mt-2 text-brand-600 dark:text-brand-400 hover:underline text-sm">Browse Files</button>
+          <p class="text-[10px] text-slate-400 mt-1">Supported: JPG, PNG, PDF, GEOJSON, KML</p>
+        </div>
+      </div>
+
+      <!-- Verification Notes -->
+      <div>
+        <label class="block text-sm font-medium mb-1 dark:text-slate-300">Verification Notes</label>
+        <textarea id="mrvNotes" rows="3" placeholder="Enter any observations, methodology notes, or additional context..." class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"></textarea>
+      </div>
+
+      <div class="flex gap-3 pt-2">
+        <button type="button" onclick="closeModal('evidenceModal')" class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 dark:border-charcoal-600 text-sm font-medium hover:bg-slate-50 dark:hover:bg-charcoal-700">Cancel</button>
+        <button type="submit" class="flex-1 px-4 py-2.5 rounded-xl bg-brand-600 text-white text-sm font-medium hover:bg-brand-700">Submit Evidence</button>
+      </div>
     </form>
   </div>
 </div>
@@ -609,13 +769,13 @@
     farmerPage: 0,
     farmerPageSize: 5,
     farmers: [
-      { id: 'F-1001', name: 'James Mwangi', phone: '+254 712 345 678', community: 'Machakos', status: 'Active' },
-      { id: 'F-1002', name: 'Grace Akinyi', phone: '+254 723 456 789', community: 'Makueni', status: 'Active' },
-      { id: 'F-1003', name: 'Samuel Kiprop', phone: '+254 734 567 890', community: 'Kitui', status: 'Active' },
-      { id: 'F-1004', name: 'Mary Wanjiru', phone: '+254 745 678 901', community: 'Machakos', status: 'Inactive' },
-      { id: 'F-1005', name: 'John Otieno', phone: '+254 756 789 012', community: 'Kajiado', status: 'Pending' },
-      { id: 'F-1006', name: 'Janet Auma', phone: '+254 767 890 123', community: 'Makueni', status: 'Active' },
-      { id: 'F-1007', name: 'Peter Njoroge', phone: '+254 778 901 234', community: 'Kitui', status: 'Active' },
+      { id: 'F-1001', name: 'James Mwangi', phone: '+254 712 345 678', email: 'james@example.com', nationalId: '12345678', community: 'Machakos', status: 'Active', registered: '2026-01-15', farms: [{ name: 'Karatina Agroforestry', acres: 142.5, carbon: 1245, status: 'Verified' }, { name: 'Machakos Valley', acres: 87.3, carbon: 620, status: 'Monitoring' }], carbonRecords: [{ project: 'Agroforestry Phase II', baseline: 2400, estimated: 2100, verified: 1800, date: '2026-08-20' }], contracts: [{ id: 'C-2026-01', project: 'Agroforestry Phase II', term: '5 yrs', share: '60%', signed: '2026-01-15', status: 'Active' }], payments: [{ ref: 'PY-2026-0842', amount: 1245, date: '2026-08-25', status: 'Completed' }], mrv: [{ id: 'MRV-001', type: 'Satellite', date: '2026-08-25', status: 'Verified' }], activity: ['Registered farmer', 'Added farm Karatina Agroforestry', 'Carbon record submitted', 'Payment received KSh 1,245'] },
+      { id: 'F-1002', name: 'Grace Akinyi', phone: '+254 723 456 789', email: 'grace@example.com', nationalId: '23456789', community: 'Makueni', status: 'Active', registered: '2026-02-10', farms: [], carbonRecords: [], contracts: [], payments: [], mrv: [], activity: ['Registered farmer'] },
+      { id: 'F-1003', name: 'Samuel Kiprop', phone: '+254 734 567 890', email: 'samuel@example.com', nationalId: '34567890', community: 'Kitui', status: 'Active', registered: '2026-03-22', farms: [], carbonRecords: [], contracts: [{ id: 'C-2026-04', project: 'Soil Carbon Initiative', term: '7 yrs', share: '55%', signed: '2026-07-10', status: 'Pending' }], payments: [{ ref: 'PY-2026-0835', amount: 2100, date: '2026-08-23', status: 'Completed' }], mrv: [{ id: 'MRV-002', type: 'Field Survey', date: '2026-08-24', status: 'Review' }], activity: ['Registered farmer', 'Contract signed'] },
+      { id: 'F-1004', name: 'Mary Wanjiru', phone: '+254 745 678 901', email: 'mary@example.com', nationalId: '45678901', community: 'Machakos', status: 'Inactive', registered: '2025-11-05', farms: [], carbonRecords: [], contracts: [], payments: [{ ref: 'PY-2026-0830', amount: 675, date: '2026-08-20', status: 'Completed' }], mrv: [], activity: ['Registered farmer', 'Status changed to Inactive'] },
+      { id: 'F-1005', name: 'John Otieno', phone: '+254 756 789 012', email: 'john@example.com', nationalId: '56789012', community: 'Kajiado', status: 'Pending', registered: '2026-07-01', farms: [], carbonRecords: [], contracts: [], payments: [], mrv: [{ id: 'MRV-003', type: 'Soil Sample', date: '2026-08-22', status: 'Rejected' }], activity: ['Registered farmer', 'MRV evidence rejected - resubmit required'] },
+      { id: 'F-1006', name: 'Janet Auma', phone: '+254 767 890 123', email: 'janet@example.com', nationalId: '67890123', community: 'Makueni', status: 'Active', registered: '2026-06-18', farms: [], carbonRecords: [], contracts: [], payments: [], mrv: [], activity: ['Registered farmer'] },
+      { id: 'F-1007', name: 'Peter Njoroge', phone: '+254 778 901 234', email: 'peter@example.com', nationalId: '78901234', community: 'Kitui', status: 'Active', registered: '2026-05-09', farms: [], carbonRecords: [], contracts: [], payments: [], mrv: [], activity: ['Registered farmer'] },
     ],
     mrvEvidence: [
       { id: 'MRV-001', farm: 'F-102', type: 'Satellite', date: '2026-08-25', status: 'Verified' },
@@ -638,6 +798,7 @@
     farmMap: null,
     toastTimer: null,
     undoCallback: null,
+    currentFarmer: null,
   };
 
   // --- DOM REFS ---
@@ -670,6 +831,7 @@
     addFarmerBtn: $('#addFarmerBtn'),
     addEvidenceBtn: $('#addEvidenceBtn'),
     farmerModal: $('#farmerModal'),
+    farmerDetailModal: $('#farmerDetailModal'),
     evidenceModal: $('#evidenceModal'),
     notificationModal: $('#notificationModal'),
     deleteModal: $('#deleteModal'),
@@ -685,6 +847,34 @@
     contractList: $('#contractList'),
     communityList: $('#communityList'),
     dashFarmerCount: $('#dashFarmerCount'),
+    // Detail modal elements
+    detailAvatar: $('#detailAvatar'),
+    detailName: $('#detailName'),
+    detailId: $('#detailId'),
+    dpName: $('#dpName'),
+    dpId: $('#dpId'),
+    dpPhone: $('#dpPhone'),
+    dpEmail: $('#dpEmail'),
+    dpNational: $('#dpNational'),
+    dpCommunity: $('#dpCommunity'),
+    dpDate: $('#dpDate'),
+    dpStatus: $('#dpStatus'),
+    dpFarmsList: $('#dpFarmsList'),
+    dpCarbonList: $('#dpCarbonList'),
+    dpContractsList: $('#dpContractsList'),
+    dpPaymentsList: $('#dpPaymentsList'),
+    dpMrvList: $('#dpMrvList'),
+    dpActivityList: $('#dpActivityList'),
+    // MRV manual fields
+    mrvFarmId: $('#mrvFarmId'),
+    mrvFarmSelect: $('#mrvFarmSelect'),
+    mrvEvidenceType: $('#mrvEvidenceType'),
+    mrvTypeSelect: $('#mrvTypeSelect'),
+    mrvLatitude: $('#mrvLatitude'),
+    mrvLongitude: $('#mrvLongitude'),
+    mrvCarbon: $('#mrvCarbon'),
+    mrvDate: $('#mrvDate'),
+    mrvNotes: $('#mrvNotes'),
   };
 
   // --- THEME ---
@@ -884,6 +1074,106 @@
     DOM.sidebar.classList.add('-translate-x-full');
   }
 
+  // --- FARMER DETAILS (TABS) ---
+  function openFarmerDetails(farmerId) {
+    const farmer = state.farmers.find(f => f.id === farmerId);
+    if (!farmer) {
+      showToast('❌ Farmer not found');
+      return;
+    }
+    state.currentFarmer = farmer;
+
+    // Set header
+    const initials = farmer.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+    DOM.detailAvatar.textContent = initials;
+    DOM.detailName.textContent = farmer.name;
+    DOM.detailId.textContent = farmer.id;
+
+    // Personal info
+    DOM.dpName.textContent = farmer.name;
+    DOM.dpId.textContent = farmer.id;
+    DOM.dpPhone.textContent = farmer.phone || '—';
+    DOM.dpEmail.textContent = farmer.email || '—';
+    DOM.dpNational.textContent = farmer.nationalId || '—';
+    DOM.dpCommunity.textContent = farmer.community || '—';
+    DOM.dpDate.textContent = farmer.registered || '—';
+    const statusColors = {
+      'Active': 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300',
+      'Inactive': 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300',
+      'Pending': 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300'
+    };
+    DOM.dpStatus.textContent = farmer.status || '—';
+    DOM.dpStatus.className = `inline-flex px-2 py-0.5 rounded-full text-xs ${statusColors[farmer.status] || 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300'}`;
+
+    // Farms
+    DOM.dpFarmsList.innerHTML = (farmer.farms && farmer.farms.length) ? farmer.farms.map(f => `
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2">
+        <div><p class="font-medium dark:text-white">${f.name}</p><p class="text-xs text-slate-400">${f.acres} ha · ${f.carbon} tCO₂e</p></div>
+        <span class="inline-flex px-2 py-0.5 rounded-full text-xs ${f.status === 'Verified' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300'}">${f.status}</span>
+      </div>
+    `).join('') : '<p class="text-sm text-slate-400">No farms registered</p>';
+
+    // Carbon records
+    DOM.dpCarbonList.innerHTML = (farmer.carbonRecords && farmer.carbonRecords.length) ? farmer.carbonRecords.map(c => `
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2">
+        <div><p class="font-medium dark:text-white">${c.project}</p><p class="text-xs text-slate-400">Baseline: ${c.baseline} · Est: ${c.estimated} · Verified: ${c.verified}</p></div>
+        <span class="text-xs text-slate-400">${c.date}</span>
+      </div>
+    `).join('') : '<p class="text-sm text-slate-400">No carbon records</p>';
+
+    // Contracts
+    DOM.dpContractsList.innerHTML = (farmer.contracts && farmer.contracts.length) ? farmer.contracts.map(c => `
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2">
+        <div><p class="font-medium dark:text-white">${c.id}</p><p class="text-xs text-slate-400">${c.project} · Term: ${c.term} · Share: ${c.share}</p></div>
+        <span class="inline-flex px-2 py-0.5 rounded-full text-xs ${c.status === 'Active' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300'}">${c.status}</span>
+      </div>
+    `).join('') : '<p class="text-sm text-slate-400">No contracts</p>';
+
+    // Payments
+    DOM.dpPaymentsList.innerHTML = (farmer.payments && farmer.payments.length) ? farmer.payments.map(p => `
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2">
+        <div><p class="font-medium dark:text-white">${p.ref}</p><p class="text-xs text-slate-400">${p.date}</p></div>
+        <span class="font-medium text-emerald-600 dark:text-emerald-400">KSh ${p.amount.toLocaleString()}</span>
+      </div>
+    `).join('') : '<p class="text-sm text-slate-400">No payments</p>';
+
+    // MRV Evidence
+    DOM.dpMrvList.innerHTML = (farmer.mrv && farmer.mrv.length) ? farmer.mrv.map(m => `
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2">
+        <div><p class="font-medium dark:text-white">${m.id}</p><p class="text-xs text-slate-400">${m.type} · ${m.date}</p></div>
+        <span class="inline-flex px-2 py-0.5 rounded-full text-xs ${m.status === 'Verified' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' : m.status === 'Review' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'}">${m.status}</span>
+      </div>
+    `).join('') : '<p class="text-sm text-slate-400">No MRV evidence</p>';
+
+    // Activity
+    DOM.dpActivityList.innerHTML = (farmer.activity && farmer.activity.length) ? farmer.activity.map((a, i) => `
+      <div class="flex items-start space-x-3 border-b border-slate-100 dark:border-charcoal-700 pb-2 last:border-0">
+        <div class="w-5 h-5 rounded-full bg-brand-100 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 flex items-center justify-center text-[10px] shrink-0 mt-0.5">${i + 1}</div>
+        <p class="text-sm dark:text-white">${a}</p>
+      </div>
+    `).join('') : '<p class="text-sm text-slate-400">No activity recorded</p>';
+
+    // Reset tabs to Personal
+    document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
+    document.querySelector('.profile-tab[data-tab="personal"]').classList.add('active');
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
+    document.getElementById('tab-personal').classList.remove('hidden');
+
+    openModal('farmerDetailModal');
+  }
+
+  // Tab switching
+  document.querySelectorAll('.profile-tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+      const target = this.dataset.tab;
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
+      const content = document.getElementById(`tab-${target}`);
+      if (content) content.classList.remove('hidden');
+    });
+  });
+
   // --- RENDER FUNCTIONS ---
   function renderFarmers() {
     const search = (DOM.farmerSearch?.value || '').toLowerCase();
@@ -919,12 +1209,15 @@
         <td class="px-4 py-3 hidden md:table-cell text-sm">${f.community}</td>
         <td class="px-4 py-3 hidden lg:table-cell"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${f.status === 'Active' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' : f.status === 'Pending' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'}">${f.status}</span></td>
         <td class="px-4 py-3 text-right space-x-2">
-          <button class="text-brand-600 dark:text-brand-400 hover:underline text-xs">View</button>
+          <button onclick="window.openFarmerDetails('${f.id}')" class="text-brand-600 dark:text-brand-400 hover:underline text-xs"><i class="fas fa-eye mr-1"></i>View</button>
           <button onclick="confirmDelete('farmer', ${realIndex}, null, '${f.name}')" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-trash-alt"></i></button>
         </td>
       </tr>
     `}).join('');
   }
+
+  // Expose openFarmerDetails globally
+  window.openFarmerDetails = openFarmerDetails;
 
   function renderMRV() {
     if (!DOM.mrvTableBody) return;
@@ -944,7 +1237,7 @@
         <td class="px-4 py-3 hidden md:table-cell">${m.date}</td>
         <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${statusClass}">${m.status}</span></td>
         <td class="px-4 py-3 text-right space-x-2">
-          <button class="text-brand-600 dark:text-brand-400 hover:underline text-xs">View</button>
+          <button class="text-brand-600 dark:text-brand-400 hover:underline text-xs"><i class="fas fa-eye mr-1"></i>View</button>
           <button onclick="confirmDelete('mrv', ${idx}, null, '${m.id}')" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-trash-alt"></i></button>
         </td>
       </tr>
@@ -992,7 +1285,6 @@
   }
 
   function exportData() {
-    // Simulate export
     showToast('📦 Exporting all MRV data... (simulated)');
     setTimeout(() => {
       showToast('✅ Data export completed! (simulated)');
@@ -1006,6 +1298,19 @@
     closeModal('notificationModal');
     showToast(`🔔 Notifications saved: Email ${email ? 'ON' : 'OFF'}, Push ${push ? 'ON' : 'OFF'}, SMS ${sms ? 'ON' : 'OFF'}`);
   }
+
+  // --- MRV Manual Entry Logic ---
+  DOM.mrvFarmSelect.addEventListener('change', function() {
+    if (this.value) {
+      DOM.mrvFarmId.value = this.value;
+    }
+  });
+
+  DOM.mrvTypeSelect.addEventListener('change', function() {
+    if (this.value) {
+      DOM.mrvEvidenceType.value = this.value;
+    }
+  });
 
   // --- CHARTS ---
   function getChartColors() {
@@ -1176,7 +1481,9 @@
       if (name && phone && nationalId) {
         const newFarmer = {
           id: `F-${String(state.farmers.length + 1001).padStart(4, '0')}`,
-          name, phone, community: community || 'Machakos', status: 'Pending'
+          name, phone, email: email || '', nationalId, community: community || 'Machakos',
+          status: 'Pending', registered: new Date().toISOString().slice(0, 10),
+          farms: [], carbonRecords: [], contracts: [], payments: [], mrv: [], activity: ['Registered farmer']
         };
         state.farmers.unshift(newFarmer);
         renderFarmers();
@@ -1187,11 +1494,61 @@
       }
     });
 
+    // Enhanced MRV Evidence submission with manual entry
     document.getElementById('evidenceForm')?.addEventListener('submit', (e) => {
       e.preventDefault();
+      const farmId = DOM.mrvFarmId.value.trim();
+      const evType = DOM.mrvEvidenceType.value.trim();
+      const lat = DOM.mrvLatitude.value.trim();
+      const lng = DOM.mrvLongitude.value.trim();
+      const carbon = DOM.mrvCarbon.value.trim();
+      const date = DOM.mrvDate.value || new Date().toISOString().slice(0, 10);
+      const notes = DOM.mrvNotes.value.trim();
+
+      if (!farmId || !evType) {
+        showToast('⚠️ Please enter Farm ID and Evidence Type', null, 3000);
+        return;
+      }
+
+      // Find farmer by ID
+      const farmer = state.farmers.find(f => f.id === farmId || f.name.includes(farmId));
+      const farmerName = farmer ? farmer.name : farmId;
+
+      // Create new evidence entry
+      const newEvidence = {
+        id: `MRV-${String(state.mrvEvidence.length + 1).padStart(3, '0')}`,
+        farm: farmId,
+        type: evType,
+        date: date,
+        status: 'Pending',
+        latitude: lat,
+        longitude: lng,
+        carbon: carbon,
+        notes: notes,
+        farmerName: farmerName
+      };
+
+      state.mrvEvidence.unshift(newEvidence);
+      renderMRV();
+
+      // Also add to farmer's MRV if found
+      if (farmer) {
+        if (!farmer.mrv) farmer.mrv = [];
+        farmer.mrv.unshift({ id: newEvidence.id, type: evType, date: date, status: 'Pending' });
+        if (!farmer.activity) farmer.activity = [];
+        farmer.activity.unshift(`MRV evidence ${newEvidence.id} submitted (${evType})`);
+      }
+
       closeModal('evidenceModal');
-      showToast('📤 Evidence submitted for verification!');
+      showToast(`📤 Evidence submitted! ${evType} for ${farmerName}`);
       document.getElementById('evidenceForm')?.reset();
+      DOM.mrvFarmId.value = '';
+      DOM.mrvEvidenceType.value = '';
+      DOM.mrvLatitude.value = '';
+      DOM.mrvLongitude.value = '';
+      DOM.mrvCarbon.value = '';
+      DOM.mrvDate.value = '';
+      DOM.mrvNotes.value = '';
     });
 
     document.getElementById('timeRangeSelect')?.addEventListener('change', function() {
