@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
-  <title>CarbonLink MRV – Complete Platform</title>
+  <title>CarbonLink MRV – Ultra Pro</title>
 
-  <!-- Tailwind CSS via CDN -->
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -23,98 +23,78 @@
 
   <!-- Font Awesome 6 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <!-- Chart.js -->
+  <!-- Chart.js & Leaflet -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <!-- Leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <style>
     * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
     body { transition: background-color 0.25s ease, color 0.25s ease; }
-    
-    /* Scrollbar */
     ::-webkit-scrollbar { width: 5px; height: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
     .dark ::-webkit-scrollbar-thumb { background: #404040; }
     ::-webkit-scrollbar-thumb:hover { background: #388e5c; }
 
-    /* Sidebar transitions */
     .sidebar-transition { transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
     .content-transition { transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-    
-    /* Nav active indicator */
     .nav-link.active::before { content: ''; position: absolute; left: 0; top: 12%; bottom: 12%; width: 3.5px; background: #43a047; border-radius: 0 4px 4px 0; }
     .nav-link { position: relative; transition: all 0.15s ease; cursor: pointer; }
     .nav-link:hover { background: rgba(67, 160, 71, 0.08); }
     .dark .nav-link:hover { background: rgba(67, 160, 71, 0.15); }
-    
-    /* Card hover */
+
     .stat-card { transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease; }
     .stat-card:hover { transform: translateY(-3px); box-shadow: 0 12px 28px -8px rgba(0,0,0,0.12); }
     .dark .stat-card:hover { box-shadow: 0 12px 28px -8px rgba(0,0,0,0.5); }
 
-    /* Glass header */
     .glass-header { background: rgba(255,255,255,0.82); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
     .dark .glass-header { background: rgba(26,26,26,0.85); }
 
-    /* Map container */
     .leaflet-container { border-radius: 0.75rem; z-index: 5; }
     .dark .leaflet-tile-pane { filter: brightness(0.7) invert(1) contrast(1.2) hue-rotate(160deg); }
     .leaflet-popup-content-wrapper { border-radius: 0.5rem; font-family: 'Inter', sans-serif; }
 
-    /* Badge pulse */
     .badge-pulse { animation: pulse 2s infinite; }
     @keyframes pulse { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
 
-    /* Modal backdrop */
     .modal-backdrop { background: rgba(0,0,0,0.5); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
     .modal { transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); }
     .modal.hidden { opacity: 0; transform: scale(0.95) translateY(10px); pointer-events: none; }
     .modal:not(.hidden) { opacity: 1; transform: scale(1) translateY(0); pointer-events: auto; }
 
-    /* Table row hover */
     .table-row-hover:hover { background: rgba(67, 160, 71, 0.04); }
     .dark .table-row-hover:hover { background: rgba(67, 160, 71, 0.08); }
 
-    /* Mobile bottom nav */
     .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; z-index: 60; background: rgba(255,255,255,0.96); backdrop-filter: blur(12px); border-top: 1px solid #e5e7eb; display: none; }
     .dark .bottom-nav { background: rgba(26,26,26,0.96); border-top-color: #404040; }
     @media (max-width: 768px) { .bottom-nav { display: flex; } }
 
-    /* Utility: hide scrollbar */
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-    /* Touch-optimized taps */
     .tap-target { min-height: 44px; min-width: 44px; }
 
-    /* Loading shimmer */
     .shimmer { background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
     .dark .shimmer { background: linear-gradient(90deg, #2d2d2d 25%, #3d3d3d 50%, #2d2d2d 75%); background-size: 200% 100%; }
     @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
 
-    /* Responsive container queries */
-    @container (max-width: 280px) { .stat-card-body { flex-direction: column; align-items: flex-start; gap: 0.5rem; } }
+    /* Toast with undo */
+    .toast-undo { display: inline-flex; align-items: center; gap: 0.75rem; }
+    .toast-undo button { background: rgba(255,255,255,0.2); border: none; padding: 0.25rem 0.75rem; border-radius: 6px; font-weight: 600; font-size: 0.8rem; color: #fff; cursor: pointer; transition: background 0.2s; }
+    .toast-undo button:hover { background: rgba(255,255,255,0.3); }
   </style>
 </head>
 
 <body class="h-full bg-slate-50 dark:bg-charcoal-900 text-slate-800 dark:text-slate-100 overflow-hidden antialiased">
 
-<!-- ============================================================ -->
 <!-- MAIN APP WRAPPER -->
-<!-- ============================================================ -->
 <div class="flex h-full overflow-hidden relative">
 
-  <!-- ===== SIDEBAR ===== -->
+  <!-- SIDEBAR -->
   <aside id="sidebar" class="sidebar-transition fixed md:static inset-y-0 left-0 z-50 w-64 md:w-64 bg-charcoal-900 text-white flex flex-col shrink-0 transform -translate-x-full md:translate-x-0 border-r border-charcoal-700/50 h-full overflow-hidden">
-    
-    <!-- Brand -->
     <div class="h-14 md:h-16 flex items-center justify-between px-4 border-b border-charcoal-700/60 shrink-0">
       <div class="flex items-center space-x-2.5 overflow-hidden">
         <div class="w-8 h-8 md:w-9 md:h-9 rounded-lg bg-brand-500/20 text-brand-400 flex items-center justify-center shrink-0">
@@ -127,7 +107,6 @@
       </button>
     </div>
 
-    <!-- Navigation -->
     <nav class="flex-1 overflow-y-auto px-2 py-3 space-y-0.5 no-scrollbar">
       <a data-page="dashboard" class="nav-link active flex items-center px-3 py-2.5 rounded-lg text-slate-300 hover:text-white hover:bg-charcoal-800 font-medium text-sm">
         <i class="fas fa-chart-pie w-5 text-brand-400 text-center text-sm"></i>
@@ -179,7 +158,6 @@
       </a>
     </nav>
 
-    <!-- Profile -->
     <div class="p-3 border-t border-charcoal-700/60 bg-charcoal-850 shrink-0">
       <div class="flex items-center space-x-3 overflow-hidden">
         <div class="w-8 h-8 md:w-9 md:h-9 rounded-full bg-gradient-to-tr from-brand-600 to-brand-400 text-white font-semibold text-sm flex items-center justify-center shrink-0 shadow">JD</div>
@@ -191,7 +169,7 @@
     </div>
   </aside>
 
-  <!-- ===== MAIN CONTENT ===== -->
+  <!-- MAIN CONTENT -->
   <div id="mainContent" class="flex-1 flex flex-col h-full min-w-0 overflow-hidden content-transition">
 
     <!-- Header -->
@@ -223,18 +201,15 @@
     <!-- Page Container -->
     <main id="pageContainer" class="flex-1 overflow-y-auto p-3 md:p-6 space-y-4 md:space-y-6 pb-20 md:pb-6">
 
-      <!-- ========================================================== -->
-      <!-- PAGE: DASHBOARD -->
-      <!-- ========================================================== -->
+      <!-- ===== DASHBOARD ===== -->
       <div id="page-dashboard" class="page-content space-y-4 md:space-y-6">
-
         <!-- Stats Grid -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
           <div class="stat-card bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm">
             <div class="stat-card-body flex items-center justify-between">
               <div>
                 <span class="text-[10px] md:text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Farmers</span>
-                <h3 class="text-xl md:text-2xl font-bold mt-0.5 text-slate-900 dark:text-white">1,284</h3>
+                <h3 class="text-xl md:text-2xl font-bold mt-0.5 text-slate-900 dark:text-white" id="dashFarmerCount">1,284</h3>
                 <span class="inline-flex items-center text-[10px] md:text-xs font-semibold text-emerald-600 dark:text-emerald-400 mt-1"><i class="fas fa-arrow-trend-up mr-1"></i>+12.5%</span>
               </div>
               <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-base md:text-xl shrink-0"><i class="fas fa-users"></i></div>
@@ -331,16 +306,14 @@
           </div>
         </div>
 
-        <!-- Farmer Growth Chart (extra) -->
+        <!-- Farmer Growth Chart -->
         <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm">
           <h3 class="text-sm md:text-base font-bold dark:text-white mb-3 md:mb-4">Farmer Registration Growth</h3>
           <div class="w-full h-[160px] md:h-[200px]"><canvas id="farmerGrowthChart"></canvas></div>
         </div>
       </div>
 
-      <!-- ========================================================== -->
-      <!-- PAGE: FARMERS -->
-      <!-- ========================================================== -->
+      <!-- ===== FARMERS ===== -->
       <div id="page-farmers" class="page-content hidden space-y-4 md:space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div><h2 class="text-lg md:text-xl font-bold dark:text-white">Farmers Directory</h2><p class="text-xs text-slate-400">Manage registered farmers and their profiles</p></div>
@@ -349,14 +322,27 @@
         <!-- Search & filter -->
         <div class="flex flex-col sm:flex-row gap-3">
           <div class="relative flex-1"><i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i><input type="text" id="farmerSearch" placeholder="Search by name, ID, phone..." class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-charcoal-600 bg-white dark:bg-charcoal-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"></div>
-          <select class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-charcoal-600 bg-white dark:bg-charcoal-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"><option>All Communities</option><option>Nyeri</option><option>Karatina</option><option>Nanyuki</option></select>
+          <select id="communityFilter" class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-charcoal-600 bg-white dark:bg-charcoal-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+            <option value="all">All Communities</option>
+            <option value="Machakos">Machakos</option>
+            <option value="Makueni">Makueni</option>
+            <option value="Kitui">Kitui</option>
+            <option value="Kajiado">Kajiado</option>
+          </select>
         </div>
         <!-- Table -->
         <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm overflow-hidden">
           <div class="overflow-x-auto">
             <table class="w-full text-sm">
               <thead class="bg-slate-50 dark:bg-charcoal-850 border-b border-slate-200 dark:border-charcoal-700">
-                <tr><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">ID</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">Name</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden sm:table-cell">Phone</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden md:table-cell">Community</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden lg:table-cell">Status</th><th class="px-4 py-3 text-right font-semibold text-slate-600 dark:text-slate-300">Action</th></tr>
+                <tr>
+                  <th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">ID</th>
+                  <th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">Name</th>
+                  <th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden sm:table-cell">Phone</th>
+                  <th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden md:table-cell">Community</th>
+                  <th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden lg:table-cell">Status</th>
+                  <th class="px-4 py-3 text-right font-semibold text-slate-600 dark:text-slate-300">Actions</th>
+                </tr>
               </thead>
               <tbody id="farmerTableBody" class="divide-y divide-slate-100 dark:divide-charcoal-700">
                 <!-- Rows rendered by JS -->
@@ -370,9 +356,7 @@
         </div>
       </div>
 
-      <!-- ========================================================== -->
-      <!-- PAGE: FARMS & GIS -->
-      <!-- ========================================================== -->
+      <!-- ===== FARMS & GIS ===== -->
       <div id="page-farms" class="page-content hidden space-y-4 md:space-y-6">
         <div><h2 class="text-lg md:text-xl font-bold dark:text-white">Farms & GIS</h2><p class="text-xs text-slate-400">Spatial data, polygons, and farm boundaries</p></div>
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
@@ -393,24 +377,20 @@
         </div>
       </div>
 
-      <!-- ========================================================== -->
-      <!-- PAGE: CARBON PROJECTS -->
-      <!-- ========================================================== -->
+      <!-- ===== CARBON PROJECTS ===== -->
       <div id="page-carbon" class="page-content hidden space-y-4 md:space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div><h2 class="text-lg md:text-xl font-bold dark:text-white">Carbon Projects</h2><p class="text-xs text-slate-400">Project lifecycle & carbon accounting</p></div>
           <button class="inline-flex items-center justify-center px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm gap-2"><i class="fas fa-plus"></i> New Project</button>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-          <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm"><div class="flex justify-between items-start"><div><h3 class="font-bold dark:text-white">Agroforestry Phase II</h3><p class="text-xs text-slate-400">Nyeri · 1,240 ha</p></div><span class="text-xs bg-brand-100 text-brand-800 dark:bg-brand-900/40 dark:text-brand-300 px-2 py-0.5 rounded-full">Active</span></div><div class="mt-3 grid grid-cols-2 gap-2 text-sm"><div><span class="text-slate-400">Baseline</span><p class="font-medium dark:text-white">2.4K tCO₂e</p></div><div><span class="text-slate-400">Verified</span><p class="font-medium text-emerald-600 dark:text-emerald-400">1.8K tCO₂e</p></div></div></div>
-          <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm"><div class="flex justify-between items-start"><div><h3 class="font-bold dark:text-white">Soil Carbon Initiative</h3><p class="text-xs text-slate-400">Karatina · 860 ha</p></div><span class="text-xs bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300 px-2 py-0.5 rounded-full">Monitoring</span></div><div class="mt-3 grid grid-cols-2 gap-2 text-sm"><div><span class="text-slate-400">Baseline</span><p class="font-medium dark:text-white">1.1K tCO₂e</p></div><div><span class="text-slate-400">Verified</span><p class="font-medium text-amber-600 dark:text-amber-400">620 tCO₂e</p></div></div></div>
-          <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm"><div class="flex justify-between items-start"><div><h3 class="font-bold dark:text-white">Silvopasture Pilot</h3><p class="text-xs text-slate-400">Nanyuki · 430 ha</p></div><span class="text-xs bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300 px-2 py-0.5 rounded-full">Verification</span></div><div class="mt-3 grid grid-cols-2 gap-2 text-sm"><div><span class="text-slate-400">Baseline</span><p class="font-medium dark:text-white">940 tCO₂e</p></div><div><span class="text-slate-400">Verified</span><p class="font-medium text-blue-600 dark:text-blue-400">340 tCO₂e</p></div></div></div>
+          <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm"><div class="flex justify-between items-start"><div><h3 class="font-bold dark:text-white">Agroforestry Phase II</h3><p class="text-xs text-slate-400">Machakos · 1,240 ha</p></div><span class="text-xs bg-brand-100 text-brand-800 dark:bg-brand-900/40 dark:text-brand-300 px-2 py-0.5 rounded-full">Active</span></div><div class="mt-3 grid grid-cols-2 gap-2 text-sm"><div><span class="text-slate-400">Baseline</span><p class="font-medium dark:text-white">2.4K tCO₂e</p></div><div><span class="text-slate-400">Verified</span><p class="font-medium text-emerald-600 dark:text-emerald-400">1.8K tCO₂e</p></div></div></div>
+          <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm"><div class="flex justify-between items-start"><div><h3 class="font-bold dark:text-white">Soil Carbon Initiative</h3><p class="text-xs text-slate-400">Makueni · 860 ha</p></div><span class="text-xs bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300 px-2 py-0.5 rounded-full">Monitoring</span></div><div class="mt-3 grid grid-cols-2 gap-2 text-sm"><div><span class="text-slate-400">Baseline</span><p class="font-medium dark:text-white">1.1K tCO₂e</p></div><div><span class="text-slate-400">Verified</span><p class="font-medium text-amber-600 dark:text-amber-400">620 tCO₂e</p></div></div></div>
+          <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm"><div class="flex justify-between items-start"><div><h3 class="font-bold dark:text-white">Silvopasture Pilot</h3><p class="text-xs text-slate-400">Kitui · 430 ha</p></div><span class="text-xs bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300 px-2 py-0.5 rounded-full">Verification</span></div><div class="mt-3 grid grid-cols-2 gap-2 text-sm"><div><span class="text-slate-400">Baseline</span><p class="font-medium dark:text-white">940 tCO₂e</p></div><div><span class="text-slate-400">Verified</span><p class="font-medium text-blue-600 dark:text-blue-400">340 tCO₂e</p></div></div></div>
         </div>
       </div>
 
-      <!-- ========================================================== -->
-      <!-- PAGE: MRV MONITORING -->
-      <!-- ========================================================== -->
+      <!-- ===== MRV MONITORING ===== -->
       <div id="page-mrv" class="page-content hidden space-y-4 md:space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div><h2 class="text-lg md:text-xl font-bold dark:text-white">MRV Monitoring</h2><p class="text-xs text-slate-400">Evidence collection & verification pipeline</p></div>
@@ -420,44 +400,40 @@
           <div class="overflow-x-auto">
             <table class="w-full text-sm">
               <thead class="bg-slate-50 dark:bg-charcoal-850 border-b border-slate-200 dark:border-charcoal-700">
-                <tr><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">ID</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">Farm</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden sm:table-cell">Type</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden md:table-cell">Date</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">Status</th><th class="px-4 py-3 text-right font-semibold text-slate-600 dark:text-slate-300">Action</th></tr>
+                <tr>
+                  <th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">ID</th>
+                  <th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">Farm</th>
+                  <th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden sm:table-cell">Type</th>
+                  <th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden md:table-cell">Date</th>
+                  <th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">Status</th>
+                  <th class="px-4 py-3 text-right font-semibold text-slate-600 dark:text-slate-300">Actions</th>
+                </tr>
               </thead>
-              <tbody class="divide-y divide-slate-100 dark:divide-charcoal-700">
-                <tr class="table-row-hover"><td class="px-4 py-3 font-mono text-xs">MRV-001</td><td class="px-4 py-3">F-102</td><td class="px-4 py-3 hidden sm:table-cell">Satellite</td><td class="px-4 py-3 hidden md:table-cell">2026-08-25</td><td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300">Verified</span></td><td class="px-4 py-3 text-right"><button class="text-brand-600 dark:text-brand-400 hover:underline text-xs">View</button></td></tr>
-                <tr class="table-row-hover"><td class="px-4 py-3 font-mono text-xs">MRV-002</td><td class="px-4 py-3">F-2034</td><td class="px-4 py-3 hidden sm:table-cell">Field Survey</td><td class="px-4 py-3 hidden md:table-cell">2026-08-24</td><td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300">Review</span></td><td class="px-4 py-3 text-right"><button class="text-brand-600 dark:text-brand-400 hover:underline text-xs">View</button></td></tr>
-                <tr class="table-row-hover"><td class="px-4 py-3 font-mono text-xs">MRV-003</td><td class="px-4 py-3">F-087</td><td class="px-4 py-3 hidden sm:table-cell">Soil Sample</td><td class="px-4 py-3 hidden md:table-cell">2026-08-22</td><td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300">Rejected</span></td><td class="px-4 py-3 text-right"><button class="text-brand-600 dark:text-brand-400 hover:underline text-xs">View</button></td></tr>
+              <tbody id="mrvTableBody" class="divide-y divide-slate-100 dark:divide-charcoal-700">
+                <!-- Rows rendered by JS -->
               </tbody>
             </table>
           </div>
         </div>
       </div>
 
-      <!-- ========================================================== -->
-      <!-- PAGE: CONTRACTS -->
-      <!-- ========================================================== -->
+      <!-- ===== CONTRACTS ===== -->
       <div id="page-contracts" class="page-content hidden space-y-4 md:space-y-6">
         <div><h2 class="text-lg md:text-xl font-bold dark:text-white">Contracts</h2><p class="text-xs text-slate-400">Carbon rights, benefit sharing & agreements</p></div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-          <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm"><div class="flex justify-between"><div><h3 class="font-bold dark:text-white">J. Mwangi · C-2026-01</h3><p class="text-xs text-slate-400">Agroforestry Phase II</p></div><span class="text-xs bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300 px-2 py-0.5 rounded-full">Active</span></div><div class="mt-2 grid grid-cols-3 gap-1 text-xs"><span class="text-slate-400">Term: 5 yrs</span><span class="text-slate-400">Share: 60%</span><span class="text-slate-400">Signed: 2026-01-15</span></div></div>
-          <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm"><div class="flex justify-between"><div><h3 class="font-bold dark:text-white">S. Kiprop · C-2026-04</h3><p class="text-xs text-slate-400">Soil Carbon Initiative</p></div><span class="text-xs bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300 px-2 py-0.5 rounded-full">Pending</span></div><div class="mt-2 grid grid-cols-3 gap-1 text-xs"><span class="text-slate-400">Term: 7 yrs</span><span class="text-slate-400">Share: 55%</span><span class="text-slate-400">Signed: 2026-07-10</span></div></div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6" id="contractList">
+          <!-- Rendered by JS -->
         </div>
       </div>
 
-      <!-- ========================================================== -->
-      <!-- PAGE: COMMUNITIES -->
-      <!-- ========================================================== -->
+      <!-- ===== COMMUNITIES ===== -->
       <div id="page-communities" class="page-content hidden space-y-4 md:space-y-6">
         <div><h2 class="text-lg md:text-xl font-bold dark:text-white">Communities</h2><p class="text-xs text-slate-400">Community management & CDA tracking</p></div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-          <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm"><h3 class="font-bold dark:text-white">Nyeri Community</h3><p class="text-xs text-slate-400">1,240 ha · 284 farmers</p><div class="mt-2 flex gap-4 text-sm"><span class="text-slate-400">CDA: 3</span><span class="text-slate-400">Projects: 2</span><span class="text-emerald-600 dark:text-emerald-400">$124.5K paid</span></div></div>
-          <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm"><h3 class="font-bold dark:text-white">Karatina Community</h3><p class="text-xs text-slate-400">860 ha · 192 farmers</p><div class="mt-2 flex gap-4 text-sm"><span class="text-slate-400">CDA: 2</span><span class="text-slate-400">Projects: 1</span><span class="text-emerald-600 dark:text-emerald-400">$87.2K paid</span></div></div>
-          <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm"><h3 class="font-bold dark:text-white">Nanyuki Community</h3><p class="text-xs text-slate-400">430 ha · 108 farmers</p><div class="mt-2 flex gap-4 text-sm"><span class="text-slate-400">CDA: 1</span><span class="text-slate-400">Projects: 1</span><span class="text-emerald-600 dark:text-emerald-400">$38.6K paid</span></div></div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6" id="communityList">
+          <!-- Rendered by JS -->
         </div>
       </div>
 
-      <!-- ========================================================== -->
-      <!-- PAGE: PAYMENTS -->
-      <!-- ========================================================== -->
+      <!-- ===== PAYMENTS ===== -->
       <div id="page-payments" class="page-content hidden space-y-4 md:space-y-6">
         <div><h2 class="text-lg md:text-xl font-bold dark:text-white">Payments</h2><p class="text-xs text-slate-400">Benefit sharing & disbursement tracking</p></div>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
@@ -468,9 +444,7 @@
         </div>
       </div>
 
-      <!-- ========================================================== -->
-      <!-- PAGE: VERIFICATION -->
-      <!-- ========================================================== -->
+      <!-- ===== VERIFICATION ===== -->
       <div id="page-verification" class="page-content hidden space-y-4 md:space-y-6">
         <div><h2 class="text-lg md:text-xl font-bold dark:text-white">Verification</h2><p class="text-xs text-slate-400">MRV verification workflow & approvals</p></div>
         <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-6 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm">
@@ -478,13 +452,15 @@
             <div><h3 class="font-semibold dark:text-white">Pending Review</h3><p class="text-sm text-slate-400">12 items awaiting verification</p></div>
             <button class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-xl transition-colors">Start Review</button>
           </div>
-          <div class="mt-4 space-y-2"><div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2"><span class="text-sm">MRV-002 · Farm F-2034</span><span class="text-xs bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300 px-2 py-0.5 rounded-full">Review</span></div><div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2"><span class="text-sm">MRV-005 · Farm F-112</span><span class="text-xs bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300 px-2 py-0.5 rounded-full">Review</span></div><div class="flex items-center justify-between"><span class="text-sm">MRV-008 · Farm F-056</span><span class="text-xs bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300 px-2 py-0.5 rounded-full">Assigned</span></div></div>
+          <div class="mt-4 space-y-2">
+            <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2"><span class="text-sm">MRV-002 · Farm F-2034</span><span class="text-xs bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300 px-2 py-0.5 rounded-full">Review</span></div>
+            <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2"><span class="text-sm">MRV-005 · Farm F-112</span><span class="text-xs bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300 px-2 py-0.5 rounded-full">Review</span></div>
+            <div class="flex items-center justify-between"><span class="text-sm">MRV-008 · Farm F-056</span><span class="text-xs bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300 px-2 py-0.5 rounded-full">Assigned</span></div>
+          </div>
         </div>
       </div>
 
-      <!-- ========================================================== -->
-      <!-- PAGE: AUDIT RECORDS -->
-      <!-- ========================================================== -->
+      <!-- ===== AUDIT RECORDS ===== -->
       <div id="page-audit" class="page-content hidden space-y-4 md:space-y-6">
         <div><h2 class="text-lg md:text-xl font-bold dark:text-white">Audit Records</h2><p class="text-xs text-slate-400">Full audit trail of all system actions</p></div>
         <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm overflow-hidden">
@@ -492,9 +468,7 @@
         </div>
       </div>
 
-      <!-- ========================================================== -->
-      <!-- PAGE: REPORTS -->
-      <!-- ========================================================== -->
+      <!-- ===== REPORTS ===== -->
       <div id="page-reports" class="page-content hidden space-y-4 md:space-y-6">
         <div><h2 class="text-lg md:text-xl font-bold dark:text-white">Reports</h2><p class="text-xs text-slate-400">Exportable MRV & carbon reports</p></div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -505,9 +479,7 @@
         </div>
       </div>
 
-      <!-- ========================================================== -->
-      <!-- PAGE: SETTINGS -->
-      <!-- ========================================================== -->
+      <!-- ===== SETTINGS ===== -->
       <div id="page-settings" class="page-content hidden space-y-4 md:space-y-6">
         <div><h2 class="text-lg md:text-xl font-bold dark:text-white">Settings</h2><p class="text-xs text-slate-400">System configuration & preferences</p></div>
         <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-6 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm space-y-4">
@@ -521,9 +493,7 @@
   </div>
 </div>
 
-<!-- ============================================================ -->
-<!-- BOTTOM NAV (Mobile) -->
-<!-- ============================================================ -->
+<!-- ===== BOTTOM NAV (Mobile) ===== -->
 <nav class="bottom-nav md:hidden flex items-center justify-around px-2 py-1.5">
   <button data-page="dashboard" class="bottom-nav-btn flex flex-col items-center text-xs text-slate-500 dark:text-slate-400 active:text-brand-600 dark:active:text-brand-400 p-1"><i class="fas fa-chart-pie text-lg"></i><span class="text-[9px]">Home</span></button>
   <button data-page="farmers" class="bottom-nav-btn flex flex-col items-center text-xs text-slate-500 dark:text-slate-400 p-1"><i class="fas fa-users text-lg"></i><span class="text-[9px]">Farmers</span></button>
@@ -532,9 +502,7 @@
   <button data-page="settings" class="bottom-nav-btn flex flex-col items-center text-xs text-slate-500 dark:text-slate-400 p-1"><i class="fas fa-cog text-lg"></i><span class="text-[9px]">Settings</span></button>
 </nav>
 
-<!-- ============================================================ -->
-<!-- MODALS -->
-<!-- ============================================================ -->
+<!-- ===== MODALS ===== -->
 
 <!-- Farmer Registration Modal -->
 <div id="farmerModal" class="modal hidden fixed inset-0 z-[70] flex items-center justify-center p-4">
@@ -548,7 +516,14 @@
       </div>
       <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Email</label><input type="email" id="fEmail" class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"></div>
       <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">National ID *</label><input type="text" id="fNationalId" required class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"></div>
-      <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Community</label><select id="fCommunity" class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"><option value="Nyeri">Nyeri Community</option><option value="Karatina">Karatina Community</option><option value="Nanyuki">Nanyuki Community</option></select></div>
+      <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Community</label>
+        <select id="fCommunity" class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+          <option value="Machakos">Machakos</option>
+          <option value="Makueni">Makueni</option>
+          <option value="Kitui">Kitui</option>
+          <option value="Kajiado">Kajiado</option>
+        </select>
+      </div>
       <div class="flex gap-3 pt-2"><button type="button" onclick="closeModal('farmerModal')" class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 dark:border-charcoal-600 text-sm font-medium hover:bg-slate-50 dark:hover:bg-charcoal-700">Cancel</button><button type="submit" class="flex-1 px-4 py-2.5 rounded-xl bg-brand-600 text-white text-sm font-medium hover:bg-brand-700">Register</button></div>
     </form>
   </div>
@@ -560,8 +535,18 @@
   <div class="relative bg-white dark:bg-charcoal-800 rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 md:p-8">
     <div class="flex items-center justify-between mb-5"><h2 class="text-xl font-bold dark:text-white">Submit MRV Evidence</h2><button onclick="closeModal('evidenceModal')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fas fa-times text-xl"></i></button></div>
     <form id="evidenceForm" class="space-y-4">
-      <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Farm *</label><select required class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"><option value="F-102">F-102 – J. Mwangi</option><option value="F-2034">F-2034 – J. Otieno</option><option value="F-087">F-087 – S. Kiprop</option></select></div>
-      <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Evidence Type *</label><select required class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"><option>Satellite Imagery</option><option>Field Survey</option><option>Soil Sample</option><option>Photographic</option><option>Farmer Declaration</option></select></div>
+      <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Farm *</label>
+        <select required class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+          <option value="F-102">F-102 – J. Mwangi</option>
+          <option value="F-2034">F-2034 – J. Otieno</option>
+          <option value="F-087">F-087 – S. Kiprop</option>
+        </select>
+      </div>
+      <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Evidence Type *</label>
+        <select required class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+          <option>Satellite Imagery</option><option>Field Survey</option><option>Soil Sample</option><option>Photographic</option><option>Farmer Declaration</option>
+        </select>
+      </div>
       <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Upload Files</label><div class="border-2 border-dashed border-slate-300 dark:border-charcoal-600 rounded-xl p-6 text-center"><i class="fas fa-cloud-upload-alt text-3xl text-slate-400 mb-2"></i><p class="text-sm text-slate-500 dark:text-slate-400">Drag & drop or click to browse</p><input type="file" multiple accept=".jpg,.png,.pdf,.geojson" class="hidden" id="evidenceFileInput"><button type="button" onclick="document.getElementById('evidenceFileInput').click()" class="mt-2 text-brand-600 dark:text-brand-400 hover:underline text-sm">Browse</button></div></div>
       <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Verification Notes</label><textarea rows="3" class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"></textarea></div>
       <div class="flex gap-3 pt-2"><button type="button" onclick="closeModal('evidenceModal')" class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 dark:border-charcoal-600 text-sm font-medium hover:bg-slate-50 dark:hover:bg-charcoal-700">Cancel</button><button type="submit" class="flex-1 px-4 py-2.5 rounded-xl bg-brand-600 text-white text-sm font-medium hover:bg-brand-700">Submit</button></div>
@@ -569,11 +554,32 @@
   </div>
 </div>
 
-<!-- Toast notification -->
-<div id="toast" class="fixed bottom-20 md:bottom-6 left-1/2 -translate-x-1/2 z-[80] bg-charcoal-900 text-white px-6 py-3 rounded-xl shadow-lg text-sm font-medium transition-all duration-300 opacity-0 translate-y-4 pointer-events-none">Action completed</div>
+<!-- ===== DELETE CONFIRMATION MODAL ===== -->
+<div id="deleteModal" class="modal hidden fixed inset-0 z-[80] flex items-center justify-center p-4">
+  <div class="modal-backdrop absolute inset-0" onclick="closeModal('deleteModal')"></div>
+  <div class="relative bg-white dark:bg-charcoal-800 rounded-2xl shadow-2xl max-w-md w-full p-6 md:p-8">
+    <div class="text-center">
+      <div class="w-16 h-16 rounded-full bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 flex items-center justify-center text-3xl mx-auto mb-4"><i class="fas fa-trash-alt"></i></div>
+      <h3 class="text-xl font-bold dark:text-white">Confirm Deletion</h3>
+      <p class="text-sm text-slate-500 dark:text-slate-400 mt-2" id="deleteMessage">Are you sure you want to delete this item? This action cannot be undone.</p>
+      <div class="flex gap-3 mt-6">
+        <button onclick="closeModal('deleteModal')" class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 dark:border-charcoal-600 text-sm font-medium hover:bg-slate-50 dark:hover:bg-charcoal-700">Cancel</button>
+        <button id="deleteConfirmBtn" class="flex-1 px-4 py-2.5 rounded-xl bg-red-600 text-white text-sm font-medium hover:bg-red-700">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TOAST with UNDO ===== -->
+<div id="toast" class="fixed bottom-20 md:bottom-6 left-1/2 -translate-x-1/2 z-[90] bg-charcoal-900 text-white px-6 py-3 rounded-xl shadow-lg text-sm font-medium transition-all duration-300 opacity-0 translate-y-4 pointer-events-none flex items-center gap-4 max-w-[90vw]">
+  <span id="toastMessage">Action completed</span>
+  <span id="toastUndoContainer" class="hidden">
+    <button id="toastUndoBtn" class="bg-white/20 hover:bg-white/30 text-white px-3 py-1 rounded-lg text-xs font-semibold transition">Undo</button>
+  </span>
+</div>
 
 <!-- ============================================================ -->
-<!-- MAIN APPLICATION JAVASCRIPT -->
+<!-- ULTRA PRO JAVASCRIPT -->
 <!-- ============================================================ -->
 <script>
 (function() {
@@ -587,17 +593,36 @@
     farmerPage: 0,
     farmerPageSize: 5,
     farmers: [
-      { id: 'F-1001', name: 'James Mwangi', phone: '+254 712 345 678', community: 'Nyeri', status: 'Active' },
-      { id: 'F-1002', name: 'Grace Akinyi', phone: '+254 723 456 789', community: 'Karatina', status: 'Active' },
-      { id: 'F-1003', name: 'Samuel Kiprop', phone: '+254 734 567 890', community: 'Nanyuki', status: 'Active' },
-      { id: 'F-1004', name: 'Mary Wanjiru', phone: '+254 745 678 901', community: 'Nyeri', status: 'Inactive' },
-      { id: 'F-1005', name: 'John Otieno', phone: '+254 756 789 012', community: 'Karatina', status: 'Pending' },
-      { id: 'F-1006', name: 'Janet Auma', phone: '+254 767 890 123', community: 'Nanyuki', status: 'Active' },
-      { id: 'F-1007', name: 'Peter Njoroge', phone: '+254 778 901 234', community: 'Nyeri', status: 'Active' },
+      { id: 'F-1001', name: 'James Mwangi', phone: '+254 712 345 678', community: 'Machakos', status: 'Active' },
+      { id: 'F-1002', name: 'Grace Akinyi', phone: '+254 723 456 789', community: 'Makueni', status: 'Active' },
+      { id: 'F-1003', name: 'Samuel Kiprop', phone: '+254 734 567 890', community: 'Kitui', status: 'Active' },
+      { id: 'F-1004', name: 'Mary Wanjiru', phone: '+254 745 678 901', community: 'Machakos', status: 'Inactive' },
+      { id: 'F-1005', name: 'John Otieno', phone: '+254 756 789 012', community: 'Kajiado', status: 'Pending' },
+      { id: 'F-1006', name: 'Janet Auma', phone: '+254 767 890 123', community: 'Makueni', status: 'Active' },
+      { id: 'F-1007', name: 'Peter Njoroge', phone: '+254 778 901 234', community: 'Kitui', status: 'Active' },
     ],
+    mrvEvidence: [
+      { id: 'MRV-001', farm: 'F-102', type: 'Satellite', date: '2026-08-25', status: 'Verified' },
+      { id: 'MRV-002', farm: 'F-2034', type: 'Field Survey', date: '2026-08-24', status: 'Review' },
+      { id: 'MRV-003', farm: 'F-087', type: 'Soil Sample', date: '2026-08-22', status: 'Rejected' },
+    ],
+    contracts: [
+      { id: 'C-2026-01', farmer: 'J. Mwangi', project: 'Agroforestry Phase II', status: 'Active', term: '5 yrs', share: '60%', signed: '2026-01-15' },
+      { id: 'C-2026-04', farmer: 'S. Kiprop', project: 'Soil Carbon Initiative', status: 'Pending', term: '7 yrs', share: '55%', signed: '2026-07-10' },
+    ],
+    communities: [
+      { name: 'Machakos', area: '1,240 ha', farmers: 284, cda: 3, projects: 2, paid: '$124.5K' },
+      { name: 'Makueni', area: '860 ha', farmers: 192, cda: 2, projects: 1, paid: '$87.2K' },
+      { name: 'Kitui', area: '430 ha', farmers: 108, cda: 1, projects: 1, paid: '$38.6K' },
+      { name: 'Kajiado', area: '520 ha', farmers: 156, cda: 2, projects: 2, paid: '$92.3K' },
+    ],
+    // Deletion undo stack
+    deletedItems: [], // { type, item, timestamp }
     charts: {},
     map: null,
     farmMap: null,
+    toastTimer: null,
+    undoCallback: null,
   };
 
   // --- DOM REFS ---
@@ -624,13 +649,24 @@
     farmerPrev: $('#farmerPrev'),
     farmerNext: $('#farmerNext'),
     farmerSearch: $('#farmerSearch'),
+    communityFilter: $('#communityFilter'),
     addFarmerBtn: $('#addFarmerBtn'),
     addEvidenceBtn: $('#addEvidenceBtn'),
     farmerModal: $('#farmerModal'),
     evidenceModal: $('#evidenceModal'),
+    deleteModal: $('#deleteModal'),
+    deleteMessage: $('#deleteMessage'),
+    deleteConfirmBtn: $('#deleteConfirmBtn'),
     toast: $('#toast'),
+    toastMessage: $('#toastMessage'),
+    toastUndoContainer: $('#toastUndoContainer'),
+    toastUndoBtn: $('#toastUndoBtn'),
     bottomNavBtns: $$('.bottom-nav-btn'),
     navLinks: $$('.nav-link'),
+    mrvTableBody: $('#mrvTableBody'),
+    contractList: $('#contractList'),
+    communityList: $('#communityList'),
+    dashFarmerCount: $('#dashFarmerCount'),
   };
 
   // --- THEME ---
@@ -651,14 +687,124 @@
     updateChartsTheme();
   }
 
+  // --- TOAST with UNDO ---
+  function showToast(msg, undoCallback = null, duration = 4000) {
+    const t = DOM.toast;
+    const msgEl = DOM.toastMessage;
+    const undoContainer = DOM.toastUndoContainer;
+    const undoBtn = DOM.toastUndoBtn;
+    if (!t) return;
+
+    msgEl.textContent = msg;
+    if (undoCallback) {
+      undoContainer.classList.remove('hidden');
+      state.undoCallback = undoCallback;
+      undoBtn.onclick = function(e) {
+        e.stopPropagation();
+        if (state.undoCallback) {
+          state.undoCallback();
+          state.undoCallback = null;
+          hideToast();
+        }
+      };
+    } else {
+      undoContainer.classList.add('hidden');
+      state.undoCallback = null;
+    }
+
+    clearTimeout(state.toastTimer);
+    t.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
+    t.classList.add('opacity-100', 'translate-y-0');
+    state.toastTimer = setTimeout(() => {
+      hideToast();
+    }, duration);
+  }
+
+  function hideToast() {
+    const t = DOM.toast;
+    if (!t) return;
+    t.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
+    t.classList.remove('opacity-100', 'translate-y-0');
+    state.undoCallback = null;
+    DOM.toastUndoContainer.classList.add('hidden');
+  }
+
+  // --- MODALS ---
+  window.closeModal = function(id) {
+    const el = document.getElementById(id);
+    if (el) el.classList.add('hidden');
+  };
+
+  function openModal(id) {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('hidden');
+  }
+
+  // --- DELETE LOGIC (Pro) ---
+  let pendingDelete = null; // { type, index, item }
+
+  function confirmDelete(type, index, item, name) {
+    pendingDelete = { type, index, item };
+    DOM.deleteMessage.textContent = `Are you sure you want to delete "${name}"? This action can be undone within 5 seconds.`;
+    openModal('deleteModal');
+  }
+
+  DOM.deleteConfirmBtn.addEventListener('click', function() {
+    if (!pendingDelete) return;
+    const { type, index, item } = pendingDelete;
+    let undoData = null;
+
+    // Perform deletion based on type
+    if (type === 'farmer') {
+      const removed = state.farmers.splice(index, 1);
+      if (removed.length) {
+        undoData = { type: 'farmer', item: removed[0], index };
+        state.deletedItems.push({ type: 'farmer', item: removed[0], timestamp: Date.now() });
+        renderFarmers();
+        updateDashboardCount();
+        showToast(`🗑️ Deleted farmer ${removed[0].name}`, function() {
+          // Undo: restore farmer at original index
+          state.farmers.splice(undoData.index, 0, undoData.item);
+          renderFarmers();
+          updateDashboardCount();
+          showToast(`↩️ Undo successful: ${undoData.item.name} restored`);
+        }, 5000);
+      }
+    } else if (type === 'mrv') {
+      const removed = state.mrvEvidence.splice(index, 1);
+      if (removed.length) {
+        undoData = { type: 'mrv', item: removed[0], index };
+        state.deletedItems.push({ type: 'mrv', item: removed[0], timestamp: Date.now() });
+        renderMRV();
+        showToast(`🗑️ Deleted evidence ${removed[0].id}`, function() {
+          state.mrvEvidence.splice(undoData.index, 0, undoData.item);
+          renderMRV();
+          showToast(`↩️ Undo successful: ${undoData.item.id} restored`);
+        }, 5000);
+      }
+    } else if (type === 'contract') {
+      const removed = state.contracts.splice(index, 1);
+      if (removed.length) {
+        undoData = { type: 'contract', item: removed[0], index };
+        state.deletedItems.push({ type: 'contract', item: removed[0], timestamp: Date.now() });
+        renderContracts();
+        showToast(`🗑️ Deleted contract ${removed[0].id}`, function() {
+          state.contracts.splice(undoData.index, 0, undoData.item);
+          renderContracts();
+          showToast(`↩️ Undo successful: ${undoData.item.id} restored`);
+        }, 5000);
+      }
+    }
+
+    closeModal('deleteModal');
+    pendingDelete = null;
+  });
+
   // --- NAVIGATION ---
   function navigateTo(page) {
-    // Hide all pages
     $$('.page-content').forEach(el => el.classList.add('hidden'));
-    // Show target
     const target = $(`#page-${page}`);
     if (target) target.classList.remove('hidden');
-    // Update title
     const titles = {
       dashboard: 'Dashboard', farmers: 'Farmers', farms: 'Farms & GIS',
       carbon: 'Carbon Projects', mrv: 'MRV Monitoring', contracts: 'Contracts',
@@ -669,7 +815,6 @@
     if (DOM.pageTitle) DOM.pageTitle.textContent = title;
     if (DOM.mobilePageTitle) DOM.mobilePageTitle.textContent = title;
 
-    // Update nav links
     DOM.navLinks.forEach(link => {
       link.classList.toggle('active', link.dataset.page === page);
     });
@@ -683,11 +828,12 @@
     });
 
     state.currentPage = page;
-    // Close mobile sidebar
     closeMobileDrawer();
-    // Re-initialize map if switching to farms
     if (page === 'farms') {
       setTimeout(initFarmMap, 200);
+    }
+    if (page === 'dashboard') {
+      updateDashboardCount();
     }
   }
 
@@ -721,14 +867,15 @@
     DOM.sidebar.classList.add('-translate-x-full');
   }
 
-  // --- FARMER TABLE ---
+  // --- RENDER FUNCTIONS ---
   function renderFarmers() {
     const search = (DOM.farmerSearch?.value || '').toLowerCase();
-    let filtered = state.farmers.filter(f => 
-      f.name.toLowerCase().includes(search) || 
-      f.id.toLowerCase().includes(search) || 
-      f.phone.includes(search)
-    );
+    const community = DOM.communityFilter?.value || 'all';
+    let filtered = state.farmers.filter(f => {
+      const matchName = f.name.toLowerCase().includes(search) || f.id.toLowerCase().includes(search) || f.phone.includes(search);
+      const matchCommunity = community === 'all' || f.community === community;
+      return matchName && matchCommunity;
+    });
     const total = filtered.length;
     const start = state.farmerPage * state.farmerPageSize;
     const end = Math.min(start + state.farmerPageSize, total);
@@ -745,47 +892,81 @@
       DOM.farmerTableBody.innerHTML = `<tr><td colspan="6" class="px-4 py-8 text-center text-slate-400 text-sm">No farmers found</td></tr>`;
       return;
     }
-    DOM.farmerTableBody.innerHTML = pageItems.map(f => `
+    DOM.farmerTableBody.innerHTML = pageItems.map((f, idx) => {
+      const realIndex = state.farmers.indexOf(f);
+      return `
       <tr class="table-row-hover">
         <td class="px-4 py-3 font-mono text-xs">${f.id}</td>
         <td class="px-4 py-3 font-medium">${f.name}</td>
         <td class="px-4 py-3 hidden sm:table-cell text-sm">${f.phone}</td>
         <td class="px-4 py-3 hidden md:table-cell text-sm">${f.community}</td>
         <td class="px-4 py-3 hidden lg:table-cell"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${f.status === 'Active' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' : f.status === 'Pending' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'}">${f.status}</span></td>
-        <td class="px-4 py-3 text-right"><button class="text-brand-600 dark:text-brand-400 hover:underline text-xs">View</button></td>
+        <td class="px-4 py-3 text-right space-x-2">
+          <button class="text-brand-600 dark:text-brand-400 hover:underline text-xs">View</button>
+          <button onclick="confirmDelete('farmer', ${realIndex}, null, '${f.name}')" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-trash-alt"></i></button>
+        </td>
       </tr>
+    `}).join('');
+  }
+
+  function renderMRV() {
+    if (!DOM.mrvTableBody) return;
+    if (state.mrvEvidence.length === 0) {
+      DOM.mrvTableBody.innerHTML = `<tr><td colspan="6" class="px-4 py-8 text-center text-slate-400 text-sm">No evidence records</td></tr>`;
+      return;
+    }
+    DOM.mrvTableBody.innerHTML = state.mrvEvidence.map((m, idx) => {
+      const statusClass = m.status === 'Verified' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' :
+                          m.status === 'Review' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' :
+                          'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300';
+      return `
+      <tr class="table-row-hover">
+        <td class="px-4 py-3 font-mono text-xs">${m.id}</td>
+        <td class="px-4 py-3">${m.farm}</td>
+        <td class="px-4 py-3 hidden sm:table-cell">${m.type}</td>
+        <td class="px-4 py-3 hidden md:table-cell">${m.date}</td>
+        <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${statusClass}">${m.status}</span></td>
+        <td class="px-4 py-3 text-right space-x-2">
+          <button class="text-brand-600 dark:text-brand-400 hover:underline text-xs">View</button>
+          <button onclick="confirmDelete('mrv', ${idx}, null, '${m.id}')" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-trash-alt"></i></button>
+        </td>
+      </tr>
+    `}).join('');
+  }
+
+  function renderContracts() {
+    if (!DOM.contractList) return;
+    if (state.contracts.length === 0) {
+      DOM.contractList.innerHTML = `<div class="col-span-2 text-center text-slate-400 py-8">No contracts</div>`;
+      return;
+    }
+    DOM.contractList.innerHTML = state.contracts.map((c, idx) => `
+      <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm relative">
+        <div class="flex justify-between items-start">
+          <div><h3 class="font-bold dark:text-white">${c.farmer} · ${c.id}</h3><p class="text-xs text-slate-400">${c.project}</p></div>
+          <span class="text-xs ${c.status === 'Active' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300'} px-2 py-0.5 rounded-full">${c.status}</span>
+        </div>
+        <div class="mt-2 grid grid-cols-3 gap-1 text-xs"><span class="text-slate-400">Term: ${c.term}</span><span class="text-slate-400">Share: ${c.share}</span><span class="text-slate-400">Signed: ${c.signed}</span></div>
+        <button onclick="confirmDelete('contract', ${idx}, null, '${c.id}')" class="absolute top-3 right-3 text-red-500 hover:text-red-700 text-xs"><i class="fas fa-trash-alt"></i></button>
+      </div>
     `).join('');
   }
 
-  function farmerPrevPage() { if (state.farmerPage > 0) { state.farmerPage--; renderFarmers(); } }
-  function farmerNextPage() { 
-    const total = state.farmers.filter(f => (DOM.farmerSearch?.value || '').toLowerCase() === '' || f.name.toLowerCase().includes(DOM.farmerSearch?.value?.toLowerCase() || '')).length;
-    if ((state.farmerPage + 1) * state.farmerPageSize < total) { state.farmerPage++; renderFarmers(); }
+  function renderCommunities() {
+    if (!DOM.communityList) return;
+    DOM.communityList.innerHTML = state.communities.map(c => `
+      <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm">
+        <h3 class="font-bold dark:text-white">${c.name}</h3>
+        <p class="text-xs text-slate-400">${c.area} · ${c.farmers} farmers</p>
+        <div class="mt-2 flex flex-wrap gap-2 text-sm"><span class="text-slate-400">CDA: ${c.cda}</span><span class="text-slate-400">Projects: ${c.projects}</span><span class="text-emerald-600 dark:text-emerald-400">${c.paid} paid</span></div>
+      </div>
+    `).join('');
   }
 
-  // --- TOAST ---
-  function showToast(msg, duration = 2500) {
-    const t = DOM.toast;
-    if (!t) return;
-    t.textContent = msg;
-    t.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
-    t.classList.add('opacity-100', 'translate-y-0');
-    clearTimeout(t._timeout);
-    t._timeout = setTimeout(() => {
-      t.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
-      t.classList.remove('opacity-100', 'translate-y-0');
-    }, duration);
-  }
-
-  // --- MODALS ---
-  window.closeModal = function(id) {
-    const el = document.getElementById(id);
-    if (el) el.classList.add('hidden');
-  };
-
-  function openModal(id) {
-    const el = document.getElementById(id);
-    if (el) el.classList.remove('hidden');
+  function updateDashboardCount() {
+    if (DOM.dashFarmerCount) {
+      DOM.dashFarmerCount.textContent = state.farmers.length.toLocaleString();
+    }
   }
 
   // --- CHARTS ---
@@ -798,8 +979,6 @@
 
   function initCharts() {
     const { text, grid } = getChartColors();
-
-    // Carbon trend
     const ctx1 = document.getElementById('carbonTrendChart')?.getContext('2d');
     if (ctx1) {
       state.charts.carbon = new Chart(ctx1, {
@@ -818,8 +997,6 @@
         }
       });
     }
-
-    // Verification doughnut
     const ctx2 = document.getElementById('verificationChart')?.getContext('2d');
     if (ctx2) {
       state.charts.verification = new Chart(ctx2, {
@@ -834,8 +1011,6 @@
         }
       });
     }
-
-    // Farmer growth
     const ctx3 = document.getElementById('farmerGrowthChart')?.getContext('2d');
     if (ctx3) {
       state.charts.growth = new Chart(ctx3, {
@@ -872,18 +1047,18 @@
     const container = document.getElementById('map');
     if (!container) return;
     if (state.map) { state.map.invalidateSize(); return; }
-    state.map = L.map('map', { zoomControl: false }).setView([-0.302, 36.823], 8);
+    state.map = L.map('map', { zoomControl: false }).setView([-1.3, 37.0], 8);
     L.control.zoom({ position: 'bottomright' }).addTo(state.map);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OSM' }).addTo(state.map);
     [
-      { lat: -0.302, lng: 36.678, name: 'Nyeri Cluster' },
-      { lat: -0.234, lng: 36.823, name: 'Karatina Cluster' },
-      { lat: -0.156, lng: 37.012, name: 'Nanyuki Cluster' }
+      { lat: -1.29, lng: 37.18, name: 'Machakos' },
+      { lat: -1.45, lng: 37.65, name: 'Makueni' },
+      { lat: -1.52, lng: 38.12, name: 'Kitui' },
+      { lat: -1.85, lng: 36.78, name: 'Kajiado' }
     ].forEach(n => {
       L.circleMarker([n.lat, n.lng], { radius: 7, fillColor: '#43a047', color: '#fff', weight: 2, fillOpacity: 0.9 })
-        .addTo(state.map).bindPopup(`<strong>${n.name}</strong><br/>Status: Active`);
+        .addTo(state.map).bindPopup(`<strong>${n.name}</strong><br/>Active`);
     });
-    L.polygon([[-0.28,36.65],[-0.28,36.72],[-0.34,36.72],[-0.34,36.65]], { color: '#388e5c', weight: 2, fillOpacity: 0.15 }).addTo(state.map);
     setTimeout(() => state.map?.invalidateSize(), 300);
   }
 
@@ -891,27 +1066,20 @@
     const container = document.getElementById('farmMap');
     if (!container) return;
     if (state.farmMap) { state.farmMap.invalidateSize(); return; }
-    state.farmMap = L.map('farmMap', { zoomControl: false }).setView([-0.302, 36.823], 10);
+    state.farmMap = L.map('farmMap', { zoomControl: false }).setView([-1.3, 37.0], 8);
     L.control.zoom({ position: 'bottomright' }).addTo(state.farmMap);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OSM' }).addTo(state.farmMap);
-    // Sample polygons
-    const coords = [[-0.28,36.65],[-0.28,36.72],[-0.34,36.72],[-0.34,36.65]];
-    L.polygon(coords, { color: '#2e7d32', weight: 2, fillOpacity: 0.2 }).addTo(state.farmMap).bindPopup('Karatina Farm');
-    L.polygon([[-0.32,36.78],[-0.32,36.85],[-0.38,36.85],[-0.38,36.78]], { color: '#388e5c', weight: 2, fillOpacity: 0.15 }).addTo(state.farmMap).bindPopup('Nyeri Farm');
+    L.polygon([[-1.28,37.12],[-1.28,37.25],[-1.38,37.25],[-1.38,37.12]], { color: '#2e7d32', weight: 2, fillOpacity: 0.2 }).addTo(state.farmMap).bindPopup('Machakos Farm');
+    L.polygon([[-1.42,37.55],[-1.42,37.68],[-1.52,37.68],[-1.52,37.55]], { color: '#388e5c', weight: 2, fillOpacity: 0.15 }).addTo(state.farmMap).bindPopup('Makueni Farm');
     setTimeout(() => state.farmMap?.invalidateSize(), 300);
   }
 
   // --- EVENT BINDING ---
   function initEvents() {
-    // Theme
     DOM.themeToggle?.addEventListener('click', toggleTheme);
     DOM.settingsThemeToggle?.addEventListener('click', toggleTheme);
-
-    // Sidebar
     DOM.sidebarToggle?.addEventListener('click', toggleSidebar);
     DOM.mobileMenuBtn?.addEventListener('click', openMobileDrawer);
-
-    // Close sidebar on outside click (mobile)
     document.addEventListener('click', (e) => {
       if (window.innerWidth < 768) {
         const sidebar = DOM.sidebar;
@@ -921,7 +1089,6 @@
       }
     });
 
-    // Navigation
     DOM.navLinks.forEach(link => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
@@ -936,16 +1103,26 @@
       });
     });
 
-    // Farmer table pagination
-    DOM.farmerPrev?.addEventListener('click', farmerPrevPage);
-    DOM.farmerNext?.addEventListener('click', farmerNextPage);
+    DOM.farmerPrev?.addEventListener('click', () => { if (state.farmerPage > 0) { state.farmerPage--; renderFarmers(); } });
+    DOM.farmerNext?.addEventListener('click', () => {
+      const search = (DOM.farmerSearch?.value || '').toLowerCase();
+      const community = DOM.communityFilter?.value || 'all';
+      const filtered = state.farmers.filter(f => {
+        const matchName = f.name.toLowerCase().includes(search) || f.id.toLowerCase().includes(search) || f.phone.includes(search);
+        const matchCommunity = community === 'all' || f.community === community;
+        return matchName && matchCommunity;
+      });
+      if ((state.farmerPage + 1) * state.farmerPageSize < filtered.length) {
+        state.farmerPage++;
+        renderFarmers();
+      }
+    });
     DOM.farmerSearch?.addEventListener('input', () => { state.farmerPage = 0; renderFarmers(); });
+    DOM.communityFilter?.addEventListener('change', () => { state.farmerPage = 0; renderFarmers(); });
 
-    // Modals
     DOM.addFarmerBtn?.addEventListener('click', () => openModal('farmerModal'));
     DOM.addEvidenceBtn?.addEventListener('click', () => openModal('evidenceModal'));
 
-    // Farmer form submit
     document.getElementById('farmerForm')?.addEventListener('submit', (e) => {
       e.preventDefault();
       const name = document.getElementById('fName')?.value;
@@ -956,17 +1133,17 @@
       if (name && phone && nationalId) {
         const newFarmer = {
           id: `F-${String(state.farmers.length + 1001).padStart(4, '0')}`,
-          name, phone, community: community || 'Nyeri', status: 'Pending'
+          name, phone, community: community || 'Machakos', status: 'Pending'
         };
         state.farmers.unshift(newFarmer);
         renderFarmers();
+        updateDashboardCount();
         closeModal('farmerModal');
         showToast(`✅ Farmer ${name} registered successfully!`);
         document.getElementById('farmerForm')?.reset();
       }
     });
 
-    // Evidence form submit
     document.getElementById('evidenceForm')?.addEventListener('submit', (e) => {
       e.preventDefault();
       closeModal('evidenceModal');
@@ -974,16 +1151,13 @@
       document.getElementById('evidenceForm')?.reset();
     });
 
-    // Time range select
     document.getElementById('timeRangeSelect')?.addEventListener('change', function() {
       showToast(`📊 Showing data for ${this.value === '6m' ? '6 months' : '1 year'}`);
     });
 
-    // Window resize for maps
-    let resizeTimer;
     window.addEventListener('resize', () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(() => {
+      clearTimeout(window._resizeTimer);
+      window._resizeTimer = setTimeout(() => {
         if (state.map) state.map.invalidateSize();
         if (state.farmMap) state.farmMap.invalidateSize();
       }, 200);
@@ -994,15 +1168,20 @@
   function init() {
     applyTheme();
     renderFarmers();
+    renderMRV();
+    renderContracts();
+    renderCommunities();
+    updateDashboardCount();
     initCharts();
     initDashboardMap();
     initEvents();
     navigateTo('dashboard');
-    // Re-init map after a moment
     setTimeout(() => { if (state.map) state.map.invalidateSize(); }, 500);
-    // Show welcome toast
-    setTimeout(() => showToast('🌿 Welcome to CarbonLink MRV Platform', 3000), 600);
+    setTimeout(() => showToast('🌿 CarbonLink MRV Ultra Pro ready', 3000), 600);
   }
+
+  // Expose confirmDelete globally for inline onclick
+  window.confirmDelete = confirmDelete;
 
   document.addEventListener('DOMContentLoaded', init);
 })();
