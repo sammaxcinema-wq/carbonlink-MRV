@@ -371,7 +371,7 @@
               <div class="flex justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2"><span class="text-slate-500">Carbon (tCO₂e)</span><span class="font-medium dark:text-white">1,245</span></div>
               <div class="flex justify-between"><span class="text-slate-500">Status</span><span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300">Verified</span></div>
             </div>
-            <button id="drawPolygonBtn" class="w-full py-2.5 rounded-xl border border-slate-200 dark:border-charcoal-600 text-sm font-medium hover:bg-slate-50 dark:hover:bg-charcoal-700 transition-colors"><i class="fas fa-draw-polygon mr-2"></i>Draw Polygon</button>
+            <button class="w-full py-2.5 rounded-xl border border-slate-200 dark:border-charcoal-600 text-sm font-medium hover:bg-slate-50 dark:hover:bg-charcoal-700 transition-colors"><i class="fas fa-draw-polygon mr-2"></i>Draw Polygon</button>
           </div>
         </div>
       </div>
@@ -380,7 +380,7 @@
       <div id="page-carbon" class="page-content hidden space-y-4 md:space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div><h2 class="text-lg md:text-xl font-bold dark:text-white">Carbon Projects</h2><p class="text-xs text-slate-400">Project lifecycle & carbon accounting</p></div>
-          <button id="newProjectBtn" class="inline-flex items-center justify-center px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm gap-2"><i class="fas fa-plus"></i> New Project</button>
+          <button class="inline-flex items-center justify-center px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm gap-2"><i class="fas fa-plus"></i> New Project</button>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm"><div class="flex justify-between items-start"><div><h3 class="font-bold dark:text-white">Agroforestry Phase II</h3><p class="text-xs text-slate-400">Machakos · 1,240 ha</p></div><span class="text-xs bg-brand-100 text-brand-800 dark:bg-brand-900/40 dark:text-brand-300 px-2 py-0.5 rounded-full">Active</span></div><div class="mt-3 grid grid-cols-2 gap-2 text-sm"><div><span class="text-slate-400">Baseline</span><p class="font-medium dark:text-white">2.4K tCO₂e</p></div><div><span class="text-slate-400">Verified</span><p class="font-medium text-emerald-600 dark:text-emerald-400">1.8K tCO₂e</p></div></div></div>
@@ -449,7 +449,7 @@
         <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-6 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm">
           <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div><h3 class="font-semibold dark:text-white">Pending Review</h3><p class="text-sm text-slate-400">12 items awaiting verification</p></div>
-            <button id="startReviewBtn" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-xl transition-colors">Start Review</button>
+            <button class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-xl transition-colors">Start Review</button>
           </div>
           <div class="mt-4 space-y-2">
             <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2"><span class="text-sm">MRV-002 · Farm F-2034</span><span class="text-xs bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300 px-2 py-0.5 rounded-full">Review</span></div>
@@ -482,18 +482,9 @@
       <div id="page-settings" class="page-content hidden space-y-4 md:space-y-6">
         <div><h2 class="text-lg md:text-xl font-bold dark:text-white">Settings</h2><p class="text-xs text-slate-400">System configuration & preferences</p></div>
         <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-6 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm space-y-4">
-          <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-4">
-            <div><p class="font-medium dark:text-white">Dark Mode</p><p class="text-xs text-slate-400">Toggle system theme</p></div>
-            <button id="settingsThemeToggle" class="px-4 py-2 rounded-xl bg-brand-600 text-white text-sm font-semibold">Toggle</button>
-          </div>
-          <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-4">
-            <div><p class="font-medium dark:text-white">Notifications</p><p class="text-xs text-slate-400">Email & in-app alerts</p></div>
-            <button id="settingsNotificationsBtn" class="px-4 py-2 rounded-xl bg-brand-600 text-white text-sm font-semibold">Configure</button>
-          </div>
-          <div class="flex items-center justify-between">
-            <div><p class="font-medium dark:text-white">Data Export</p><p class="text-xs text-slate-400">Export all MRV data</p></div>
-            <button id="settingsExportBtn" class="px-4 py-2 rounded-xl bg-brand-600 text-white text-sm font-semibold">Export</button>
-          </div>
+          <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-4"><div><p class="font-medium dark:text-white">Dark Mode</p><p class="text-xs text-slate-400">Toggle system theme</p></div><button id="settingsThemeToggle" class="px-4 py-2 rounded-xl bg-brand-600 text-white text-sm font-semibold">Toggle</button></div>
+          <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-4"><div><p class="font-medium dark:text-white">Notifications</p><p class="text-xs text-slate-400">Email & in-app alerts</p></div><button id="configureNotificationsBtn" class="px-4 py-2 rounded-xl bg-brand-600 text-white text-sm font-semibold">Configure</button></div>
+          <div class="flex items-center justify-between"><div><p class="font-medium dark:text-white">Data Export</p><p class="text-xs text-slate-400">Export all MRV data</p></div><button id="exportDataBtn" class="px-4 py-2 rounded-xl bg-brand-600 text-white text-sm font-semibold">Export</button></div>
         </div>
       </div>
 
@@ -559,6 +550,23 @@
       <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Verification Notes</label><textarea rows="3" class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"></textarea></div>
       <div class="flex gap-3 pt-2"><button type="button" onclick="closeModal('evidenceModal')" class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 dark:border-charcoal-600 text-sm font-medium hover:bg-slate-50 dark:hover:bg-charcoal-700">Cancel</button><button type="submit" class="flex-1 px-4 py-2.5 rounded-xl bg-brand-600 text-white text-sm font-medium hover:bg-brand-700">Submit</button></div>
     </form>
+  </div>
+</div>
+
+<!-- Notification Configuration Modal -->
+<div id="notificationModal" class="modal hidden fixed inset-0 z-[75] flex items-center justify-center p-4">
+  <div class="modal-backdrop absolute inset-0" onclick="closeModal('notificationModal')"></div>
+  <div class="relative bg-white dark:bg-charcoal-800 rounded-2xl shadow-2xl max-w-md w-full p-6 md:p-8">
+    <div class="flex items-center justify-between mb-5"><h2 class="text-xl font-bold dark:text-white">Notification Preferences</h2><button onclick="closeModal('notificationModal')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fas fa-times text-xl"></i></button></div>
+    <div class="space-y-4">
+      <div class="flex items-center justify-between"><span class="text-sm dark:text-white">Email Notifications</span><label class="relative inline-flex items-center cursor-pointer"><input type="checkbox" id="emailNotif" checked class="sr-only peer"><div class="w-11 h-6 bg-slate-200 peer-focus:ring-2 peer-focus:ring-brand-500 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-600"></div></label></div>
+      <div class="flex items-center justify-between"><span class="text-sm dark:text-white">Push Notifications</span><label class="relative inline-flex items-center cursor-pointer"><input type="checkbox" id="pushNotif" checked class="sr-only peer"><div class="w-11 h-6 bg-slate-200 peer-focus:ring-2 peer-focus:ring-brand-500 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-600"></div></label></div>
+      <div class="flex items-center justify-between"><span class="text-sm dark:text-white">SMS Alerts</span><label class="relative inline-flex items-center cursor-pointer"><input type="checkbox" id="smsNotif" class="sr-only peer"><div class="w-11 h-6 bg-slate-200 peer-focus:ring-2 peer-focus:ring-brand-500 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-600"></div></label></div>
+    </div>
+    <div class="flex gap-3 mt-6 pt-4 border-t border-slate-200 dark:border-charcoal-700">
+      <button onclick="closeModal('notificationModal')" class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 dark:border-charcoal-600 text-sm font-medium hover:bg-slate-50 dark:hover:bg-charcoal-700">Cancel</button>
+      <button id="saveNotificationsBtn" class="flex-1 px-4 py-2.5 rounded-xl bg-brand-600 text-white text-sm font-medium hover:bg-brand-700">Save</button>
+    </div>
   </div>
 </div>
 
@@ -646,11 +654,11 @@
     themeToggle: $('#themeToggle'),
     themeIcon: $('#themeIcon'),
     settingsThemeToggle: $('#settingsThemeToggle'),
-    settingsNotificationsBtn: $('#settingsNotificationsBtn'),
-    settingsExportBtn: $('#settingsExportBtn'),
+    configureNotifBtn: $('#configureNotificationsBtn'),
+    exportDataBtn: $('#exportDataBtn'),
+    saveNotifBtn: $('#saveNotificationsBtn'),
     pageTitle: $('#pageTitle'),
     mobilePageTitle: $('#mobilePageTitle'),
-    pageContainer: $('#pageContainer'),
     farmerTableBody: $('#farmerTableBody'),
     farmerStart: $('#farmerStart'),
     farmerEnd: $('#farmerEnd'),
@@ -663,6 +671,7 @@
     addEvidenceBtn: $('#addEvidenceBtn'),
     farmerModal: $('#farmerModal'),
     evidenceModal: $('#evidenceModal'),
+    notificationModal: $('#notificationModal'),
     deleteModal: $('#deleteModal'),
     deleteMessage: $('#deleteMessage'),
     deleteConfirmBtn: $('#deleteConfirmBtn'),
@@ -676,9 +685,6 @@
     contractList: $('#contractList'),
     communityList: $('#communityList'),
     dashFarmerCount: $('#dashFarmerCount'),
-    drawPolygonBtn: $('#drawPolygonBtn'),
-    newProjectBtn: $('#newProjectBtn'),
-    startReviewBtn: $('#startReviewBtn'),
   };
 
   // --- THEME ---
@@ -753,7 +759,7 @@
     if (el) el.classList.remove('hidden');
   }
 
-  // --- DELETE LOGIC (Pro) ---
+  // --- DELETE LOGIC ---
   let pendingDelete = null;
 
   function confirmDelete(type, index, item, name) {
@@ -913,20 +919,11 @@
         <td class="px-4 py-3 hidden md:table-cell text-sm">${f.community}</td>
         <td class="px-4 py-3 hidden lg:table-cell"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${f.status === 'Active' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' : f.status === 'Pending' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'}">${f.status}</span></td>
         <td class="px-4 py-3 text-right space-x-2">
-          <button class="viewFarmerBtn text-brand-600 dark:text-brand-400 hover:underline text-xs" data-name="${f.name}" data-id="${f.id}">View</button>
+          <button class="text-brand-600 dark:text-brand-400 hover:underline text-xs">View</button>
           <button onclick="confirmDelete('farmer', ${realIndex}, null, '${f.name}')" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-trash-alt"></i></button>
         </td>
       </tr>
     `}).join('');
-
-    // Attach view events
-    document.querySelectorAll('.viewFarmerBtn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        const name = this.dataset.name;
-        const id = this.dataset.id;
-        showToast(`👤 Viewing farmer ${name} (${id}) - profile details would open`);
-      });
-    });
   }
 
   function renderMRV() {
@@ -947,17 +944,11 @@
         <td class="px-4 py-3 hidden md:table-cell">${m.date}</td>
         <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${statusClass}">${m.status}</span></td>
         <td class="px-4 py-3 text-right space-x-2">
-          <button class="viewMrvBtn text-brand-600 dark:text-brand-400 hover:underline text-xs" data-id="${m.id}">View</button>
+          <button class="text-brand-600 dark:text-brand-400 hover:underline text-xs">View</button>
           <button onclick="confirmDelete('mrv', ${idx}, null, '${m.id}')" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-trash-alt"></i></button>
         </td>
       </tr>
     `}).join('');
-
-    document.querySelectorAll('.viewMrvBtn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        showToast(`📄 Viewing MRV record ${this.dataset.id}`);
-      });
-    });
   }
 
   function renderContracts() {
@@ -974,15 +965,8 @@
         </div>
         <div class="mt-2 grid grid-cols-3 gap-1 text-xs"><span class="text-slate-400">Term: ${c.term}</span><span class="text-slate-400">Share: ${c.share}</span><span class="text-slate-400">Signed: ${c.signed}</span></div>
         <button onclick="confirmDelete('contract', ${idx}, null, '${c.id}')" class="absolute top-3 right-3 text-red-500 hover:text-red-700 text-xs"><i class="fas fa-trash-alt"></i></button>
-        <button class="viewContractBtn mt-2 text-xs text-brand-600 dark:text-brand-400 hover:underline" data-id="${c.id}">View Details</button>
       </div>
     `).join('');
-
-    document.querySelectorAll('.viewContractBtn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        showToast(`📄 Viewing contract ${this.dataset.id}`);
-      });
-    });
   }
 
   function renderCommunities() {
@@ -1000,6 +984,27 @@
     if (DOM.dashFarmerCount) {
       DOM.dashFarmerCount.textContent = state.farmers.length.toLocaleString();
     }
+  }
+
+  // --- SETTINGS BUTTONS ---
+  function configureNotifications() {
+    openModal('notificationModal');
+  }
+
+  function exportData() {
+    // Simulate export
+    showToast('📦 Exporting all MRV data... (simulated)');
+    setTimeout(() => {
+      showToast('✅ Data export completed! (simulated)');
+    }, 1500);
+  }
+
+  function saveNotifications() {
+    const email = document.getElementById('emailNotif').checked;
+    const push = document.getElementById('pushNotif').checked;
+    const sms = document.getElementById('smsNotif').checked;
+    closeModal('notificationModal');
+    showToast(`🔔 Notifications saved: Email ${email ? 'ON' : 'OFF'}, Push ${push ? 'ON' : 'OFF'}, SMS ${sms ? 'ON' : 'OFF'}`);
   }
 
   // --- CHARTS ---
@@ -1156,6 +1161,11 @@
     DOM.addFarmerBtn?.addEventListener('click', () => openModal('farmerModal'));
     DOM.addEvidenceBtn?.addEventListener('click', () => openModal('evidenceModal'));
 
+    // Settings buttons
+    DOM.configureNotifBtn?.addEventListener('click', configureNotifications);
+    DOM.exportDataBtn?.addEventListener('click', exportData);
+    DOM.saveNotifBtn?.addEventListener('click', saveNotifications);
+
     document.getElementById('farmerForm')?.addEventListener('submit', (e) => {
       e.preventDefault();
       const name = document.getElementById('fName')?.value;
@@ -1188,29 +1198,6 @@
       showToast(`📊 Showing data for ${this.value === '6m' ? '6 months' : '1 year'}`);
     });
 
-    // Pro button handlers
-    DOM.drawPolygonBtn?.addEventListener('click', () => {
-      showToast('🖊️ Polygon drawing mode activated. Click on the map to start drawing.');
-    });
-    DOM.newProjectBtn?.addEventListener('click', () => {
-      showToast('📋 New carbon project creation wizard would open.');
-    });
-    DOM.startReviewBtn?.addEventListener('click', () => {
-      showToast('🔍 Starting verification review for 12 pending items.');
-    });
-    DOM.settingsNotificationsBtn?.addEventListener('click', () => {
-      showToast('🔔 Notification preferences dialog would open.');
-    });
-    DOM.settingsExportBtn?.addEventListener('click', () => {
-      showToast('📦 Data export initiated. A download will start shortly.');
-    });
-
-    // View all payments link
-    document.querySelector('.bg-white.dark\\:bg-charcoal-800 a[href="#"]')?.addEventListener('click', (e) => {
-      e.preventDefault();
-      showToast('📋 Navigating to full payment history...');
-    });
-
     window.addEventListener('resize', () => {
       clearTimeout(window._resizeTimer);
       window._resizeTimer = setTimeout(() => {
@@ -1236,7 +1223,7 @@
     setTimeout(() => showToast('🌿 CarbonLink MRV Ultra Pro ready', 3000), 600);
   }
 
-  // Expose confirmDelete globally for inline onclick
+  // Expose confirmDelete globally
   window.confirmDelete = confirmDelete;
 
   document.addEventListener('DOMContentLoaded', init);
