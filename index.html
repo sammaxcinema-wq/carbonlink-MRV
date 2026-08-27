@@ -81,7 +81,6 @@
     .dark .shimmer { background: linear-gradient(90deg, #2d2d2d 25%, #3d3d3d 50%, #2d2d2d 75%); background-size: 200% 100%; }
     @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
 
-    /* Toast with undo */
     .toast-undo { display: inline-flex; align-items: center; gap: 0.75rem; }
     .toast-undo button { background: rgba(255,255,255,0.2); border: none; padding: 0.25rem 0.75rem; border-radius: 6px; font-weight: 600; font-size: 0.8rem; color: #fff; cursor: pointer; transition: background 0.2s; }
     .toast-undo button:hover { background: rgba(255,255,255,0.3); }
@@ -239,7 +238,7 @@
             <div class="stat-card-body flex items-center justify-between">
               <div>
                 <span class="text-[10px] md:text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Disbursed</span>
-                <h3 class="text-xl md:text-2xl font-bold mt-0.5 text-slate-900 dark:text-white">$342.9K</h3>
+                <h3 class="text-xl md:text-2xl font-bold mt-0.5 text-slate-900 dark:text-white">KSh 342.9K</h3>
                 <span class="inline-flex items-center text-[10px] md:text-xs font-semibold text-emerald-600 dark:text-emerald-400 mt-1"><i class="fas fa-arrow-trend-up mr-1"></i>+9.1%</span>
               </div>
               <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-amber-50 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400 flex items-center justify-center text-base md:text-xl shrink-0"><i class="fas fa-wallet"></i></div>
@@ -278,7 +277,7 @@
             <h2 class="text-sm md:text-base font-bold text-slate-900 dark:text-white mb-3 md:mb-4">Audit Stream</h2>
             <div class="flex-1 space-y-3 md:space-y-4 overflow-y-auto max-h-[220px] md:max-h-[320px] pr-1 no-scrollbar">
               <div class="flex items-start space-x-3"><div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs shrink-0 mt-0.5"><i class="fas fa-check"></i></div><div><p class="text-xs md:text-sm font-semibold text-slate-800 dark:text-slate-200">Parcel F-102 Approved</p><p class="text-[10px] md:text-xs text-slate-400">Sentinel-2 verified</p><span class="text-[9px] md:text-[10px] text-slate-400 font-medium">10 min ago</span></div></div>
-              <div class="flex items-start space-x-3"><div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-blue-100 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 flex items-center justify-center text-xs shrink-0 mt-0.5"><i class="fas fa-file-invoice"></i></div><div><p class="text-xs md:text-sm font-semibold text-slate-800 dark:text-slate-200">Payout Triggered</p><p class="text-[10px] md:text-xs text-slate-400">$1,245 to S. Kiprop</p><span class="text-[9px] md:text-[10px] text-slate-400 font-medium">1 hour ago</span></div></div>
+              <div class="flex items-start space-x-3"><div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-blue-100 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 flex items-center justify-center text-xs shrink-0 mt-0.5"><i class="fas fa-file-invoice"></i></div><div><p class="text-xs md:text-sm font-semibold text-slate-800 dark:text-slate-200">Payout Triggered</p><p class="text-[10px] md:text-xs text-slate-400">KSh 1,245 to S. Kiprop</p><span class="text-[9px] md:text-[10px] text-slate-400 font-medium">1 hour ago</span></div></div>
               <div class="flex items-start space-x-3"><div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-amber-100 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400 flex items-center justify-center text-xs shrink-0 mt-0.5"><i class="fas fa-flask"></i></div><div><p class="text-xs md:text-sm font-semibold text-slate-800 dark:text-slate-200">Soil Assay Received</p><p class="text-[10px] md:text-xs text-slate-400">Carbon: 3.4% · pH 6.5</p><span class="text-[9px] md:text-[10px] text-slate-400 font-medium">3 hours ago</span></div></div>
               <div class="flex items-start space-x-3"><div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-purple-100 dark:bg-purple-950/50 text-purple-600 dark:text-purple-400 flex items-center justify-center text-xs shrink-0 mt-0.5"><i class="fas fa-user-plus"></i></div><div><p class="text-xs md:text-sm font-semibold text-slate-800 dark:text-slate-200">Farmer Registered</p><p class="text-[10px] md:text-xs text-slate-400">Janet Auma · ID: F-2041</p><span class="text-[9px] md:text-[10px] text-slate-400 font-medium">5 hours ago</span></div></div>
             </div>
@@ -290,10 +289,10 @@
           <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm">
             <div class="flex items-center justify-between mb-3 md:mb-4"><h3 class="text-sm md:text-base font-bold dark:text-white">Recent Payments</h3><a href="#" class="text-xs text-brand-600 dark:text-brand-400 hover:underline">View all</a></div>
             <div class="space-y-2 md:space-y-3">
-              <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2"><div><p class="text-sm font-medium dark:text-white">James Mwangi</p><p class="text-[10px] text-slate-400">#PY-2026-0842</p></div><span class="text-emerald-600 dark:text-emerald-400 font-medium text-sm">$1,245</span></div>
-              <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2"><div><p class="text-sm font-medium dark:text-white">Grace Akinyi</p><p class="text-[10px] text-slate-400">#PY-2026-0839</p></div><span class="text-emerald-600 dark:text-emerald-400 font-medium text-sm">$890</span></div>
-              <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2"><div><p class="text-sm font-medium dark:text-white">Samuel Kiprop</p><p class="text-[10px] text-slate-400">#PY-2026-0835</p></div><span class="text-emerald-600 dark:text-emerald-400 font-medium text-sm">$2,100</span></div>
-              <div class="flex items-center justify-between"><div><p class="text-sm font-medium dark:text-white">Mary Wanjiru</p><p class="text-[10px] text-slate-400">#PY-2026-0830</p></div><span class="text-emerald-600 dark:text-emerald-400 font-medium text-sm">$675</span></div>
+              <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2"><div><p class="text-sm font-medium dark:text-white">James Mwangi</p><p class="text-[10px] text-slate-400">#PY-2026-0842</p></div><span class="text-emerald-600 dark:text-emerald-400 font-medium text-sm">KSh 1,245</span></div>
+              <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2"><div><p class="text-sm font-medium dark:text-white">Grace Akinyi</p><p class="text-[10px] text-slate-400">#PY-2026-0839</p></div><span class="text-emerald-600 dark:text-emerald-400 font-medium text-sm">KSh 890</span></div>
+              <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2"><div><p class="text-sm font-medium dark:text-white">Samuel Kiprop</p><p class="text-[10px] text-slate-400">#PY-2026-0835</p></div><span class="text-emerald-600 dark:text-emerald-400 font-medium text-sm">KSh 2,100</span></div>
+              <div class="flex items-center justify-between"><div><p class="text-sm font-medium dark:text-white">Mary Wanjiru</p><p class="text-[10px] text-slate-400">#PY-2026-0830</p></div><span class="text-emerald-600 dark:text-emerald-400 font-medium text-sm">KSh 675</span></div>
             </div>
           </div>
           <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm">
@@ -372,7 +371,7 @@
               <div class="flex justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2"><span class="text-slate-500">Carbon (tCO₂e)</span><span class="font-medium dark:text-white">1,245</span></div>
               <div class="flex justify-between"><span class="text-slate-500">Status</span><span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300">Verified</span></div>
             </div>
-            <button class="w-full py-2.5 rounded-xl border border-slate-200 dark:border-charcoal-600 text-sm font-medium hover:bg-slate-50 dark:hover:bg-charcoal-700 transition-colors"><i class="fas fa-draw-polygon mr-2"></i>Draw Polygon</button>
+            <button id="drawPolygonBtn" class="w-full py-2.5 rounded-xl border border-slate-200 dark:border-charcoal-600 text-sm font-medium hover:bg-slate-50 dark:hover:bg-charcoal-700 transition-colors"><i class="fas fa-draw-polygon mr-2"></i>Draw Polygon</button>
           </div>
         </div>
       </div>
@@ -381,7 +380,7 @@
       <div id="page-carbon" class="page-content hidden space-y-4 md:space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div><h2 class="text-lg md:text-xl font-bold dark:text-white">Carbon Projects</h2><p class="text-xs text-slate-400">Project lifecycle & carbon accounting</p></div>
-          <button class="inline-flex items-center justify-center px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm gap-2"><i class="fas fa-plus"></i> New Project</button>
+          <button id="newProjectBtn" class="inline-flex items-center justify-center px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm gap-2"><i class="fas fa-plus"></i> New Project</button>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm"><div class="flex justify-between items-start"><div><h3 class="font-bold dark:text-white">Agroforestry Phase II</h3><p class="text-xs text-slate-400">Machakos · 1,240 ha</p></div><span class="text-xs bg-brand-100 text-brand-800 dark:bg-brand-900/40 dark:text-brand-300 px-2 py-0.5 rounded-full">Active</span></div><div class="mt-3 grid grid-cols-2 gap-2 text-sm"><div><span class="text-slate-400">Baseline</span><p class="font-medium dark:text-white">2.4K tCO₂e</p></div><div><span class="text-slate-400">Verified</span><p class="font-medium text-emerald-600 dark:text-emerald-400">1.8K tCO₂e</p></div></div></div>
@@ -437,8 +436,8 @@
       <div id="page-payments" class="page-content hidden space-y-4 md:space-y-6">
         <div><h2 class="text-lg md:text-xl font-bold dark:text-white">Payments</h2><p class="text-xs text-slate-400">Benefit sharing & disbursement tracking</p></div>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
-          <div class="bg-white dark:bg-charcoal-800 rounded-xl p-4 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center"><p class="text-xs text-slate-400">Total Paid</p><p class="text-xl font-bold dark:text-white">$342.9K</p></div>
-          <div class="bg-white dark:bg-charcoal-800 rounded-xl p-4 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center"><p class="text-xs text-slate-400">Pending</p><p class="text-xl font-bold text-amber-600 dark:text-amber-400">$48.2K</p></div>
+          <div class="bg-white dark:bg-charcoal-800 rounded-xl p-4 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center"><p class="text-xs text-slate-400">Total Paid</p><p class="text-xl font-bold dark:text-white">KSh 342.9K</p></div>
+          <div class="bg-white dark:bg-charcoal-800 rounded-xl p-4 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center"><p class="text-xs text-slate-400">Pending</p><p class="text-xl font-bold text-amber-600 dark:text-amber-400">KSh 48.2K</p></div>
           <div class="bg-white dark:bg-charcoal-800 rounded-xl p-4 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center"><p class="text-xs text-slate-400">Beneficiaries</p><p class="text-xl font-bold dark:text-white">1,284</p></div>
           <div class="bg-white dark:bg-charcoal-800 rounded-xl p-4 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center"><p class="text-xs text-slate-400">Community Share</p><p class="text-xl font-bold text-emerald-600 dark:text-emerald-400">42%</p></div>
         </div>
@@ -450,7 +449,7 @@
         <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-6 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm">
           <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div><h3 class="font-semibold dark:text-white">Pending Review</h3><p class="text-sm text-slate-400">12 items awaiting verification</p></div>
-            <button class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-xl transition-colors">Start Review</button>
+            <button id="startReviewBtn" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-xl transition-colors">Start Review</button>
           </div>
           <div class="mt-4 space-y-2">
             <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2"><span class="text-sm">MRV-002 · Farm F-2034</span><span class="text-xs bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300 px-2 py-0.5 rounded-full">Review</span></div>
@@ -483,9 +482,18 @@
       <div id="page-settings" class="page-content hidden space-y-4 md:space-y-6">
         <div><h2 class="text-lg md:text-xl font-bold dark:text-white">Settings</h2><p class="text-xs text-slate-400">System configuration & preferences</p></div>
         <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-6 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm space-y-4">
-          <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-4"><div><p class="font-medium dark:text-white">Dark Mode</p><p class="text-xs text-slate-400">Toggle system theme</p></div><button id="settingsThemeToggle" class="px-4 py-2 rounded-xl bg-brand-600 text-white text-sm font-semibold">Toggle</button></div>
-          <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-4"><div><p class="font-medium dark:text-white">Notifications</p><p class="text-xs text-slate-400">Email & in-app alerts</p></div><button class="px-4 py-2 rounded-xl bg-brand-600 text-white text-sm font-semibold">Configure</button></div>
-          <div class="flex items-center justify-between"><div><p class="font-medium dark:text-white">Data Export</p><p class="text-xs text-slate-400">Export all MRV data</p></div><button class="px-4 py-2 rounded-xl bg-brand-600 text-white text-sm font-semibold">Export</button></div>
+          <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-4">
+            <div><p class="font-medium dark:text-white">Dark Mode</p><p class="text-xs text-slate-400">Toggle system theme</p></div>
+            <button id="settingsThemeToggle" class="px-4 py-2 rounded-xl bg-brand-600 text-white text-sm font-semibold">Toggle</button>
+          </div>
+          <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-4">
+            <div><p class="font-medium dark:text-white">Notifications</p><p class="text-xs text-slate-400">Email & in-app alerts</p></div>
+            <button id="settingsNotificationsBtn" class="px-4 py-2 rounded-xl bg-brand-600 text-white text-sm font-semibold">Configure</button>
+          </div>
+          <div class="flex items-center justify-between">
+            <div><p class="font-medium dark:text-white">Data Export</p><p class="text-xs text-slate-400">Export all MRV data</p></div>
+            <button id="settingsExportBtn" class="px-4 py-2 rounded-xl bg-brand-600 text-white text-sm font-semibold">Export</button>
+          </div>
         </div>
       </div>
 
@@ -611,13 +619,12 @@
       { id: 'C-2026-04', farmer: 'S. Kiprop', project: 'Soil Carbon Initiative', status: 'Pending', term: '7 yrs', share: '55%', signed: '2026-07-10' },
     ],
     communities: [
-      { name: 'Machakos', area: '1,240 ha', farmers: 284, cda: 3, projects: 2, paid: '$124.5K' },
-      { name: 'Makueni', area: '860 ha', farmers: 192, cda: 2, projects: 1, paid: '$87.2K' },
-      { name: 'Kitui', area: '430 ha', farmers: 108, cda: 1, projects: 1, paid: '$38.6K' },
-      { name: 'Kajiado', area: '520 ha', farmers: 156, cda: 2, projects: 2, paid: '$92.3K' },
+      { name: 'Machakos', area: '1,240 ha', farmers: 284, cda: 3, projects: 2, paid: 'KSh 124.5K' },
+      { name: 'Makueni', area: '860 ha', farmers: 192, cda: 2, projects: 1, paid: 'KSh 87.2K' },
+      { name: 'Kitui', area: '430 ha', farmers: 108, cda: 1, projects: 1, paid: 'KSh 38.6K' },
+      { name: 'Kajiado', area: '520 ha', farmers: 156, cda: 2, projects: 2, paid: 'KSh 92.3K' },
     ],
-    // Deletion undo stack
-    deletedItems: [], // { type, item, timestamp }
+    deletedItems: [],
     charts: {},
     map: null,
     farmMap: null,
@@ -639,6 +646,8 @@
     themeToggle: $('#themeToggle'),
     themeIcon: $('#themeIcon'),
     settingsThemeToggle: $('#settingsThemeToggle'),
+    settingsNotificationsBtn: $('#settingsNotificationsBtn'),
+    settingsExportBtn: $('#settingsExportBtn'),
     pageTitle: $('#pageTitle'),
     mobilePageTitle: $('#mobilePageTitle'),
     pageContainer: $('#pageContainer'),
@@ -667,6 +676,9 @@
     contractList: $('#contractList'),
     communityList: $('#communityList'),
     dashFarmerCount: $('#dashFarmerCount'),
+    drawPolygonBtn: $('#drawPolygonBtn'),
+    newProjectBtn: $('#newProjectBtn'),
+    startReviewBtn: $('#startReviewBtn'),
   };
 
   // --- THEME ---
@@ -685,6 +697,7 @@
     localStorage.setItem('theme', state.isDark ? 'dark' : 'light');
     applyTheme();
     updateChartsTheme();
+    showToast(`🌓 Theme switched to ${state.isDark ? 'Dark' : 'Light'} mode`);
   }
 
   // --- TOAST with UNDO ---
@@ -741,7 +754,7 @@
   }
 
   // --- DELETE LOGIC (Pro) ---
-  let pendingDelete = null; // { type, index, item }
+  let pendingDelete = null;
 
   function confirmDelete(type, index, item, name) {
     pendingDelete = { type, index, item };
@@ -754,7 +767,6 @@
     const { type, index, item } = pendingDelete;
     let undoData = null;
 
-    // Perform deletion based on type
     if (type === 'farmer') {
       const removed = state.farmers.splice(index, 1);
       if (removed.length) {
@@ -763,7 +775,6 @@
         renderFarmers();
         updateDashboardCount();
         showToast(`🗑️ Deleted farmer ${removed[0].name}`, function() {
-          // Undo: restore farmer at original index
           state.farmers.splice(undoData.index, 0, undoData.item);
           renderFarmers();
           updateDashboardCount();
@@ -902,11 +913,20 @@
         <td class="px-4 py-3 hidden md:table-cell text-sm">${f.community}</td>
         <td class="px-4 py-3 hidden lg:table-cell"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${f.status === 'Active' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' : f.status === 'Pending' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'}">${f.status}</span></td>
         <td class="px-4 py-3 text-right space-x-2">
-          <button class="text-brand-600 dark:text-brand-400 hover:underline text-xs">View</button>
+          <button class="viewFarmerBtn text-brand-600 dark:text-brand-400 hover:underline text-xs" data-name="${f.name}" data-id="${f.id}">View</button>
           <button onclick="confirmDelete('farmer', ${realIndex}, null, '${f.name}')" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-trash-alt"></i></button>
         </td>
       </tr>
     `}).join('');
+
+    // Attach view events
+    document.querySelectorAll('.viewFarmerBtn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const name = this.dataset.name;
+        const id = this.dataset.id;
+        showToast(`👤 Viewing farmer ${name} (${id}) - profile details would open`);
+      });
+    });
   }
 
   function renderMRV() {
@@ -927,11 +947,17 @@
         <td class="px-4 py-3 hidden md:table-cell">${m.date}</td>
         <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${statusClass}">${m.status}</span></td>
         <td class="px-4 py-3 text-right space-x-2">
-          <button class="text-brand-600 dark:text-brand-400 hover:underline text-xs">View</button>
+          <button class="viewMrvBtn text-brand-600 dark:text-brand-400 hover:underline text-xs" data-id="${m.id}">View</button>
           <button onclick="confirmDelete('mrv', ${idx}, null, '${m.id}')" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-trash-alt"></i></button>
         </td>
       </tr>
     `}).join('');
+
+    document.querySelectorAll('.viewMrvBtn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        showToast(`📄 Viewing MRV record ${this.dataset.id}`);
+      });
+    });
   }
 
   function renderContracts() {
@@ -948,8 +974,15 @@
         </div>
         <div class="mt-2 grid grid-cols-3 gap-1 text-xs"><span class="text-slate-400">Term: ${c.term}</span><span class="text-slate-400">Share: ${c.share}</span><span class="text-slate-400">Signed: ${c.signed}</span></div>
         <button onclick="confirmDelete('contract', ${idx}, null, '${c.id}')" class="absolute top-3 right-3 text-red-500 hover:text-red-700 text-xs"><i class="fas fa-trash-alt"></i></button>
+        <button class="viewContractBtn mt-2 text-xs text-brand-600 dark:text-brand-400 hover:underline" data-id="${c.id}">View Details</button>
       </div>
     `).join('');
+
+    document.querySelectorAll('.viewContractBtn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        showToast(`📄 Viewing contract ${this.dataset.id}`);
+      });
+    });
   }
 
   function renderCommunities() {
@@ -1153,6 +1186,29 @@
 
     document.getElementById('timeRangeSelect')?.addEventListener('change', function() {
       showToast(`📊 Showing data for ${this.value === '6m' ? '6 months' : '1 year'}`);
+    });
+
+    // Pro button handlers
+    DOM.drawPolygonBtn?.addEventListener('click', () => {
+      showToast('🖊️ Polygon drawing mode activated. Click on the map to start drawing.');
+    });
+    DOM.newProjectBtn?.addEventListener('click', () => {
+      showToast('📋 New carbon project creation wizard would open.');
+    });
+    DOM.startReviewBtn?.addEventListener('click', () => {
+      showToast('🔍 Starting verification review for 12 pending items.');
+    });
+    DOM.settingsNotificationsBtn?.addEventListener('click', () => {
+      showToast('🔔 Notification preferences dialog would open.');
+    });
+    DOM.settingsExportBtn?.addEventListener('click', () => {
+      showToast('📦 Data export initiated. A download will start shortly.');
+    });
+
+    // View all payments link
+    document.querySelector('.bg-white.dark\\:bg-charcoal-800 a[href="#"]')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      showToast('📋 Navigating to full payment history...');
     });
 
     window.addEventListener('resize', () => {
