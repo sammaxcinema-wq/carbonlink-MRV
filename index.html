@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+  <title>CarbonLink MRV – Complete Platform</title>
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: { 50: '#e8f5e9', 100: '#c8e6c9', 200: '#a5d6a7', 300: '#81c784', 400: '#66bb6a', 500: '#43a047', 600: '#388e5c', 700: '#2e7d32', 800: '#1e4d34', 900: '#1a3c2a' },
+            charcoal: { 50: '#f2f2f2', 100: '#e6e6e6', 200: '#cccccc', 300: '#b3b3b3', 400: '#8c8c8c', 500: '#737373', 600: '#595959', 700: '#404040', 800: '#2d2d2d', 850: '#242424', 900: '#1a1a1a' }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <style>
+    * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+    body { transition: background-color 0.25s ease, color 0.25s ease; }
+    
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    .dark ::-webkit-scrollbar-thumb { background: #404040; }
+    ::-webkit-scrollbar-thumb:hover { background: #388e5c; }
+
+    /* Sidebar transitions */
+    .sidebar-transition { transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    .content-transition { transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    
+    /* Nav active indicator */
+    .nav-link.active::before { content: ''; position: absolute; left: 0; top: 12%; bottom: 12%; width: 3.5px; background: #43a047; border-radius: 0 4px 4px 0; }
+    .nav-link { position: relative; transition: all 0.15s ease; cursor: pointer; }
+    .nav-link:hover { background: rgba(67, 160, 71, 0.08); }
+    .dark .nav-link:hover { background: rgba(67, 160, 71, 0.15); }
+    
+    /* Card hover */
+    .stat-card { transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease; }
+    .stat-card:hover { transform: translateY(-3px); box-shadow: 0 12px 28px -8px rgba(0,0,0,0.12); }
+    .dark .stat-card:hover { box-shadow: 0 12px 28px -8px rgba(0,0,0,0.5); }
+
+    /* Glass header */
+    .glass-header { background: rgba(255,255,255,0.82); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+    .dark .glass-header { background: rgba(26,26,26,0.85); }
+
+    /* Map container */
+    .leaflet-container { border-radius: 0.75rem; z-index: 5; }
+    .dark .leaflet-tile-pane { filter: brightness(0.7) invert(1) contrast(1.2) hue-rotate(160deg); }
+    .leaflet-popup-content-wrapper { border-radius: 0.5rem; font-family: 'Inter', sans-serif; }
+
+    /* Badge pulse */
+    .badge-pulse { animation: pulse 2s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
+
+    /* Modal backdrop */
+    .modal-backdrop { background: rgba(0,0,0,0.5); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+    .modal { transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    .modal.hidden { opacity: 0; transform: scale(0.95) translateY(10px); pointer-events: none; }
+    .modal:not(.hidden) { opacity: 1; transform: scale(1) translateY(0); pointer-events: auto; }
+
+    /* Table row hover */
+    .table-row-hover:hover { background: rgba(67, 160, 71, 0.04); }
+    .dark .table-row-hover:hover { background: rgba(67, 160, 71, 0.08); }
+
+    /* Mobile bottom nav */
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; z-index: 60; background: rgba(255,255,255,0.96); backdrop-filter: blur(12px); border-top: 1px solid #e5e7eb; display: none; }
+    .dark .bottom-nav { background: rgba(26,26,26,0.96); border-top-color: #404040; }
+    @media (max-width: 768px) { .bottom-nav { display: flex; } }
+
+    /* Utility: hide scrollbar */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* Touch-optimized taps */
+    .tap-target { min-height: 44px; min-width: 44px; }
+
+    /* Loading shimmer */
+    .shimmer { background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
+    .dark .shimmer { background: linear-gradient(90deg, #2d2d2d 25%, #3d3d3d 50%, #2d2d2d 75%); background-size: 200% 100%; }
+    @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+
+    /* Responsive container queries */
+    @container (max-width: 280px) { .stat-card-body { flex-direction: column; align-items: flex-start; gap: 0.5rem; } }
+  </style>
+</head>
+
+<body class="h-full bg-slate-50 dark:bg-charcoal-900 text-slate-800 dark:text-slate-100 overflow-hidden antialiased">
+
+<!-- ============================================================ -->
+<!-- MAIN APP WRAPPER -->
+<!-- ============================================================ -->
+<div class="flex h-full overflow-hidden relative">
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside id="sidebar" class="sidebar-transition fixed md:static inset-y-0 left-0 z-50 w-64 md:w-64 bg-charcoal-900 text-white flex flex-col shrink-0 transform -translate-x-full md:translate-x-0 border-r border-charcoal-700/50 h-full overflow-hidden">
+    
+    <!-- Brand -->
+    <div class="h-14 md:h-16 flex items-center justify-between px-4 border-b border-charcoal-700/60 shrink-0">
+      <div class="flex items-center space-x-2.5 overflow-hidden">
+        <div class="w-8 h-8 md:w-9 md:h-9 rounded-lg bg-brand-500/20 text-brand-400 flex items-center justify-center shrink-0">
+          <i class="fas fa-leaf text-lg md:text-xl"></i>
+        </div>
+        <span class="brand-text font-bold text-base md:text-lg tracking-tight text-white whitespace-nowrap transition-opacity duration-200">CarbonLink <span class="text-brand-400">MRV</span></span>
+      </div>
+      <button id="sidebarToggle" class="hidden md:flex p-1.5 rounded-lg hover:bg-charcoal-800 text-slate-400 hover:text-white transition-colors focus:outline-none">
+        <i class="fas fa-chevron-left text-sm transition-transform duration-300" id="toggleIcon"></i>
+      </button>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="flex-1 overflow-y-auto px-2 py-3 space-y-0.5 no-scrollbar">
+      <a data-page="dashboard" class="nav-link active flex items-center px-3 py-2.5 rounded-lg text-slate-300 hover:text-white hover:bg-charcoal-800 font-medium text-sm">
+        <i class="fas fa-chart-pie w-5 text-brand-400 text-center text-sm"></i>
+        <span class="nav-text ml-3 whitespace-nowrap">Dashboard</span>
+      </a>
+      <a data-page="farmers" class="nav-link flex items-center px-3 py-2.5 rounded-lg text-slate-300 hover:text-white hover:bg-charcoal-800 font-medium text-sm">
+        <i class="fas fa-users w-5 text-brand-400 text-center text-sm"></i>
+        <span class="nav-text ml-3 whitespace-nowrap">Farmers</span>
+      </a>
+      <a data-page="farms" class="nav-link flex items-center px-3 py-2.5 rounded-lg text-slate-300 hover:text-white hover:bg-charcoal-800 font-medium text-sm">
+        <i class="fas fa-map-marked-alt w-5 text-brand-400 text-center text-sm"></i>
+        <span class="nav-text ml-3 whitespace-nowrap">Farms & GIS</span>
+      </a>
+      <a data-page="carbon" class="nav-link flex items-center px-3 py-2.5 rounded-lg text-slate-300 hover:text-white hover:bg-charcoal-800 font-medium text-sm">
+        <i class="fas fa-tree w-5 text-brand-400 text-center text-sm"></i>
+        <span class="nav-text ml-3 whitespace-nowrap">Carbon Projects</span>
+      </a>
+      <a data-page="mrv" class="nav-link flex items-center px-3 py-2.5 rounded-lg text-slate-300 hover:text-white hover:bg-charcoal-800 font-medium text-sm">
+        <i class="fas fa-clipboard-check w-5 text-brand-400 text-center text-sm"></i>
+        <span class="nav-text ml-3 whitespace-nowrap">MRV Monitoring</span>
+      </a>
+      <a data-page="contracts" class="nav-link flex items-center px-3 py-2.5 rounded-lg text-slate-300 hover:text-white hover:bg-charcoal-800 font-medium text-sm">
+        <i class="fas fa-file-contract w-5 text-brand-400 text-center text-sm"></i>
+        <span class="nav-text ml-3 whitespace-nowrap">Contracts</span>
+      </a>
+      <a data-page="communities" class="nav-link flex items-center px-3 py-2.5 rounded-lg text-slate-300 hover:text-white hover:bg-charcoal-800 font-medium text-sm">
+        <i class="fas fa-people-arrows w-5 text-brand-400 text-center text-sm"></i>
+        <span class="nav-text ml-3 whitespace-nowrap">Communities</span>
+      </a>
+      <a data-page="payments" class="nav-link flex items-center px-3 py-2.5 rounded-lg text-slate-300 hover:text-white hover:bg-charcoal-800 font-medium text-sm">
+        <i class="fas fa-coins w-5 text-brand-400 text-center text-sm"></i>
+        <span class="nav-text ml-3 whitespace-nowrap">Payments</span>
+      </a>
+      <a data-page="verification" class="nav-link flex items-center px-3 py-2.5 rounded-lg text-slate-300 hover:text-white hover:bg-charcoal-800 font-medium text-sm">
+        <i class="fas fa-check-double w-5 text-brand-400 text-center text-sm"></i>
+        <span class="nav-text ml-3 whitespace-nowrap">Verification</span>
+      </a>
+      <a data-page="audit" class="nav-link flex items-center px-3 py-2.5 rounded-lg text-slate-300 hover:text-white hover:bg-charcoal-800 font-medium text-sm">
+        <i class="fas fa-history w-5 text-brand-400 text-center text-sm"></i>
+        <span class="nav-text ml-3 whitespace-nowrap">Audit Records</span>
+      </a>
+      <a data-page="reports" class="nav-link flex items-center px-3 py-2.5 rounded-lg text-slate-300 hover:text-white hover:bg-charcoal-800 font-medium text-sm">
+        <i class="fas fa-file-alt w-5 text-brand-400 text-center text-sm"></i>
+        <span class="nav-text ml-3 whitespace-nowrap">Reports</span>
+      </a>
+      <a data-page="settings" class="nav-link flex items-center px-3 py-2.5 rounded-lg text-slate-300 hover:text-white hover:bg-charcoal-800 font-medium text-sm">
+        <i class="fas fa-cog w-5 text-brand-400 text-center text-sm"></i>
+        <span class="nav-text ml-3 whitespace-nowrap">Settings</span>
+      </a>
+    </nav>
+
+    <!-- Profile -->
+    <div class="p-3 border-t border-charcoal-700/60 bg-charcoal-850 shrink-0">
+      <div class="flex items-center space-x-3 overflow-hidden">
+        <div class="w-8 h-8 md:w-9 md:h-9 rounded-full bg-gradient-to-tr from-brand-600 to-brand-400 text-white font-semibold text-sm flex items-center justify-center shrink-0 shadow">JD</div>
+        <div class="profile-text overflow-hidden">
+          <p class="text-sm font-semibold text-white leading-tight truncate">John Doe</p>
+          <p class="text-xs text-slate-400 truncate">Super Admin</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <div id="mainContent" class="flex-1 flex flex-col h-full min-w-0 overflow-hidden content-transition">
+
+    <!-- Header -->
+    <header class="glass-header h-14 md:h-16 sticky top-0 z-30 px-3 md:px-6 flex items-center justify-between border-b border-slate-200/70 dark:border-charcoal-700/70 shrink-0">
+      <div class="flex items-center space-x-3">
+        <button id="mobileMenuBtn" class="md:hidden text-slate-600 dark:text-slate-300 hover:text-brand-500 focus:outline-none tap-target">
+          <i class="fas fa-bars text-xl"></i>
+        </button>
+        <div class="hidden sm:block">
+          <h1 id="pageTitle" class="text-base md:text-lg font-bold text-slate-900 dark:text-white leading-tight">Dashboard</h1>
+          <p class="text-[10px] md:text-xs text-slate-500 dark:text-slate-400 hidden sm:block">Real-time MRV node · East Africa</p>
+        </div>
+        <span id="mobilePageTitle" class="sm:hidden text-base font-bold text-slate-900 dark:text-white">Dashboard</span>
+      </div>
+      <div class="flex items-center space-x-2 md:space-x-3">
+        <button id="themeToggle" class="p-2 rounded-xl text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-charcoal-800 transition-colors focus:outline-none tap-target">
+          <i id="themeIcon" class="fas fa-moon text-base md:text-lg"></i>
+        </button>
+        <button class="relative p-2 rounded-xl text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-charcoal-800 transition-colors focus:outline-none tap-target">
+          <i class="fas fa-bell text-base md:text-lg"></i>
+          <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-emerald-500 rounded-full ring-2 ring-white dark:ring-charcoal-800"></span>
+        </button>
+        <div class="hidden md:flex items-center space-x-2 cursor-pointer">
+          <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-brand-600 to-brand-400 text-white font-semibold text-sm flex items-center justify-center">JD</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Page Container -->
+    <main id="pageContainer" class="flex-1 overflow-y-auto p-3 md:p-6 space-y-4 md:space-y-6 pb-20 md:pb-6">
+
+      <!-- ========================================================== -->
+      <!-- PAGE: DASHBOARD -->
+      <!-- ========================================================== -->
+      <div id="page-dashboard" class="page-content space-y-4 md:space-y-6">
+
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
+          <div class="stat-card bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm">
+            <div class="stat-card-body flex items-center justify-between">
+              <div>
+                <span class="text-[10px] md:text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Farmers</span>
+                <h3 class="text-xl md:text-2xl font-bold mt-0.5 text-slate-900 dark:text-white">1,284</h3>
+                <span class="inline-flex items-center text-[10px] md:text-xs font-semibold text-emerald-600 dark:text-emerald-400 mt-1"><i class="fas fa-arrow-trend-up mr-1"></i>+12.5%</span>
+              </div>
+              <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-base md:text-xl shrink-0"><i class="fas fa-users"></i></div>
+            </div>
+          </div>
+          <div class="stat-card bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm">
+            <div class="stat-card-body flex items-center justify-between">
+              <div>
+                <span class="text-[10px] md:text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Hectares</span>
+                <h3 class="text-xl md:text-2xl font-bold mt-0.5 text-slate-900 dark:text-white">54.8K</h3>
+                <span class="inline-flex items-center text-[10px] md:text-xs font-semibold text-emerald-600 dark:text-emerald-400 mt-1"><i class="fas fa-arrow-trend-up mr-1"></i>+5.6%</span>
+              </div>
+              <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 flex items-center justify-center text-base md:text-xl shrink-0"><i class="fas fa-vector-square"></i></div>
+            </div>
+          </div>
+          <div class="stat-card bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm">
+            <div class="stat-card-body flex items-center justify-between">
+              <div>
+                <span class="text-[10px] md:text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">tCO₂e Verified</span>
+                <h3 class="text-xl md:text-2xl font-bold mt-0.5 text-slate-900 dark:text-white">86.4K</h3>
+                <span class="inline-flex items-center text-[10px] md:text-xs font-semibold text-emerald-600 dark:text-emerald-400 mt-1"><i class="fas fa-arrow-trend-up mr-1"></i>+14.2%</span>
+              </div>
+              <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-purple-50 dark:bg-purple-950/50 text-purple-600 dark:text-purple-400 flex items-center justify-center text-base md:text-xl shrink-0"><i class="fas fa-cloud-sun"></i></div>
+            </div>
+          </div>
+          <div class="stat-card bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm">
+            <div class="stat-card-body flex items-center justify-between">
+              <div>
+                <span class="text-[10px] md:text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Disbursed</span>
+                <h3 class="text-xl md:text-2xl font-bold mt-0.5 text-slate-900 dark:text-white">$342.9K</h3>
+                <span class="inline-flex items-center text-[10px] md:text-xs font-semibold text-emerald-600 dark:text-emerald-400 mt-1"><i class="fas fa-arrow-trend-up mr-1"></i>+9.1%</span>
+              </div>
+              <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-amber-50 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400 flex items-center justify-center text-base md:text-xl shrink-0"><i class="fas fa-wallet"></i></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+          <div class="lg:col-span-2 bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-3 md:mb-4">
+              <div><h2 class="text-sm md:text-base font-bold text-slate-900 dark:text-white">Carbon Sequestration</h2><p class="text-[10px] md:text-xs text-slate-400">Estimated vs Field-Verified</p></div>
+              <select id="timeRangeSelect" class="text-xs border border-slate-200 dark:border-charcoal-600 rounded-lg px-2 md:px-3 py-1 md:py-1.5 bg-slate-50 dark:bg-charcoal-700 text-slate-700 dark:text-slate-200 font-medium focus:outline-none focus:ring-2 focus:ring-brand-500 mt-2 sm:mt-0">
+                <option value="6m">Last 6 Months</option><option value="1y">Last Year</option>
+              </select>
+            </div>
+            <div class="relative w-full h-[200px] md:h-[260px]"><canvas id="carbonTrendChart"></canvas></div>
+          </div>
+          <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm">
+            <h2 class="text-sm md:text-base font-bold text-slate-900 dark:text-white mb-0.5">Verification Status</h2>
+            <p class="text-[10px] md:text-xs text-slate-400 mb-3 md:mb-4">Pipeline distribution</p>
+            <div class="relative w-full h-[180px] md:h-[220px] flex items-center justify-center"><canvas id="verificationChart"></canvas></div>
+          </div>
+        </div>
+
+        <!-- Map + Activity -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+          <div class="lg:col-span-2 bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-3 md:mb-4">
+              <div><h2 class="text-sm md:text-base font-bold text-slate-900 dark:text-white">Farm Clusters</h2><p class="text-[10px] md:text-xs text-slate-400">Regional parcel boundaries</p></div>
+              <span class="inline-flex items-center px-2 md:px-2.5 py-0.5 rounded-full text-[10px] md:text-xs font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 mt-2 sm:mt-0">Live Spatial</span>
+            </div>
+            <div id="map" class="h-[220px] md:h-[320px] w-full rounded-xl overflow-hidden border border-slate-100 dark:border-charcoal-700 z-10"></div>
+          </div>
+          <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm flex flex-col">
+            <h2 class="text-sm md:text-base font-bold text-slate-900 dark:text-white mb-3 md:mb-4">Audit Stream</h2>
+            <div class="flex-1 space-y-3 md:space-y-4 overflow-y-auto max-h-[220px] md:max-h-[320px] pr-1 no-scrollbar">
+              <div class="flex items-start space-x-3"><div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs shrink-0 mt-0.5"><i class="fas fa-check"></i></div><div><p class="text-xs md:text-sm font-semibold text-slate-800 dark:text-slate-200">Parcel F-102 Approved</p><p class="text-[10px] md:text-xs text-slate-400">Sentinel-2 verified</p><span class="text-[9px] md:text-[10px] text-slate-400 font-medium">10 min ago</span></div></div>
+              <div class="flex items-start space-x-3"><div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-blue-100 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 flex items-center justify-center text-xs shrink-0 mt-0.5"><i class="fas fa-file-invoice"></i></div><div><p class="text-xs md:text-sm font-semibold text-slate-800 dark:text-slate-200">Payout Triggered</p><p class="text-[10px] md:text-xs text-slate-400">$1,245 to S. Kiprop</p><span class="text-[9px] md:text-[10px] text-slate-400 font-medium">1 hour ago</span></div></div>
+              <div class="flex items-start space-x-3"><div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-amber-100 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400 flex items-center justify-center text-xs shrink-0 mt-0.5"><i class="fas fa-flask"></i></div><div><p class="text-xs md:text-sm font-semibold text-slate-800 dark:text-slate-200">Soil Assay Received</p><p class="text-[10px] md:text-xs text-slate-400">Carbon: 3.4% · pH 6.5</p><span class="text-[9px] md:text-[10px] text-slate-400 font-medium">3 hours ago</span></div></div>
+              <div class="flex items-start space-x-3"><div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-purple-100 dark:bg-purple-950/50 text-purple-600 dark:text-purple-400 flex items-center justify-center text-xs shrink-0 mt-0.5"><i class="fas fa-user-plus"></i></div><div><p class="text-xs md:text-sm font-semibold text-slate-800 dark:text-slate-200">Farmer Registered</p><p class="text-[10px] md:text-xs text-slate-400">Janet Auma · ID: F-2041</p><span class="text-[9px] md:text-[10px] text-slate-400 font-medium">5 hours ago</span></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Payments & Pending Verification -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+          <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm">
+            <div class="flex items-center justify-between mb-3 md:mb-4"><h3 class="text-sm md:text-base font-bold dark:text-white">Recent Payments</h3><a href="#" class="text-xs text-brand-600 dark:text-brand-400 hover:underline">View all</a></div>
+            <div class="space-y-2 md:space-y-3">
+              <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2"><div><p class="text-sm font-medium dark:text-white">James Mwangi</p><p class="text-[10px] text-slate-400">#PY-2026-0842</p></div><span class="text-emerald-600 dark:text-emerald-400 font-medium text-sm">$1,245</span></div>
+              <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2"><div><p class="text-sm font-medium dark:text-white">Grace Akinyi</p><p class="text-[10px] text-slate-400">#PY-2026-0839</p></div><span class="text-emerald-600 dark:text-emerald-400 font-medium text-sm">$890</span></div>
+              <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2"><div><p class="text-sm font-medium dark:text-white">Samuel Kiprop</p><p class="text-[10px] text-slate-400">#PY-2026-0835</p></div><span class="text-emerald-600 dark:text-emerald-400 font-medium text-sm">$2,100</span></div>
+              <div class="flex items-center justify-between"><div><p class="text-sm font-medium dark:text-white">Mary Wanjiru</p><p class="text-[10px] text-slate-400">#PY-2026-0830</p></div><span class="text-emerald-600 dark:text-emerald-400 font-medium text-sm">$675</span></div>
+            </div>
+          </div>
+          <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm">
+            <div class="flex items-center justify-between mb-3 md:mb-4"><h3 class="text-sm md:text-base font-bold dark:text-white">Pending Verification</h3><span class="bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-200 text-[10px] font-medium px-2 py-0.5 rounded">12</span></div>
+            <div class="space-y-2 md:space-y-3">
+              <div class="flex items-start space-x-3 p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-charcoal-700 transition-colors"><div class="w-1.5 h-1.5 mt-2 rounded-full bg-yellow-500"></div><div class="flex-1"><p class="text-sm font-medium dark:text-white">Farm F-2034 – J. Otieno</p><p class="text-[10px] text-slate-400">Submitted 2h ago</p></div><span class="text-[10px] bg-slate-200 dark:bg-charcoal-600 px-2 py-0.5 rounded">MRV</span></div>
+              <div class="flex items-start space-x-3 p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-charcoal-700 transition-colors"><div class="w-1.5 h-1.5 mt-2 rounded-full bg-yellow-500"></div><div class="flex-1"><p class="text-sm font-medium dark:text-white">Project P-012 – Agroforestry</p><p class="text-[10px] text-slate-400">Under review</p></div><span class="text-[10px] bg-slate-200 dark:bg-charcoal-600 px-2 py-0.5 rounded">Verifier</span></div>
+              <div class="flex items-start space-x-3 p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-charcoal-700 transition-colors"><div class="w-1.5 h-1.5 mt-2 rounded-full bg-red-400"></div><div class="flex-1"><p class="text-sm font-medium dark:text-white">Soil Samples – Farm F-087</p><p class="text-[10px] text-slate-400">Missing lab results</p></div><span class="text-[10px] bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300 px-2 py-0.5 rounded">Action</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Farmer Growth Chart (extra) -->
+        <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm">
+          <h3 class="text-sm md:text-base font-bold dark:text-white mb-3 md:mb-4">Farmer Registration Growth</h3>
+          <div class="w-full h-[160px] md:h-[200px]"><canvas id="farmerGrowthChart"></canvas></div>
+        </div>
+      </div>
+
+      <!-- ========================================================== -->
+      <!-- PAGE: FARMERS -->
+      <!-- ========================================================== -->
+      <div id="page-farmers" class="page-content hidden space-y-4 md:space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div><h2 class="text-lg md:text-xl font-bold dark:text-white">Farmers Directory</h2><p class="text-xs text-slate-400">Manage registered farmers and their profiles</p></div>
+          <button id="addFarmerBtn" class="inline-flex items-center justify-center px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm gap-2"><i class="fas fa-plus"></i> Register Farmer</button>
+        </div>
+        <!-- Search & filter -->
+        <div class="flex flex-col sm:flex-row gap-3">
+          <div class="relative flex-1"><i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i><input type="text" id="farmerSearch" placeholder="Search by name, ID, phone..." class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-charcoal-600 bg-white dark:bg-charcoal-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"></div>
+          <select class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-charcoal-600 bg-white dark:bg-charcoal-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"><option>All Communities</option><option>Nyeri</option><option>Karatina</option><option>Nanyuki</option></select>
+        </div>
+        <!-- Table -->
+        <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead class="bg-slate-50 dark:bg-charcoal-850 border-b border-slate-200 dark:border-charcoal-700">
+                <tr><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">ID</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">Name</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden sm:table-cell">Phone</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden md:table-cell">Community</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden lg:table-cell">Status</th><th class="px-4 py-3 text-right font-semibold text-slate-600 dark:text-slate-300">Action</th></tr>
+              </thead>
+              <tbody id="farmerTableBody" class="divide-y divide-slate-100 dark:divide-charcoal-700">
+                <!-- Rows rendered by JS -->
+              </tbody>
+            </table>
+          </div>
+          <div class="px-4 py-3 border-t border-slate-200 dark:border-charcoal-700 flex flex-col sm:flex-row justify-between items-center gap-2 text-xs text-slate-500">
+            <span>Showing <span id="farmerStart">1</span>-<span id="farmerEnd">5</span> of <span id="farmerTotal">0</span></span>
+            <div class="flex gap-2"><button id="farmerPrev" class="px-3 py-1 rounded-lg border border-slate-200 dark:border-charcoal-600 hover:bg-slate-50 dark:hover:bg-charcoal-700 disabled:opacity-50">Prev</button><button id="farmerNext" class="px-3 py-1 rounded-lg border border-slate-200 dark:border-charcoal-600 hover:bg-slate-50 dark:hover:bg-charcoal-700 disabled:opacity-50">Next</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================================== -->
+      <!-- PAGE: FARMS & GIS -->
+      <!-- ========================================================== -->
+      <div id="page-farms" class="page-content hidden space-y-4 md:space-y-6">
+        <div><h2 class="text-lg md:text-xl font-bold dark:text-white">Farms & GIS</h2><p class="text-xs text-slate-400">Spatial data, polygons, and farm boundaries</p></div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+          <div class="lg:col-span-2 bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm p-1 md:p-1.5">
+            <div id="farmMap" class="h-[300px] md:h-[420px] w-full rounded-xl overflow-hidden"></div>
+          </div>
+          <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm space-y-4">
+            <div><h3 class="font-semibold dark:text-white">Farm Details</h3><p class="text-xs text-slate-400">Select a farm on the map</p></div>
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2"><span class="text-slate-500">Name</span><span class="font-medium dark:text-white">Karatina Agroforestry</span></div>
+              <div class="flex justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2"><span class="text-slate-500">Acreage</span><span class="font-medium dark:text-white">142.5 ha</span></div>
+              <div class="flex justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2"><span class="text-slate-500">Farmer</span><span class="font-medium dark:text-white">James Mwangi</span></div>
+              <div class="flex justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2"><span class="text-slate-500">Carbon (tCO₂e)</span><span class="font-medium dark:text-white">1,245</span></div>
+              <div class="flex justify-between"><span class="text-slate-500">Status</span><span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300">Verified</span></div>
+            </div>
+            <button class="w-full py-2.5 rounded-xl border border-slate-200 dark:border-charcoal-600 text-sm font-medium hover:bg-slate-50 dark:hover:bg-charcoal-700 transition-colors"><i class="fas fa-draw-polygon mr-2"></i>Draw Polygon</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================================== -->
+      <!-- PAGE: CARBON PROJECTS -->
+      <!-- ========================================================== -->
+      <div id="page-carbon" class="page-content hidden space-y-4 md:space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div><h2 class="text-lg md:text-xl font-bold dark:text-white">Carbon Projects</h2><p class="text-xs text-slate-400">Project lifecycle & carbon accounting</p></div>
+          <button class="inline-flex items-center justify-center px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm gap-2"><i class="fas fa-plus"></i> New Project</button>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+          <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm"><div class="flex justify-between items-start"><div><h3 class="font-bold dark:text-white">Agroforestry Phase II</h3><p class="text-xs text-slate-400">Nyeri · 1,240 ha</p></div><span class="text-xs bg-brand-100 text-brand-800 dark:bg-brand-900/40 dark:text-brand-300 px-2 py-0.5 rounded-full">Active</span></div><div class="mt-3 grid grid-cols-2 gap-2 text-sm"><div><span class="text-slate-400">Baseline</span><p class="font-medium dark:text-white">2.4K tCO₂e</p></div><div><span class="text-slate-400">Verified</span><p class="font-medium text-emerald-600 dark:text-emerald-400">1.8K tCO₂e</p></div></div></div>
+          <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm"><div class="flex justify-between items-start"><div><h3 class="font-bold dark:text-white">Soil Carbon Initiative</h3><p class="text-xs text-slate-400">Karatina · 860 ha</p></div><span class="text-xs bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300 px-2 py-0.5 rounded-full">Monitoring</span></div><div class="mt-3 grid grid-cols-2 gap-2 text-sm"><div><span class="text-slate-400">Baseline</span><p class="font-medium dark:text-white">1.1K tCO₂e</p></div><div><span class="text-slate-400">Verified</span><p class="font-medium text-amber-600 dark:text-amber-400">620 tCO₂e</p></div></div></div>
+          <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm"><div class="flex justify-between items-start"><div><h3 class="font-bold dark:text-white">Silvopasture Pilot</h3><p class="text-xs text-slate-400">Nanyuki · 430 ha</p></div><span class="text-xs bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300 px-2 py-0.5 rounded-full">Verification</span></div><div class="mt-3 grid grid-cols-2 gap-2 text-sm"><div><span class="text-slate-400">Baseline</span><p class="font-medium dark:text-white">940 tCO₂e</p></div><div><span class="text-slate-400">Verified</span><p class="font-medium text-blue-600 dark:text-blue-400">340 tCO₂e</p></div></div></div>
+        </div>
+      </div>
+
+      <!-- ========================================================== -->
+      <!-- PAGE: MRV MONITORING -->
+      <!-- ========================================================== -->
+      <div id="page-mrv" class="page-content hidden space-y-4 md:space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div><h2 class="text-lg md:text-xl font-bold dark:text-white">MRV Monitoring</h2><p class="text-xs text-slate-400">Evidence collection & verification pipeline</p></div>
+          <button id="addEvidenceBtn" class="inline-flex items-center justify-center px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm gap-2"><i class="fas fa-upload"></i> Submit Evidence</button>
+        </div>
+        <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead class="bg-slate-50 dark:bg-charcoal-850 border-b border-slate-200 dark:border-charcoal-700">
+                <tr><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">ID</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">Farm</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden sm:table-cell">Type</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden md:table-cell">Date</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">Status</th><th class="px-4 py-3 text-right font-semibold text-slate-600 dark:text-slate-300">Action</th></tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 dark:divide-charcoal-700">
+                <tr class="table-row-hover"><td class="px-4 py-3 font-mono text-xs">MRV-001</td><td class="px-4 py-3">F-102</td><td class="px-4 py-3 hidden sm:table-cell">Satellite</td><td class="px-4 py-3 hidden md:table-cell">2026-08-25</td><td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300">Verified</span></td><td class="px-4 py-3 text-right"><button class="text-brand-600 dark:text-brand-400 hover:underline text-xs">View</button></td></tr>
+                <tr class="table-row-hover"><td class="px-4 py-3 font-mono text-xs">MRV-002</td><td class="px-4 py-3">F-2034</td><td class="px-4 py-3 hidden sm:table-cell">Field Survey</td><td class="px-4 py-3 hidden md:table-cell">2026-08-24</td><td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300">Review</span></td><td class="px-4 py-3 text-right"><button class="text-brand-600 dark:text-brand-400 hover:underline text-xs">View</button></td></tr>
+                <tr class="table-row-hover"><td class="px-4 py-3 font-mono text-xs">MRV-003</td><td class="px-4 py-3">F-087</td><td class="px-4 py-3 hidden sm:table-cell">Soil Sample</td><td class="px-4 py-3 hidden md:table-cell">2026-08-22</td><td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300">Rejected</span></td><td class="px-4 py-3 text-right"><button class="text-brand-600 dark:text-brand-400 hover:underline text-xs">View</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================================== -->
+      <!-- PAGE: CONTRACTS -->
+      <!-- ========================================================== -->
+      <div id="page-contracts" class="page-content hidden space-y-4 md:space-y-6">
+        <div><h2 class="text-lg md:text-xl font-bold dark:text-white">Contracts</h2><p class="text-xs text-slate-400">Carbon rights, benefit sharing & agreements</p></div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+          <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm"><div class="flex justify-between"><div><h3 class="font-bold dark:text-white">J. Mwangi · C-2026-01</h3><p class="text-xs text-slate-400">Agroforestry Phase II</p></div><span class="text-xs bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300 px-2 py-0.5 rounded-full">Active</span></div><div class="mt-2 grid grid-cols-3 gap-1 text-xs"><span class="text-slate-400">Term: 5 yrs</span><span class="text-slate-400">Share: 60%</span><span class="text-slate-400">Signed: 2026-01-15</span></div></div>
+          <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm"><div class="flex justify-between"><div><h3 class="font-bold dark:text-white">S. Kiprop · C-2026-04</h3><p class="text-xs text-slate-400">Soil Carbon Initiative</p></div><span class="text-xs bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300 px-2 py-0.5 rounded-full">Pending</span></div><div class="mt-2 grid grid-cols-3 gap-1 text-xs"><span class="text-slate-400">Term: 7 yrs</span><span class="text-slate-400">Share: 55%</span><span class="text-slate-400">Signed: 2026-07-10</span></div></div>
+        </div>
+      </div>
+
+      <!-- ========================================================== -->
+      <!-- PAGE: COMMUNITIES -->
+      <!-- ========================================================== -->
+      <div id="page-communities" class="page-content hidden space-y-4 md:space-y-6">
+        <div><h2 class="text-lg md:text-xl font-bold dark:text-white">Communities</h2><p class="text-xs text-slate-400">Community management & CDA tracking</p></div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+          <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm"><h3 class="font-bold dark:text-white">Nyeri Community</h3><p class="text-xs text-slate-400">1,240 ha · 284 farmers</p><div class="mt-2 flex gap-4 text-sm"><span class="text-slate-400">CDA: 3</span><span class="text-slate-400">Projects: 2</span><span class="text-emerald-600 dark:text-emerald-400">$124.5K paid</span></div></div>
+          <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm"><h3 class="font-bold dark:text-white">Karatina Community</h3><p class="text-xs text-slate-400">860 ha · 192 farmers</p><div class="mt-2 flex gap-4 text-sm"><span class="text-slate-400">CDA: 2</span><span class="text-slate-400">Projects: 1</span><span class="text-emerald-600 dark:text-emerald-400">$87.2K paid</span></div></div>
+          <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm"><h3 class="font-bold dark:text-white">Nanyuki Community</h3><p class="text-xs text-slate-400">430 ha · 108 farmers</p><div class="mt-2 flex gap-4 text-sm"><span class="text-slate-400">CDA: 1</span><span class="text-slate-400">Projects: 1</span><span class="text-emerald-600 dark:text-emerald-400">$38.6K paid</span></div></div>
+        </div>
+      </div>
+
+      <!-- ========================================================== -->
+      <!-- PAGE: PAYMENTS -->
+      <!-- ========================================================== -->
+      <div id="page-payments" class="page-content hidden space-y-4 md:space-y-6">
+        <div><h2 class="text-lg md:text-xl font-bold dark:text-white">Payments</h2><p class="text-xs text-slate-400">Benefit sharing & disbursement tracking</p></div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
+          <div class="bg-white dark:bg-charcoal-800 rounded-xl p-4 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center"><p class="text-xs text-slate-400">Total Paid</p><p class="text-xl font-bold dark:text-white">$342.9K</p></div>
+          <div class="bg-white dark:bg-charcoal-800 rounded-xl p-4 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center"><p class="text-xs text-slate-400">Pending</p><p class="text-xl font-bold text-amber-600 dark:text-amber-400">$48.2K</p></div>
+          <div class="bg-white dark:bg-charcoal-800 rounded-xl p-4 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center"><p class="text-xs text-slate-400">Beneficiaries</p><p class="text-xl font-bold dark:text-white">1,284</p></div>
+          <div class="bg-white dark:bg-charcoal-800 rounded-xl p-4 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center"><p class="text-xs text-slate-400">Community Share</p><p class="text-xl font-bold text-emerald-600 dark:text-emerald-400">42%</p></div>
+        </div>
+      </div>
+
+      <!-- ========================================================== -->
+      <!-- PAGE: VERIFICATION -->
+      <!-- ========================================================== -->
+      <div id="page-verification" class="page-content hidden space-y-4 md:space-y-6">
+        <div><h2 class="text-lg md:text-xl font-bold dark:text-white">Verification</h2><p class="text-xs text-slate-400">MRV verification workflow & approvals</p></div>
+        <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-6 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div><h3 class="font-semibold dark:text-white">Pending Review</h3><p class="text-sm text-slate-400">12 items awaiting verification</p></div>
+            <button class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-xl transition-colors">Start Review</button>
+          </div>
+          <div class="mt-4 space-y-2"><div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2"><span class="text-sm">MRV-002 · Farm F-2034</span><span class="text-xs bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300 px-2 py-0.5 rounded-full">Review</span></div><div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2"><span class="text-sm">MRV-005 · Farm F-112</span><span class="text-xs bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300 px-2 py-0.5 rounded-full">Review</span></div><div class="flex items-center justify-between"><span class="text-sm">MRV-008 · Farm F-056</span><span class="text-xs bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300 px-2 py-0.5 rounded-full">Assigned</span></div></div>
+        </div>
+      </div>
+
+      <!-- ========================================================== -->
+      <!-- PAGE: AUDIT RECORDS -->
+      <!-- ========================================================== -->
+      <div id="page-audit" class="page-content hidden space-y-4 md:space-y-6">
+        <div><h2 class="text-lg md:text-xl font-bold dark:text-white">Audit Records</h2><p class="text-xs text-slate-400">Full audit trail of all system actions</p></div>
+        <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm overflow-hidden">
+          <div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50 dark:bg-charcoal-850 border-b"><tr><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">Time</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">User</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden sm:table-cell">Action</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden md:table-cell">Target</th></tr></thead><tbody class="divide-y divide-slate-100 dark:divide-charcoal-700"><tr><td class="px-4 py-3 text-xs">10:34</td><td class="px-4 py-3 text-xs">J. Doe</td><td class="px-4 py-3 text-xs hidden sm:table-cell">Verified MRV-001</td><td class="px-4 py-3 text-xs hidden md:table-cell">Farm F-102</td></tr><tr><td class="px-4 py-3 text-xs">09:15</td><td class="px-4 py-3 text-xs">S. Kiprop</td><td class="px-4 py-3 text-xs hidden sm:table-cell">Registered Farmer</td><td class="px-4 py-3 text-xs hidden md:table-cell">Janet Auma</td></tr></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- ========================================================== -->
+      <!-- PAGE: REPORTS -->
+      <!-- ========================================================== -->
+      <div id="page-reports" class="page-content hidden space-y-4 md:space-y-6">
+        <div><h2 class="text-lg md:text-xl font-bold dark:text-white">Reports</h2><p class="text-xs text-slate-400">Exportable MRV & carbon reports</p></div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <button class="bg-white dark:bg-charcoal-800 rounded-xl p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center hover:shadow-md transition-shadow"><i class="fas fa-file-pdf text-2xl text-red-500 mb-2"></i><p class="font-medium dark:text-white text-sm">Farm Report</p><p class="text-xs text-slate-400">PDF</p></button>
+          <button class="bg-white dark:bg-charcoal-800 rounded-xl p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center hover:shadow-md transition-shadow"><i class="fas fa-file-pdf text-2xl text-red-500 mb-2"></i><p class="font-medium dark:text-white text-sm">Carbon Summary</p><p class="text-xs text-slate-400">PDF</p></button>
+          <button class="bg-white dark:bg-charcoal-800 rounded-xl p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center hover:shadow-md transition-shadow"><i class="fas fa-file-csv text-2xl text-green-600 mb-2"></i><p class="font-medium dark:text-white text-sm">MRV Evidence</p><p class="text-xs text-slate-400">CSV</p></button>
+          <button class="bg-white dark:bg-charcoal-800 rounded-xl p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center hover:shadow-md transition-shadow"><i class="fas fa-file-pdf text-2xl text-red-500 mb-2"></i><p class="font-medium dark:text-white text-sm">Audit Trail</p><p class="text-xs text-slate-400">PDF</p></button>
+        </div>
+      </div>
+
+      <!-- ========================================================== -->
+      <!-- PAGE: SETTINGS -->
+      <!-- ========================================================== -->
+      <div id="page-settings" class="page-content hidden space-y-4 md:space-y-6">
+        <div><h2 class="text-lg md:text-xl font-bold dark:text-white">Settings</h2><p class="text-xs text-slate-400">System configuration & preferences</p></div>
+        <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-6 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-4"><div><p class="font-medium dark:text-white">Dark Mode</p><p class="text-xs text-slate-400">Toggle system theme</p></div><button id="settingsThemeToggle" class="px-4 py-2 rounded-xl bg-brand-600 text-white text-sm font-semibold">Toggle</button></div>
+          <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-4"><div><p class="font-medium dark:text-white">Notifications</p><p class="text-xs text-slate-400">Email & in-app alerts</p></div><button class="px-4 py-2 rounded-xl bg-brand-600 text-white text-sm font-semibold">Configure</button></div>
+          <div class="flex items-center justify-between"><div><p class="font-medium dark:text-white">Data Export</p><p class="text-xs text-slate-400">Export all MRV data</p></div><button class="px-4 py-2 rounded-xl bg-brand-600 text-white text-sm font-semibold">Export</button></div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- BOTTOM NAV (Mobile) -->
+<!-- ============================================================ -->
+<nav class="bottom-nav md:hidden flex items-center justify-around px-2 py-1.5">
+  <button data-page="dashboard" class="bottom-nav-btn flex flex-col items-center text-xs text-slate-500 dark:text-slate-400 active:text-brand-600 dark:active:text-brand-400 p-1"><i class="fas fa-chart-pie text-lg"></i><span class="text-[9px]">Home</span></button>
+  <button data-page="farmers" class="bottom-nav-btn flex flex-col items-center text-xs text-slate-500 dark:text-slate-400 p-1"><i class="fas fa-users text-lg"></i><span class="text-[9px]">Farmers</span></button>
+  <button data-page="mrv" class="bottom-nav-btn flex flex-col items-center text-xs text-slate-500 dark:text-slate-400 p-1"><i class="fas fa-clipboard-check text-lg"></i><span class="text-[9px]">MRV</span></button>
+  <button data-page="payments" class="bottom-nav-btn flex flex-col items-center text-xs text-slate-500 dark:text-slate-400 p-1"><i class="fas fa-coins text-lg"></i><span class="text-[9px]">Payments</span></button>
+  <button data-page="settings" class="bottom-nav-btn flex flex-col items-center text-xs text-slate-500 dark:text-slate-400 p-1"><i class="fas fa-cog text-lg"></i><span class="text-[9px]">Settings</span></button>
+</nav>
+
+<!-- ============================================================ -->
+<!-- MODALS -->
+<!-- ============================================================ -->
+
+<!-- Farmer Registration Modal -->
+<div id="farmerModal" class="modal hidden fixed inset-0 z-[70] flex items-center justify-center p-4">
+  <div class="modal-backdrop absolute inset-0" onclick="closeModal('farmerModal')"></div>
+  <div class="relative bg-white dark:bg-charcoal-800 rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 md:p-8">
+    <div class="flex items-center justify-between mb-5"><h2 class="text-xl font-bold dark:text-white">Register Farmer</h2><button onclick="closeModal('farmerModal')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fas fa-times text-xl"></i></button></div>
+    <form id="farmerForm" class="space-y-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Full Name *</label><input type="text" id="fName" required class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"></div>
+        <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Phone *</label><input type="tel" id="fPhone" required class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"></div>
+      </div>
+      <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Email</label><input type="email" id="fEmail" class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"></div>
+      <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">National ID *</label><input type="text" id="fNationalId" required class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"></div>
+      <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Community</label><select id="fCommunity" class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"><option value="Nyeri">Nyeri Community</option><option value="Karatina">Karatina Community</option><option value="Nanyuki">Nanyuki Community</option></select></div>
+      <div class="flex gap-3 pt-2"><button type="button" onclick="closeModal('farmerModal')" class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 dark:border-charcoal-600 text-sm font-medium hover:bg-slate-50 dark:hover:bg-charcoal-700">Cancel</button><button type="submit" class="flex-1 px-4 py-2.5 rounded-xl bg-brand-600 text-white text-sm font-medium hover:bg-brand-700">Register</button></div>
+    </form>
+  </div>
+</div>
+
+<!-- MRV Evidence Modal -->
+<div id="evidenceModal" class="modal hidden fixed inset-0 z-[70] flex items-center justify-center p-4">
+  <div class="modal-backdrop absolute inset-0" onclick="closeModal('evidenceModal')"></div>
+  <div class="relative bg-white dark:bg-charcoal-800 rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 md:p-8">
+    <div class="flex items-center justify-between mb-5"><h2 class="text-xl font-bold dark:text-white">Submit MRV Evidence</h2><button onclick="closeModal('evidenceModal')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fas fa-times text-xl"></i></button></div>
+    <form id="evidenceForm" class="space-y-4">
+      <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Farm *</label><select required class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"><option value="F-102">F-102 – J. Mwangi</option><option value="F-2034">F-2034 – J. Otieno</option><option value="F-087">F-087 – S. Kiprop</option></select></div>
+      <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Evidence Type *</label><select required class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"><option>Satellite Imagery</option><option>Field Survey</option><option>Soil Sample</option><option>Photographic</option><option>Farmer Declaration</option></select></div>
+      <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Upload Files</label><div class="border-2 border-dashed border-slate-300 dark:border-charcoal-600 rounded-xl p-6 text-center"><i class="fas fa-cloud-upload-alt text-3xl text-slate-400 mb-2"></i><p class="text-sm text-slate-500 dark:text-slate-400">Drag & drop or click to browse</p><input type="file" multiple accept=".jpg,.png,.pdf,.geojson" class="hidden" id="evidenceFileInput"><button type="button" onclick="document.getElementById('evidenceFileInput').click()" class="mt-2 text-brand-600 dark:text-brand-400 hover:underline text-sm">Browse</button></div></div>
+      <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Verification Notes</label><textarea rows="3" class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"></textarea></div>
+      <div class="flex gap-3 pt-2"><button type="button" onclick="closeModal('evidenceModal')" class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 dark:border-charcoal-600 text-sm font-medium hover:bg-slate-50 dark:hover:bg-charcoal-700">Cancel</button><button type="submit" class="flex-1 px-4 py-2.5 rounded-xl bg-brand-600 text-white text-sm font-medium hover:bg-brand-700">Submit</button></div>
+    </form>
+  </div>
+</div>
+
+<!-- Toast notification -->
+<div id="toast" class="fixed bottom-20 md:bottom-6 left-1/2 -translate-x-1/2 z-[80] bg-charcoal-900 text-white px-6 py-3 rounded-xl shadow-lg text-sm font-medium transition-all duration-300 opacity-0 translate-y-4 pointer-events-none">Action completed</div>
+
+<!-- ============================================================ -->
+<!-- MAIN APPLICATION JAVASCRIPT -->
+<!-- ============================================================ -->
+<script>
+(function() {
+  'use strict';
+
+  // --- STATE ---
+  const state = {
+    isDark: localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches),
+    sidebarCollapsed: false,
+    currentPage: 'dashboard',
+    farmerPage: 0,
+    farmerPageSize: 5,
+    farmers: [
+      { id: 'F-1001', name: 'James Mwangi', phone: '+254 712 345 678', community: 'Nyeri', status: 'Active' },
+      { id: 'F-1002', name: 'Grace Akinyi', phone: '+254 723 456 789', community: 'Karatina', status: 'Active' },
+      { id: 'F-1003', name: 'Samuel Kiprop', phone: '+254 734 567 890', community: 'Nanyuki', status: 'Active' },
+      { id: 'F-1004', name: 'Mary Wanjiru', phone: '+254 745 678 901', community: 'Nyeri', status: 'Inactive' },
+      { id: 'F-1005', name: 'John Otieno', phone: '+254 756 789 012', community: 'Karatina', status: 'Pending' },
+      { id: 'F-1006', name: 'Janet Auma', phone: '+254 767 890 123', community: 'Nanyuki', status: 'Active' },
+      { id: 'F-1007', name: 'Peter Njoroge', phone: '+254 778 901 234', community: 'Nyeri', status: 'Active' },
+    ],
+    charts: {},
+    map: null,
+    farmMap: null,
+  };
+
+  // --- DOM REFS ---
+  const $ = (s) => document.querySelector(s);
+  const $$ = (s) => document.querySelectorAll(s);
+
+  const DOM = {
+    html: document.documentElement,
+    sidebar: $('#sidebar'),
+    mainContent: $('#mainContent'),
+    sidebarToggle: $('#sidebarToggle'),
+    toggleIcon: $('#toggleIcon'),
+    mobileMenuBtn: $('#mobileMenuBtn'),
+    themeToggle: $('#themeToggle'),
+    themeIcon: $('#themeIcon'),
+    settingsThemeToggle: $('#settingsThemeToggle'),
+    pageTitle: $('#pageTitle'),
+    mobilePageTitle: $('#mobilePageTitle'),
+    pageContainer: $('#pageContainer'),
+    farmerTableBody: $('#farmerTableBody'),
+    farmerStart: $('#farmerStart'),
+    farmerEnd: $('#farmerEnd'),
+    farmerTotal: $('#farmerTotal'),
+    farmerPrev: $('#farmerPrev'),
+    farmerNext: $('#farmerNext'),
+    farmerSearch: $('#farmerSearch'),
+    addFarmerBtn: $('#addFarmerBtn'),
+    addEvidenceBtn: $('#addEvidenceBtn'),
+    farmerModal: $('#farmerModal'),
+    evidenceModal: $('#evidenceModal'),
+    toast: $('#toast'),
+    bottomNavBtns: $$('.bottom-nav-btn'),
+    navLinks: $$('.nav-link'),
+  };
+
+  // --- THEME ---
+  function applyTheme() {
+    if (state.isDark) {
+      DOM.html.classList.add('dark');
+      DOM.themeIcon.className = 'fas fa-sun text-base md:text-lg text-amber-400';
+    } else {
+      DOM.html.classList.remove('dark');
+      DOM.themeIcon.className = 'fas fa-moon text-base md:text-lg text-slate-600';
+    }
+  }
+
+  function toggleTheme() {
+    state.isDark = !state.isDark;
+    localStorage.setItem('theme', state.isDark ? 'dark' : 'light');
+    applyTheme();
+    updateChartsTheme();
+  }
+
+  // --- NAVIGATION ---
+  function navigateTo(page) {
+    // Hide all pages
+    $$('.page-content').forEach(el => el.classList.add('hidden'));
+    // Show target
+    const target = $(`#page-${page}`);
+    if (target) target.classList.remove('hidden');
+    // Update title
+    const titles = {
+      dashboard: 'Dashboard', farmers: 'Farmers', farms: 'Farms & GIS',
+      carbon: 'Carbon Projects', mrv: 'MRV Monitoring', contracts: 'Contracts',
+      communities: 'Communities', payments: 'Payments', verification: 'Verification',
+      audit: 'Audit Records', reports: 'Reports', settings: 'Settings'
+    };
+    const title = titles[page] || 'Dashboard';
+    if (DOM.pageTitle) DOM.pageTitle.textContent = title;
+    if (DOM.mobilePageTitle) DOM.mobilePageTitle.textContent = title;
+
+    // Update nav links
+    DOM.navLinks.forEach(link => {
+      link.classList.toggle('active', link.dataset.page === page);
+    });
+    DOM.bottomNavBtns.forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.page === page);
+      if (btn.dataset.page === page) {
+        btn.classList.add('text-brand-600', 'dark:text-brand-400');
+      } else {
+        btn.classList.remove('text-brand-600', 'dark:text-brand-400');
+      }
+    });
+
+    state.currentPage = page;
+    // Close mobile sidebar
+    closeMobileDrawer();
+    // Re-initialize map if switching to farms
+    if (page === 'farms') {
+      setTimeout(initFarmMap, 200);
+    }
+  }
+
+  // --- SIDEBAR ---
+  function toggleSidebar() {
+    state.sidebarCollapsed = !state.sidebarCollapsed;
+    if (state.sidebarCollapsed) {
+      DOM.sidebar.classList.add('w-20');
+      DOM.sidebar.classList.remove('w-64');
+      DOM.toggleIcon?.classList.add('rotate-180');
+      hideSidebarTexts(true);
+    } else {
+      DOM.sidebar.classList.remove('w-20');
+      DOM.sidebar.classList.add('w-64');
+      DOM.toggleIcon?.classList.remove('rotate-180');
+      hideSidebarTexts(false);
+    }
+    setTimeout(() => window.dispatchEvent(new Event('resize')), 300);
+  }
+
+  function hideSidebarTexts(hide) {
+    const els = [...document.querySelectorAll('.nav-text, .brand-text, .profile-text')];
+    els.forEach(el => el.style.display = hide ? 'none' : '');
+  }
+
+  function openMobileDrawer() {
+    DOM.sidebar.classList.remove('-translate-x-full');
+  }
+
+  function closeMobileDrawer() {
+    DOM.sidebar.classList.add('-translate-x-full');
+  }
+
+  // --- FARMER TABLE ---
+  function renderFarmers() {
+    const search = (DOM.farmerSearch?.value || '').toLowerCase();
+    let filtered = state.farmers.filter(f => 
+      f.name.toLowerCase().includes(search) || 
+      f.id.toLowerCase().includes(search) || 
+      f.phone.includes(search)
+    );
+    const total = filtered.length;
+    const start = state.farmerPage * state.farmerPageSize;
+    const end = Math.min(start + state.farmerPageSize, total);
+    const pageItems = filtered.slice(start, end);
+
+    if (DOM.farmerTotal) DOM.farmerTotal.textContent = total;
+    if (DOM.farmerStart) DOM.farmerStart.textContent = total > 0 ? start + 1 : 0;
+    if (DOM.farmerEnd) DOM.farmerEnd.textContent = end;
+    if (DOM.farmerPrev) DOM.farmerPrev.disabled = state.farmerPage === 0;
+    if (DOM.farmerNext) DOM.farmerNext.disabled = end >= total;
+
+    if (!DOM.farmerTableBody) return;
+    if (pageItems.length === 0) {
+      DOM.farmerTableBody.innerHTML = `<tr><td colspan="6" class="px-4 py-8 text-center text-slate-400 text-sm">No farmers found</td></tr>`;
+      return;
+    }
+    DOM.farmerTableBody.innerHTML = pageItems.map(f => `
+      <tr class="table-row-hover">
+        <td class="px-4 py-3 font-mono text-xs">${f.id}</td>
+        <td class="px-4 py-3 font-medium">${f.name}</td>
+        <td class="px-4 py-3 hidden sm:table-cell text-sm">${f.phone}</td>
+        <td class="px-4 py-3 hidden md:table-cell text-sm">${f.community}</td>
+        <td class="px-4 py-3 hidden lg:table-cell"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${f.status === 'Active' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' : f.status === 'Pending' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'}">${f.status}</span></td>
+        <td class="px-4 py-3 text-right"><button class="text-brand-600 dark:text-brand-400 hover:underline text-xs">View</button></td>
+      </tr>
+    `).join('');
+  }
+
+  function farmerPrevPage() { if (state.farmerPage > 0) { state.farmerPage--; renderFarmers(); } }
+  function farmerNextPage() { 
+    const total = state.farmers.filter(f => (DOM.farmerSearch?.value || '').toLowerCase() === '' || f.name.toLowerCase().includes(DOM.farmerSearch?.value?.toLowerCase() || '')).length;
+    if ((state.farmerPage + 1) * state.farmerPageSize < total) { state.farmerPage++; renderFarmers(); }
+  }
+
+  // --- TOAST ---
+  function showToast(msg, duration = 2500) {
+    const t = DOM.toast;
+    if (!t) return;
+    t.textContent = msg;
+    t.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
+    t.classList.add('opacity-100', 'translate-y-0');
+    clearTimeout(t._timeout);
+    t._timeout = setTimeout(() => {
+      t.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
+      t.classList.remove('opacity-100', 'translate-y-0');
+    }, duration);
+  }
+
+  // --- MODALS ---
+  window.closeModal = function(id) {
+    const el = document.getElementById(id);
+    if (el) el.classList.add('hidden');
+  };
+
+  function openModal(id) {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('hidden');
+  }
+
+  // --- CHARTS ---
+  function getChartColors() {
+    return {
+      text: state.isDark ? '#cbd5e1' : '#475569',
+      grid: state.isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)',
+    };
+  }
+
+  function initCharts() {
+    const { text, grid } = getChartColors();
+
+    // Carbon trend
+    const ctx1 = document.getElementById('carbonTrendChart')?.getContext('2d');
+    if (ctx1) {
+      state.charts.carbon = new Chart(ctx1, {
+        type: 'line',
+        data: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+          datasets: [
+            { label: 'Estimated', data: [120,150,180,220,260,310], borderColor: '#43a047', backgroundColor: 'rgba(67,160,71,0.08)', fill: true, tension: 0.4, borderWidth: 2, pointRadius: 3 },
+            { label: 'Verified', data: [80,110,140,170,200,240], borderColor: '#1e4d34', backgroundColor: 'transparent', borderDash: [5,5], tension: 0.4, borderWidth: 2, pointRadius: 3 }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { position: 'top', labels: { color: text, font: { size: 10, family: 'Inter' }, boxWidth: 10 } } },
+          scales: { x: { grid: { display: false }, ticks: { color: text, font: { size: 9 } } }, y: { grid: { color: grid }, ticks: { color: text, font: { size: 9 } } } }
+        }
+      });
+    }
+
+    // Verification doughnut
+    const ctx2 = document.getElementById('verificationChart')?.getContext('2d');
+    if (ctx2) {
+      state.charts.verification = new Chart(ctx2, {
+        type: 'doughnut',
+        data: {
+          labels: ['Approved', 'In Review', 'Pending', 'Action Req.'],
+          datasets: [{ data: [65,18,12,5], backgroundColor: ['#43a047','#3b82f6','#f59e0b','#ef4444'], borderWidth: 0 }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false, cutout: '72%',
+          plugins: { legend: { position: 'bottom', labels: { color: text, boxWidth: 10, font: { size: 9, family: 'Inter' }, padding: 8 } } }
+        }
+      });
+    }
+
+    // Farmer growth
+    const ctx3 = document.getElementById('farmerGrowthChart')?.getContext('2d');
+    if (ctx3) {
+      state.charts.growth = new Chart(ctx3, {
+        type: 'bar',
+        data: {
+          labels: ['Jan','Feb','Mar','Apr','May','Jun'],
+          datasets: [{ label: 'New Farmers', data: [45,52,61,78,95,112], backgroundColor: 'rgba(67,160,71,0.6)', borderRadius: 4 }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true, grid: { color: grid }, ticks: { color: text, font: { size: 9 } } }, x: { grid: { display: false }, ticks: { color: text, font: { size: 9 } } } }
+        }
+      });
+    }
+  }
+
+  function updateChartsTheme() {
+    const { text, grid } = getChartColors();
+    Object.values(state.charts).forEach(chart => {
+      if (chart.options.plugins?.legend?.labels) chart.options.plugins.legend.labels.color = text;
+      if (chart.options.scales) {
+        Object.keys(chart.options.scales).forEach(axis => {
+          if (chart.options.scales[axis].grid) chart.options.scales[axis].grid.color = grid;
+          if (chart.options.scales[axis].ticks) chart.options.scales[axis].ticks.color = text;
+        });
+      }
+      chart.update();
+    });
+  }
+
+  // --- MAPS ---
+  function initDashboardMap() {
+    const container = document.getElementById('map');
+    if (!container) return;
+    if (state.map) { state.map.invalidateSize(); return; }
+    state.map = L.map('map', { zoomControl: false }).setView([-0.302, 36.823], 8);
+    L.control.zoom({ position: 'bottomright' }).addTo(state.map);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OSM' }).addTo(state.map);
+    [
+      { lat: -0.302, lng: 36.678, name: 'Nyeri Cluster' },
+      { lat: -0.234, lng: 36.823, name: 'Karatina Cluster' },
+      { lat: -0.156, lng: 37.012, name: 'Nanyuki Cluster' }
+    ].forEach(n => {
+      L.circleMarker([n.lat, n.lng], { radius: 7, fillColor: '#43a047', color: '#fff', weight: 2, fillOpacity: 0.9 })
+        .addTo(state.map).bindPopup(`<strong>${n.name}</strong><br/>Status: Active`);
+    });
+    L.polygon([[-0.28,36.65],[-0.28,36.72],[-0.34,36.72],[-0.34,36.65]], { color: '#388e5c', weight: 2, fillOpacity: 0.15 }).addTo(state.map);
+    setTimeout(() => state.map?.invalidateSize(), 300);
+  }
+
+  function initFarmMap() {
+    const container = document.getElementById('farmMap');
+    if (!container) return;
+    if (state.farmMap) { state.farmMap.invalidateSize(); return; }
+    state.farmMap = L.map('farmMap', { zoomControl: false }).setView([-0.302, 36.823], 10);
+    L.control.zoom({ position: 'bottomright' }).addTo(state.farmMap);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OSM' }).addTo(state.farmMap);
+    // Sample polygons
+    const coords = [[-0.28,36.65],[-0.28,36.72],[-0.34,36.72],[-0.34,36.65]];
+    L.polygon(coords, { color: '#2e7d32', weight: 2, fillOpacity: 0.2 }).addTo(state.farmMap).bindPopup('Karatina Farm');
+    L.polygon([[-0.32,36.78],[-0.32,36.85],[-0.38,36.85],[-0.38,36.78]], { color: '#388e5c', weight: 2, fillOpacity: 0.15 }).addTo(state.farmMap).bindPopup('Nyeri Farm');
+    setTimeout(() => state.farmMap?.invalidateSize(), 300);
+  }
+
+  // --- EVENT BINDING ---
+  function initEvents() {
+    // Theme
+    DOM.themeToggle?.addEventListener('click', toggleTheme);
+    DOM.settingsThemeToggle?.addEventListener('click', toggleTheme);
+
+    // Sidebar
+    DOM.sidebarToggle?.addEventListener('click', toggleSidebar);
+    DOM.mobileMenuBtn?.addEventListener('click', openMobileDrawer);
+
+    // Close sidebar on outside click (mobile)
+    document.addEventListener('click', (e) => {
+      if (window.innerWidth < 768) {
+        const sidebar = DOM.sidebar;
+        if (sidebar && !sidebar.contains(e.target) && !DOM.mobileMenuBtn?.contains(e.target)) {
+          closeMobileDrawer();
+        }
+      }
+    });
+
+    // Navigation
+    DOM.navLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const page = link.dataset.page;
+        if (page) navigateTo(page);
+      });
+    });
+    DOM.bottomNavBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const page = btn.dataset.page;
+        if (page) navigateTo(page);
+      });
+    });
+
+    // Farmer table pagination
+    DOM.farmerPrev?.addEventListener('click', farmerPrevPage);
+    DOM.farmerNext?.addEventListener('click', farmerNextPage);
+    DOM.farmerSearch?.addEventListener('input', () => { state.farmerPage = 0; renderFarmers(); });
+
+    // Modals
+    DOM.addFarmerBtn?.addEventListener('click', () => openModal('farmerModal'));
+    DOM.addEvidenceBtn?.addEventListener('click', () => openModal('evidenceModal'));
+
+    // Farmer form submit
+    document.getElementById('farmerForm')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('fName')?.value;
+      const phone = document.getElementById('fPhone')?.value;
+      const email = document.getElementById('fEmail')?.value;
+      const nationalId = document.getElementById('fNationalId')?.value;
+      const community = document.getElementById('fCommunity')?.value;
+      if (name && phone && nationalId) {
+        const newFarmer = {
+          id: `F-${String(state.farmers.length + 1001).padStart(4, '0')}`,
+          name, phone, community: community || 'Nyeri', status: 'Pending'
+        };
+        state.farmers.unshift(newFarmer);
+        renderFarmers();
+        closeModal('farmerModal');
+        showToast(`✅ Farmer ${name} registered successfully!`);
+        document.getElementById('farmerForm')?.reset();
+      }
+    });
+
+    // Evidence form submit
+    document.getElementById('evidenceForm')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      closeModal('evidenceModal');
+      showToast('📤 Evidence submitted for verification!');
+      document.getElementById('evidenceForm')?.reset();
+    });
+
+    // Time range select
+    document.getElementById('timeRangeSelect')?.addEventListener('change', function() {
+      showToast(`📊 Showing data for ${this.value === '6m' ? '6 months' : '1 year'}`);
+    });
+
+    // Window resize for maps
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        if (state.map) state.map.invalidateSize();
+        if (state.farmMap) state.farmMap.invalidateSize();
+      }, 200);
+    });
+  }
+
+  // --- INIT ---
+  function init() {
+    applyTheme();
+    renderFarmers();
+    initCharts();
+    initDashboardMap();
+    initEvents();
+    navigateTo('dashboard');
+    // Re-init map after a moment
+    setTimeout(() => { if (state.map) state.map.invalidateSize(); }, 500);
+    // Show welcome toast
+    setTimeout(() => showToast('🌿 Welcome to CarbonLink MRV Platform', 3000), 600);
+  }
+
+  document.addEventListener('DOMContentLoaded', init);
+})();
+</script>
+
+</body>
+</html>
