@@ -13,8 +13,11 @@
             theme: {
                 extend: {
                     colors: {
-                        brand: { 50: '#e8f5e9', 100: '#c8e6c9', 200: '#a5d6a7', 300: '#81c784', 400: '#66bb6a', 500: '#43a047', 600: '#388e5c', 700: '#2e7d32', 800: '#1e4d34', 900: '#1a3c2a' },
-                        charcoal: { 50: '#f2f2f2', 100: '#e6e6e6', 200: '#cccccc', 300: '#b3b3b3', 400: '#8c8c8c', 500: '#737373', 600: '#595959', 700: '#404040', 800: '#2d2d2d', 850: '#242424', 900: '#1a1a1a' }
+                        brand: { 50: '#e8f5e9', 100: '#c8e6c9', 200: '#a5d6a7', 300: '#81c784', 400: '#66bb6a',
+                            500: '#43a047', 600: '#388e5c', 700: '#2e7d32', 800: '#1e4d34', 900: '#1a3c2a' },
+                        charcoal: { 50: '#f2f2f2', 100: '#e6e6e6', 200: '#cccccc', 300: '#b3b3b3', 400: '#8c8c8c',
+                            500: '#737373', 600: '#595959', 700: '#404040', 800: '#2d2d2d', 850: '#242424',
+                            900: '#1a1a1a' }
                     }
                 }
             }
@@ -514,7 +517,7 @@
         }
         .leaflet-popup-content-wrapper {
             border-radius: 12px !important;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
         }
         .dark .leaflet-popup-content-wrapper {
             background: #1e293b !important;
@@ -542,13 +545,27 @@
             background-color: rgba(30, 77, 52, 0.8);
         }
         @media print {
-            .no-print { display: none !important; }
-            .page-content { display: block !important; }
-            #page-dashboard { display: block !important; }
-            .sidebar-transition { display: none !important; }
-            .glass-header { display: none !important; }
-            .bottom-nav { display: none !important; }
-            .modal { display: none !important; }
+            .no-print {
+                display: none !important;
+            }
+            .page-content {
+                display: block !important;
+            }
+            #page-dashboard {
+                display: block !important;
+            }
+            .sidebar-transition {
+                display: none !important;
+            }
+            .glass-header {
+                display: none !important;
+            }
+            .bottom-nav {
+                display: none !important;
+            }
+            .modal {
+                display: none !important;
+            }
         }
     </style>
 </head>
@@ -1426,8 +1443,10 @@
                     totalAreaHa: state.farms.reduce((s, f) => s + (f.areaHa || 0), 0),
                     verifiedCredits: state.monitoringRecords.filter(m => m.verificationStatus === 'Verified')
                         .reduce((s, m) => s + (m.carbonStock || 0), 0),
-                    pendingVerification: state.verificationRecords.filter(v => v.status === 'Pending' || v.status === 'Under Review').length,
-                    totalPayments: state.payments.filter(p => p.status === 'Completed').reduce((s, p) => s + (p.amount || 0), 0),
+                    pendingVerification: state.verificationRecords.filter(v => v.status === 'Pending' || v.status ===
+                        'Under Review').length,
+                    totalPayments: state.payments.filter(p => p.status === 'Completed').reduce((s, p) => s + (p.amount ||
+                        0), 0),
                     activeProjects: state.projects.filter(p => p.projectStatus === 'Active').length,
                     mrvRecords: state.monitoringRecords.length
                 };
@@ -1435,63 +1454,69 @@
                 const kpis = [
                     { label: 'Total Farmers', value: metrics.totalFarmers, icon: 'fa-users', color: 'emerald' },
                     { label: 'Active Farms', value: metrics.activeFarms, icon: 'fa-map-marked-alt', color: 'blue' },
-                    { label: 'Total Area (ha)', value: Math.round(metrics.totalAreaHa).toLocaleString(), icon: 'fa-vector-square', color: 'purple' },
-                    { label: 'Verified Carbon', value: Math.round(metrics.verifiedCredits).toLocaleString(), icon: 'fa-cloud-sun', color: 'amber' },
-                    { label: 'Pending Verification', value: metrics.pendingVerification, icon: 'fa-clipboard-check', color: 'orange' },
-                    { label: 'Total Payments', value: Math.round(metrics.totalPayments).toLocaleString(), icon: 'fa-wallet', color: 'green' },
+                    { label: 'Total Area (ha)', value: Math.round(metrics.totalAreaHa).toLocaleString(),
+                        icon: 'fa-vector-square', color: 'purple' },
+                    { label: 'Verified Carbon', value: Math.round(metrics.verifiedCredits).toLocaleString(),
+                        icon: 'fa-cloud-sun', color: 'amber' },
+                    { label: 'Pending Verification', value: metrics.pendingVerification, icon: 'fa-clipboard-check',
+                        color: 'orange' },
+                    { label: 'Total Payments', value: Math.round(metrics.totalPayments).toLocaleString(),
+                        icon: 'fa-wallet', color: 'green' },
                     { label: 'Active Projects', value: metrics.activeProjects, icon: 'fa-tree', color: 'teal' },
                     { label: 'MRV Records', value: metrics.mrvRecords, icon: 'fa-file-alt', color: 'pink' }
                 ];
 
                 const grid = $('#dashKpiGrid');
                 grid.innerHTML = kpis.map(k => `
-                    <div class="stat-card bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <span class="text-[10px] md:text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">${k.label}</span>
-                                <h3 class="text-xl md:text-2xl font-bold mt-0.5 text-slate-900 dark:text-white">${k.value}</h3>
+                        <div class="stat-card bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <span class="text-[10px] md:text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">${k.label}</span>
+                                    <h3 class="text-xl md:text-2xl font-bold mt-0.5 text-slate-900 dark:text-white">${k.value}</h3>
+                                </div>
+                                <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-${k.color}-50 dark:bg-${k.color}-950/50 text-${k.color}-600 dark:text-${k.color}-400 flex items-center justify-center text-base md:text-xl shrink-0"><i class="fas ${k.icon}"></i></div>
                             </div>
-                            <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-${k.color}-50 dark:bg-${k.color}-950/50 text-${k.color}-600 dark:text-${k.color}-400 flex items-center justify-center text-base md:text-xl shrink-0"><i class="fas ${k.icon}"></i></div>
                         </div>
-                    </div>
-                `).join('');
+                    `).join('');
 
                 // Activity feed
                 const feed = $('#dashActivityFeed');
                 feed.innerHTML = state.auditRecords.slice(0, 8).map(a => `
-                    <div class="flex items-start space-x-3">
-                        <div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs shrink-0 mt-0.5"><i class="fas fa-check"></i></div>
-                        <div>
-                            <p class="text-xs md:text-sm font-semibold text-slate-800 dark:text-slate-200">${a.description}</p>
-                            <span class="text-[9px] md:text-[10px] text-slate-400 font-medium">${formatDateTime(a.timestamp)} · ${a.module}</span>
+                        <div class="flex items-start space-x-3">
+                            <div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs shrink-0 mt-0.5"><i class="fas fa-check"></i></div>
+                            <div>
+                                <p class="text-xs md:text-sm font-semibold text-slate-800 dark:text-slate-200">${a.description}</p>
+                                <span class="text-[9px] md:text-[10px] text-slate-400 font-medium">${formatDateTime(a.timestamp)} · ${a.module}</span>
+                            </div>
                         </div>
-                    </div>
-                `).join('') || '<p class="text-xs text-slate-400">No activity yet</p>';
+                    `).join('') || '<p class="text-xs text-slate-400">No activity yet</p>';
 
                 // Recent payments
                 const recentPayments = state.payments.filter(p => p.status === 'Completed').slice(0, 5);
                 $('#dashRecentPayments').innerHTML = recentPayments.map(p => {
                     const farmer = state.farmers.find(f => f.id === p.farmerId);
                     return `
-                        <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2">
-                            <div><p class="text-sm font-medium dark:text-white">${farmer ? farmer.firstName + ' ' + farmer.lastName : 'Unknown'}</p><p class="text-[10px] text-slate-400">${p.paymentReference}</p></div>
-                            <span class="text-emerald-600 dark:text-emerald-400 font-medium text-sm">${formatCurrency(p.amount)}</span>
-                        </div>
-                    `;
+                            <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2">
+                                <div><p class="text-sm font-medium dark:text-white">${farmer ? farmer.firstName + ' ' + farmer.lastName : 'Unknown'}</p><p class="text-[10px] text-slate-400">${p.paymentReference}</p></div>
+                                <span class="text-emerald-600 dark:text-emerald-400 font-medium text-sm">${formatCurrency(p.amount)}</span>
+                            </div>
+                        `;
                 }).join('') || '<p class="text-xs text-slate-400">No payments yet</p>';
 
                 // Pending verification
-                const pending = state.verificationRecords.filter(v => v.status === 'Pending' || v.status === 'Under Review').slice(0, 4);
-                $('#dashPendingVerifCount').textContent = state.verificationRecords.filter(v => v.status === 'Pending' || v.status === 'Under Review').length;
+                const pending = state.verificationRecords.filter(v => v.status === 'Pending' || v.status === 'Under Review')
+                    .slice(0, 4);
+                $('#dashPendingVerifCount').textContent = state.verificationRecords.filter(v => v.status === 'Pending' ||
+                    v.status === 'Under Review').length;
                 $('#dashPendingVerification').innerHTML = pending.map(v => {
                     const project = state.projects.find(p => p.id === v.projectId);
                     return `
-                        <div class="flex items-start space-x-3 p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-charcoal-700 transition-colors">
-                            <div class="w-1.5 h-1.5 mt-2 rounded-full ${v.status === 'Under Review' ? 'bg-yellow-500' : 'bg-blue-500'}"></div>
-                            <div class="flex-1"><p class="text-sm font-medium dark:text-white">${v.referenceNumber}</p><p class="text-[10px] text-slate-400">${project ? project.name : 'Unknown Project'}</p></div>
-                            <span class="text-[10px] px-2 py-0.5 rounded">${v.status}</span>
-                        </div>
-                    `;
+                            <div class="flex items-start space-x-3 p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-charcoal-700 transition-colors">
+                                <div class="w-1.5 h-1.5 mt-2 rounded-full ${v.status === 'Under Review' ? 'bg-yellow-500' : 'bg-blue-500'}"></div>
+                                <div class="flex-1"><p class="text-sm font-medium dark:text-white">${v.referenceNumber}</p><p class="text-[10px] text-slate-400">${project ? project.name : 'Unknown Project'}</p></div>
+                                <span class="text-[10px] px-2 py-0.5 rounded">${v.status}</span>
+                            </div>
+                        `;
                 }).join('') || '<p class="text-xs text-slate-400">No pending verification</p>';
             }
 
@@ -1502,7 +1527,9 @@
                 const statusFilter = $('#farmerStatusFilter')?.value || 'all';
 
                 let filtered = state.farmers.filter(f => {
-                    const matchSearch = !search || f.firstName.toLowerCase().includes(search) || f.lastName.toLowerCase().includes(search) || f.farmerCode.toLowerCase().includes(search) || f.phone.toLowerCase().includes(search);
+                    const matchSearch = !search || f.firstName.toLowerCase().includes(search) || f.lastName
+                        .toLowerCase().includes(search) || f.farmerCode.toLowerCase().includes(search) || f
+                        .phone.toLowerCase().includes(search);
                     const matchCounty = county === 'all' || f.county === county;
                     const matchStatus = statusFilter === 'all' || f.status === statusFilter;
                     return matchSearch && matchCounty && matchStatus;
@@ -1526,64 +1553,64 @@
 
                 const tbody = $('#farmerTableBody');
                 if (items.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="7" class="px-4 py-8 text-center text-slate-400 text-sm">No farmers found</td></tr>`;
+                    tbody.innerHTML =
+                        `<tr><td colspan="7" class="px-4 py-8 text-center text-slate-400 text-sm">No farmers found</td></tr>`;
                     return;
                 }
 
                 tbody.innerHTML = items.map(f => {
-                    const statusColor = f.status === 'Active' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' :
-                        f.status === 'Pending' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' :
+                    const statusColor = f.status === 'Active' ?
+                        'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' :
+                        f.status === 'Pending' ?
+                        'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' :
                         'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300';
                     return `
-                        <tr class="table-row-hover">
-                            <td class="px-4 py-3 font-mono text-xs">${f.farmerCode}</td>
-                            <td class="px-4 py-3 font-medium">${f.firstName} ${f.lastName}</td>
-                            <td class="px-4 py-3 hidden sm:table-cell text-sm">${f.county}</td>
-                            <td class="px-4 py-3 hidden md:table-cell text-sm">${f.totalFarmArea.toFixed(1)}</td>
-                            <td class="px-4 py-3 hidden lg:table-cell text-sm">${f.estimatedCarbonCredits.toFixed(1)}</td>
-                            <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${statusColor}">${f.status}</span></td>
-                            <td class="px-4 py-3 text-right space-x-2">
-                                <button onclick="viewFarmer('${f.id}')" class="text-brand-600 dark:text-brand-400 hover:underline text-xs"><i class="fas fa-eye mr-1"></i>View</button>
-                                <button onclick="deleteEntity('farmers','${f.id}')" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-trash-alt"></i></button>
-                            </td>
-                        </tr>
-                    `;
+                            <tr class="table-row-hover">
+                                <td class="px-4 py-3 font-mono text-xs">${f.farmerCode}</td>
+                                <td class="px-4 py-3 font-medium">${f.firstName} ${f.lastName}</td>
+                                <td class="px-4 py-3 hidden sm:table-cell text-sm">${f.county}</td>
+                                <td class="px-4 py-3 hidden md:table-cell text-sm">${f.totalFarmArea.toFixed(1)}</td>
+                                <td class="px-4 py-3 hidden lg:table-cell text-sm">${f.estimatedCarbonCredits.toFixed(1)}</td>
+                                <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${statusColor}">${f.status}</span></td>
+                                <td class="px-4 py-3 text-right space-x-2">
+                                    <button onclick="viewFarmer('${f.id}')" class="text-brand-600 dark:text-brand-400 hover:underline text-xs"><i class="fas fa-eye mr-1"></i>View</button>
+                                    <button onclick="deleteEntity('farmers','${f.id}')" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-trash-alt"></i></button>
+                                </td>
+                            </tr>
+                        `;
                 }).join('');
             }
 
             // ---------- FARMS (GIS) ----------
             function renderFarmsGIS() {
-                // This would be populated with real farm data in a full implementation
-                // For now, show a message
                 const container = $('#farmListContainer');
                 if (state.farms.length === 0) {
                     container.innerHTML = `
-                        <div class="text-center py-8">
-                            <i class="fas fa-map-marked-alt text-4xl text-slate-300 dark:text-slate-600 mb-3"></i>
-                            <p class="text-sm text-slate-400">No farms registered yet</p>
-                            <p class="text-xs text-slate-500 mt-1">Add farms to see them on the map</p>
-                        </div>
-                    `;
+                            <div class="text-center py-8">
+                                <i class="fas fa-map-marked-alt text-4xl text-slate-300 dark:text-slate-600 mb-3"></i>
+                                <p class="text-sm text-slate-400">No farms registered yet</p>
+                                <p class="text-xs text-slate-500 mt-1">Add farms to see them on the map</p>
+                            </div>
+                        `;
                     return;
                 }
-                // Show sample farms
                 container.innerHTML = state.farms.slice(0, 20).map(f => {
                     const farmer = state.farmers.find(fr => fr.id === f.farmerId);
                     return `
-                        <div class="farm-list-item p-3 rounded-lg border border-slate-100 dark:border-charcoal-700">
-                            <div class="flex items-start justify-between">
-                                <div class="flex-1 min-w-0">
-                                    <p class="text-sm font-semibold dark:text-white truncate">${f.farmName || 'Farm'}</p>
-                                    <p class="text-xs text-slate-400 truncate">${farmer ? farmer.firstName + ' ' + farmer.lastName : 'Unknown Farmer'}</p>
-                                    <div class="flex items-center gap-2 mt-1 flex-wrap">
-                                        <span class="text-[10px] text-slate-400">${(f.areaHa || 0).toFixed(1)} ha</span>
-                                        <span class="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-600"></span>
-                                        <span class="text-[10px] text-slate-400">${f.county || 'N/A'}</span>
+                            <div class="farm-list-item p-3 rounded-lg border border-slate-100 dark:border-charcoal-700">
+                                <div class="flex items-start justify-between">
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-semibold dark:text-white truncate">${f.farmName || 'Farm'}</p>
+                                        <p class="text-xs text-slate-400 truncate">${farmer ? farmer.firstName + ' ' + farmer.lastName : 'Unknown Farmer'}</p>
+                                        <div class="flex items-center gap-2 mt-1 flex-wrap">
+                                            <span class="text-[10px] text-slate-400">${(f.areaHa || 0).toFixed(1)} ha</span>
+                                            <span class="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-600"></span>
+                                            <span class="text-[10px] text-slate-400">${f.county || 'N/A'}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    `;
+                        `;
                 }).join('');
             }
 
@@ -1593,7 +1620,8 @@
                 const statusFilter = $('#projectStatusFilter')?.value || 'all';
 
                 let filtered = state.projects.filter(p => {
-                    const matchSearch = !search || p.name.toLowerCase().includes(search) || p.projectCode.toLowerCase().includes(search);
+                    const matchSearch = !search || p.name.toLowerCase().includes(search) || p.projectCode
+                        .toLowerCase().includes(search);
                     const matchStatus = statusFilter === 'all' || p.projectStatus === statusFilter;
                     return matchSearch && matchStatus;
                 });
@@ -1615,28 +1643,31 @@
 
                 const tbody = $('#projectTableBody');
                 if (items.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="7" class="px-4 py-8 text-center text-slate-400 text-sm">No projects found</td></tr>`;
+                    tbody.innerHTML =
+                        `<tr><td colspan="7" class="px-4 py-8 text-center text-slate-400 text-sm">No projects found</td></tr>`;
                     return;
                 }
 
                 tbody.innerHTML = items.map(p => {
-                    const statusColor = p.projectStatus === 'Active' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' :
-                        p.projectStatus === 'Monitoring' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' :
+                    const statusColor = p.projectStatus === 'Active' ?
+                        'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' :
+                        p.projectStatus === 'Monitoring' ?
+                        'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' :
                         'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300';
                     return `
-                        <tr class="table-row-hover">
-                            <td class="px-4 py-3 font-mono text-xs">${p.projectCode}</td>
-                            <td class="px-4 py-3 font-medium">${p.name}</td>
-                            <td class="px-4 py-3 hidden sm:table-cell">${p.county}</td>
-                            <td class="px-4 py-3 hidden md:table-cell">${(p.enrolledAreaHa || 0).toFixed(1)}</td>
-                            <td class="px-4 py-3 hidden lg:table-cell">${(p.availableCredits || 0).toLocaleString()}</td>
-                            <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${statusColor}">${p.projectStatus}</span></td>
-                            <td class="px-4 py-3 text-right space-x-2">
-                                <button onclick="viewProject('${p.id}')" class="text-brand-600 dark:text-brand-400 hover:underline text-xs"><i class="fas fa-eye mr-1"></i>View</button>
-                                <button onclick="deleteEntity('projects','${p.id}')" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-trash-alt"></i></button>
-                            </td>
-                        </tr>
-                    `;
+                            <tr class="table-row-hover">
+                                <td class="px-4 py-3 font-mono text-xs">${p.projectCode}</td>
+                                <td class="px-4 py-3 font-medium">${p.name}</td>
+                                <td class="px-4 py-3 hidden sm:table-cell">${p.county}</td>
+                                <td class="px-4 py-3 hidden md:table-cell">${(p.enrolledAreaHa || 0).toFixed(1)}</td>
+                                <td class="px-4 py-3 hidden lg:table-cell">${(p.availableCredits || 0).toLocaleString()}</td>
+                                <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${statusColor}">${p.projectStatus}</span></td>
+                                <td class="px-4 py-3 text-right space-x-2">
+                                    <button onclick="viewProject('${p.id}')" class="text-brand-600 dark:text-brand-400 hover:underline text-xs"><i class="fas fa-eye mr-1"></i>View</button>
+                                    <button onclick="deleteEntity('projects','${p.id}')" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-trash-alt"></i></button>
+                                </td>
+                            </tr>
+                        `;
                 }).join('');
             }
 
@@ -1646,7 +1677,8 @@
                 const statusFilter = $('#mrvStatusFilter')?.value || 'all';
 
                 let filtered = state.monitoringRecords.filter(m => {
-                    const matchSearch = !search || m.id.toLowerCase().includes(search) || m.farmId.toLowerCase().includes(search) || m.enumerator.toLowerCase().includes(search);
+                    const matchSearch = !search || m.id.toLowerCase().includes(search) || m.farmId.toLowerCase()
+                        .includes(search) || m.enumerator.toLowerCase().includes(search);
                     const matchStatus = statusFilter === 'all' || m.verificationStatus === statusFilter;
                     return matchSearch && matchStatus;
                 });
@@ -1668,30 +1700,35 @@
 
                 const tbody = $('#mrvTableBody');
                 if (items.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="7" class="px-4 py-8 text-center text-slate-400 text-sm">No MRV records found</td></tr>`;
+                    tbody.innerHTML =
+                        `<tr><td colspan="7" class="px-4 py-8 text-center text-slate-400 text-sm">No MRV records found</td></tr>`;
                     return;
                 }
 
                 tbody.innerHTML = items.map(m => {
-                    const statusColor = m.verificationStatus === 'Verified' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' :
-                        m.verificationStatus === 'Pending' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' :
-                        m.verificationStatus === 'Rejected' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300' :
+                    const statusColor = m.verificationStatus === 'Verified' ?
+                        'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' :
+                        m.verificationStatus === 'Pending' ?
+                        'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' :
+                        m.verificationStatus === 'Rejected' ?
+                        'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300' :
                         'bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300';
-                    const qualityLabel = m.dataQualityScore >= 75 ? 'Good' : m.dataQualityScore >= 50 ? 'Needs Review' : 'Poor';
+                    const qualityLabel = m.dataQualityScore >= 75 ? 'Good' : m.dataQualityScore >= 50 ?
+                        'Needs Review' : 'Poor';
                     return `
-                        <tr class="table-row-hover">
-                            <td class="px-4 py-3 font-mono text-xs">${m.id}</td>
-                            <td class="px-4 py-3">${m.farmId}</td>
-                            <td class="px-4 py-3 hidden sm:table-cell">${formatDate(m.monitoringDate)}</td>
-                            <td class="px-4 py-3 hidden md:table-cell">${(m.carbonStock || 0).toFixed(1)}</td>
-                            <td class="px-4 py-3"><span class="text-xs font-medium">${m.dataQualityScore || 0}%</span> <span class="text-[10px] text-slate-400">${qualityLabel}</span></td>
-                            <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${statusColor}">${m.verificationStatus}</span></td>
-                            <td class="px-4 py-3 text-right space-x-2">
-                                <button onclick="viewMRV('${m.id}')" class="text-brand-600 dark:text-brand-400 hover:underline text-xs"><i class="fas fa-eye mr-1"></i>View</button>
-                                <button onclick="deleteEntity('mrv','${m.id}')" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-trash-alt"></i></button>
-                            </td>
-                        </tr>
-                    `;
+                            <tr class="table-row-hover">
+                                <td class="px-4 py-3 font-mono text-xs">${m.id}</td>
+                                <td class="px-4 py-3">${m.farmId}</td>
+                                <td class="px-4 py-3 hidden sm:table-cell">${formatDate(m.monitoringDate)}</td>
+                                <td class="px-4 py-3 hidden md:table-cell">${(m.carbonStock || 0).toFixed(1)}</td>
+                                <td class="px-4 py-3"><span class="text-xs font-medium">${m.dataQualityScore || 0}%</span> <span class="text-[10px] text-slate-400">${qualityLabel}</span></td>
+                                <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${statusColor}">${m.verificationStatus}</span></td>
+                                <td class="px-4 py-3 text-right space-x-2">
+                                    <button onclick="viewMRV('${m.id}')" class="text-brand-600 dark:text-brand-400 hover:underline text-xs"><i class="fas fa-eye mr-1"></i>View</button>
+                                    <button onclick="deleteEntity('mrv','${m.id}')" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-trash-alt"></i></button>
+                                </td>
+                            </tr>
+                        `;
                 }).join('');
             }
 
@@ -1708,28 +1745,31 @@
 
                 const tbody = $('#contractTableBody');
                 if (filtered.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="6" class="px-4 py-8 text-center text-slate-400 text-sm">No contracts found</td></tr>`;
+                    tbody.innerHTML =
+                        `<tr><td colspan="6" class="px-4 py-8 text-center text-slate-400 text-sm">No contracts found</td></tr>`;
                     return;
                 }
 
                 tbody.innerHTML = filtered.slice(0, 50).map(c => {
                     const farmer = state.farmers.find(f => f.id === c.farmerId);
-                    const statusColor = c.status === 'Active' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' :
-                        c.status === 'Pending Signature' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' :
+                    const statusColor = c.status === 'Active' ?
+                        'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' :
+                        c.status === 'Pending Signature' ?
+                        'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' :
                         'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300';
                     return `
-                        <tr class="table-row-hover">
-                            <td class="px-4 py-3 font-mono text-xs">${c.contractNumber}</td>
-                            <td class="px-4 py-3">${farmer ? farmer.firstName + ' ' + farmer.lastName : 'Unknown'}</td>
-                            <td class="px-4 py-3 hidden sm:table-cell">${c.contractType}</td>
-                            <td class="px-4 py-3 hidden md:table-cell">${formatDate(c.endDate)}</td>
-                            <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${statusColor}">${c.status}</span></td>
-                            <td class="px-4 py-3 text-right space-x-2">
-                                <button onclick="viewContract('${c.id}')" class="text-brand-600 dark:text-brand-400 hover:underline text-xs"><i class="fas fa-eye mr-1"></i>View</button>
-                                <button onclick="deleteEntity('contracts','${c.id}')" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-trash-alt"></i></button>
-                            </td>
-                        </tr>
-                    `;
+                            <tr class="table-row-hover">
+                                <td class="px-4 py-3 font-mono text-xs">${c.contractNumber}</td>
+                                <td class="px-4 py-3">${farmer ? farmer.firstName + ' ' + farmer.lastName : 'Unknown'}</td>
+                                <td class="px-4 py-3 hidden sm:table-cell">${c.contractType}</td>
+                                <td class="px-4 py-3 hidden md:table-cell">${formatDate(c.endDate)}</td>
+                                <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${statusColor}">${c.status}</span></td>
+                                <td class="px-4 py-3 text-right space-x-2">
+                                    <button onclick="viewContract('${c.id}')" class="text-brand-600 dark:text-brand-400 hover:underline text-xs"><i class="fas fa-eye mr-1"></i>View</button>
+                                    <button onclick="deleteEntity('contracts','${c.id}')" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-trash-alt"></i></button>
+                                </td>
+                            </tr>
+                        `;
                 }).join('');
             }
 
@@ -1751,18 +1791,18 @@
                     const totalPayments = payments.reduce((s, p) => s + (p.amount || 0), 0);
 
                     return `
-                        <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm">
-                            <h3 class="font-bold dark:text-white">${c.name}</h3>
-                            <p class="text-xs text-slate-400">${c.county}</p>
-                            <div class="mt-3 grid grid-cols-2 gap-2 text-sm">
-                                <div><span class="text-slate-400 text-xs">Farmers</span><p class="font-semibold dark:text-white">${farmers.length}</p></div>
-                                <div><span class="text-slate-400 text-xs">Farms</span><p class="font-semibold dark:text-white">${farms.length}</p></div>
-                                <div><span class="text-slate-400 text-xs">Area (ha)</span><p class="font-semibold dark:text-white">${totalArea.toFixed(1)}</p></div>
-                                <div><span class="text-slate-400 text-xs">Carbon (tCO₂e)</span><p class="font-semibold dark:text-white">${totalCarbon.toFixed(1)}</p></div>
-                                <div><span class="text-slate-400 text-xs">Payments</span><p class="font-semibold text-emerald-600 dark:text-emerald-400">${formatCurrency(totalPayments)}</p></div>
+                            <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm">
+                                <h3 class="font-bold dark:text-white">${c.name}</h3>
+                                <p class="text-xs text-slate-400">${c.county}</p>
+                                <div class="mt-3 grid grid-cols-2 gap-2 text-sm">
+                                    <div><span class="text-slate-400 text-xs">Farmers</span><p class="font-semibold dark:text-white">${farmers.length}</p></div>
+                                    <div><span class="text-slate-400 text-xs">Farms</span><p class="font-semibold dark:text-white">${farms.length}</p></div>
+                                    <div><span class="text-slate-400 text-xs">Area (ha)</span><p class="font-semibold dark:text-white">${totalArea.toFixed(1)}</p></div>
+                                    <div><span class="text-slate-400 text-xs">Carbon (tCO₂e)</span><p class="font-semibold dark:text-white">${totalCarbon.toFixed(1)}</p></div>
+                                    <div><span class="text-slate-400 text-xs">Payments</span><p class="font-semibold text-emerald-600 dark:text-emerald-400">${formatCurrency(totalPayments)}</p></div>
+                                </div>
                             </div>
-                        </div>
-                    `;
+                        `;
                 }).join('');
             }
 
@@ -1777,11 +1817,11 @@
                 });
 
                 $('#paymentStatsGrid').innerHTML = `
-                    <div class="bg-white dark:bg-charcoal-800 rounded-xl p-4 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center"><p class="text-xs text-slate-400">Total Volume</p><p class="text-xl font-bold dark:text-white">${formatCurrency(totals.total)}</p></div>
-                    <div class="bg-white dark:bg-charcoal-800 rounded-xl p-4 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center"><p class="text-xs text-slate-400">Completed</p><p class="text-xl font-bold text-emerald-600 dark:text-emerald-400">${formatCurrency(totals.completed)}</p></div>
-                    <div class="bg-white dark:bg-charcoal-800 rounded-xl p-4 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center"><p class="text-xs text-slate-400">Pending</p><p class="text-xl font-bold text-amber-600 dark:text-amber-400">${formatCurrency(totals.pending)}</p></div>
-                    <div class="bg-white dark:bg-charcoal-800 rounded-xl p-4 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center"><p class="text-xs text-slate-400">Failed</p><p class="text-xl font-bold text-red-600 dark:text-red-400">${formatCurrency(totals.failed)}</p></div>
-                `;
+                        <div class="bg-white dark:bg-charcoal-800 rounded-xl p-4 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center"><p class="text-xs text-slate-400">Total Volume</p><p class="text-xl font-bold dark:text-white">${formatCurrency(totals.total)}</p></div>
+                        <div class="bg-white dark:bg-charcoal-800 rounded-xl p-4 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center"><p class="text-xs text-slate-400">Completed</p><p class="text-xl font-bold text-emerald-600 dark:text-emerald-400">${formatCurrency(totals.completed)}</p></div>
+                        <div class="bg-white dark:bg-charcoal-800 rounded-xl p-4 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center"><p class="text-xs text-slate-400">Pending</p><p class="text-xl font-bold text-amber-600 dark:text-amber-400">${formatCurrency(totals.pending)}</p></div>
+                        <div class="bg-white dark:bg-charcoal-800 rounded-xl p-4 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center"><p class="text-xs text-slate-400">Failed</p><p class="text-xl font-bold text-red-600 dark:text-red-400">${formatCurrency(totals.failed)}</p></div>
+                    `;
 
                 const search = ($('#paymentSearch')?.value || '').toLowerCase();
                 const statusFilter = $('#paymentStatusFilter')?.value || 'all';
@@ -1794,28 +1834,31 @@
 
                 const tbody = $('#paymentTableBody');
                 if (filtered.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="6" class="px-4 py-8 text-center text-slate-400 text-sm">No payments found</td></tr>`;
+                    tbody.innerHTML =
+                        `<tr><td colspan="6" class="px-4 py-8 text-center text-slate-400 text-sm">No payments found</td></tr>`;
                     return;
                 }
 
                 tbody.innerHTML = filtered.slice(0, 50).map(p => {
                     const farmer = state.farmers.find(f => f.id === p.farmerId);
-                    const statusColor = p.status === 'Completed' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' :
-                        p.status === 'Pending' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' :
+                    const statusColor = p.status === 'Completed' ?
+                        'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' :
+                        p.status === 'Pending' ?
+                        'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' :
                         'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300';
                     return `
-                        <tr class="table-row-hover">
-                            <td class="px-4 py-3 font-mono text-xs">${p.paymentReference}</td>
-                            <td class="px-4 py-3">${farmer ? farmer.firstName + ' ' + farmer.lastName : 'Unknown'}</td>
-                            <td class="px-4 py-3 hidden sm:table-cell">${p.paymentType}</td>
-                            <td class="px-4 py-3 hidden md:table-cell">${formatCurrency(p.amount)}</td>
-                            <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${statusColor}">${p.status}</span></td>
-                            <td class="px-4 py-3 text-right space-x-2">
-                                ${p.status === 'Pending' ? `<button onclick="completePayment('${p.id}')" class="text-emerald-600 hover:text-emerald-700 text-xs"><i class="fas fa-check mr-1"></i>Complete</button>` : ''}
-                                <button onclick="deleteEntity('payments','${p.id}')" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-trash-alt"></i></button>
-                            </td>
-                        </tr>
-                    `;
+                            <tr class="table-row-hover">
+                                <td class="px-4 py-3 font-mono text-xs">${p.paymentReference}</td>
+                                <td class="px-4 py-3">${farmer ? farmer.firstName + ' ' + farmer.lastName : 'Unknown'}</td>
+                                <td class="px-4 py-3 hidden sm:table-cell">${p.paymentType}</td>
+                                <td class="px-4 py-3 hidden md:table-cell">${formatCurrency(p.amount)}</td>
+                                <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${statusColor}">${p.status}</span></td>
+                                <td class="px-4 py-3 text-right space-x-2">
+                                    ${p.status === 'Pending' ? `<button onclick="completePayment('${p.id}')" class="text-emerald-600 hover:text-emerald-700 text-xs"><i class="fas fa-check mr-1"></i>Complete</button>` : ''}
+                                    <button onclick="deleteEntity('payments','${p.id}')" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-trash-alt"></i></button>
+                                </td>
+                            </tr>
+                        `;
                 }).join('');
             }
 
@@ -1823,30 +1866,35 @@
             function renderVerification() {
                 const tbody = $('#verificationTableBody');
                 if (state.verificationRecords.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="6" class="px-4 py-8 text-center text-slate-400 text-sm">No verification records</td></tr>`;
+                    tbody.innerHTML =
+                        `<tr><td colspan="6" class="px-4 py-8 text-center text-slate-400 text-sm">No verification records</td></tr>`;
                     return;
                 }
 
                 tbody.innerHTML = state.verificationRecords.slice(0, 50).map(v => {
                     const project = state.projects.find(p => p.id === v.projectId);
-                    const statusColor = v.status === 'Verified' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' :
-                        v.status === 'Approved' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300' :
-                        v.status === 'Pending' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' :
-                        v.status === 'Rejected' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300' :
+                    const statusColor = v.status === 'Verified' ?
+                        'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' :
+                        v.status === 'Approved' ?
+                        'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300' :
+                        v.status === 'Pending' ?
+                        'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' :
+                        v.status === 'Rejected' ?
+                        'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300' :
                         'bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300';
                     return `
-                        <tr class="table-row-hover">
-                            <td class="px-4 py-3 font-mono text-xs">${v.referenceNumber}</td>
-                            <td class="px-4 py-3">${project ? project.name : 'Unknown'}</td>
-                            <td class="px-4 py-3 hidden sm:table-cell">${v.monitoringRecordIds.length}</td>
-                            <td class="px-4 py-3 hidden md:table-cell">${formatDate(v.submittedDate)}</td>
-                            <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${statusColor}">${v.status}</span></td>
-                            <td class="px-4 py-3 text-right space-x-2">
-                                ${v.status === 'Pending' ? `<button onclick="approveVerification('${v.id}')" class="text-emerald-600 hover:text-emerald-700 text-xs"><i class="fas fa-check mr-1"></i>Approve</button><button onclick="rejectVerification('${v.id}')" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-times mr-1"></i>Reject</button>` : ''}
-                                ${v.status === 'Under Review' ? `<button onclick="completeVerification('${v.id}')" class="text-blue-600 hover:text-blue-700 text-xs"><i class="fas fa-check-double mr-1"></i>Complete</button>` : ''}
-                            </td>
-                        </tr>
-                    `;
+                            <tr class="table-row-hover">
+                                <td class="px-4 py-3 font-mono text-xs">${v.referenceNumber}</td>
+                                <td class="px-4 py-3">${project ? project.name : 'Unknown'}</td>
+                                <td class="px-4 py-3 hidden sm:table-cell">${v.monitoringRecordIds.length}</td>
+                                <td class="px-4 py-3 hidden md:table-cell">${formatDate(v.submittedDate)}</td>
+                                <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${statusColor}">${v.status}</span></td>
+                                <td class="px-4 py-3 text-right space-x-2">
+                                    ${v.status === 'Pending' ? `<button onclick="approveVerification('${v.id}')" class="text-emerald-600 hover:text-emerald-700 text-xs"><i class="fas fa-check mr-1"></i>Approve</button><button onclick="rejectVerification('${v.id}')" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-times mr-1"></i>Reject</button>` : ''}
+                                    ${v.status === 'Under Review' ? `<button onclick="completeVerification('${v.id}')" class="text-blue-600 hover:text-blue-700 text-xs"><i class="fas fa-check-double mr-1"></i>Complete</button>` : ''}
+                                </td>
+                            </tr>
+                        `;
                 }).join('');
             }
 
@@ -1854,12 +1902,15 @@
             function renderAudit() {
                 const search = ($('#auditSearch')?.value || '').toLowerCase();
                 let filtered = state.auditRecords.filter(a =>
-                    !search || a.description.toLowerCase().includes(search) || a.module.toLowerCase().includes(search) || a.userName.toLowerCase().includes(search) || a.action.toLowerCase().includes(search)
+                    !search || a.description.toLowerCase().includes(search) || a.module.toLowerCase().includes(
+                        search) || a.userName.toLowerCase().includes(search) || a.action.toLowerCase().includes(
+                        search)
                 );
 
                 const tbody = $('#auditTableBody');
                 if (filtered.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="6" class="px-4 py-8 text-center text-slate-400 text-sm">No audit records found</td></tr>`;
+                    tbody.innerHTML =
+                        `<tr><td colspan="6" class="px-4 py-8 text-center text-slate-400 text-sm">No audit records found</td></tr>`;
                     return;
                 }
 
@@ -1869,15 +1920,15 @@
                         a.severity === 'medium' ? 'text-yellow-600 dark:text-yellow-400' :
                         'text-slate-500 dark:text-slate-400';
                     return `
-                        <tr class="table-row-hover">
-                            <td class="px-4 py-3 text-xs">${formatDateTime(a.timestamp)}</td>
-                            <td class="px-4 py-3 text-xs">${a.userName}</td>
-                            <td class="px-4 py-3 text-xs"><span class="font-semibold">${a.action}</span></td>
-                            <td class="px-4 py-3 text-xs hidden sm:table-cell">${a.module}</td>
-                            <td class="px-4 py-3 text-xs hidden md:table-cell">${a.entityId}</td>
-                            <td class="px-4 py-3 text-xs font-medium ${severityColor}">${a.severity}</td>
-                        </tr>
-                    `;
+                            <tr class="table-row-hover">
+                                <td class="px-4 py-3 text-xs">${formatDateTime(a.timestamp)}</td>
+                                <td class="px-4 py-3 text-xs">${a.userName}</td>
+                                <td class="px-4 py-3 text-xs"><span class="font-semibold">${a.action}</span></td>
+                                <td class="px-4 py-3 text-xs hidden sm:table-cell">${a.module}</td>
+                                <td class="px-4 py-3 text-xs hidden md:table-cell">${a.entityId}</td>
+                                <td class="px-4 py-3 text-xs font-medium ${severityColor}">${a.severity}</td>
+                            </tr>
+                        `;
                 }).join('');
             }
 
@@ -1886,16 +1937,36 @@
             // ============================================================
             function refreshCurrentPage() {
                 switch (state.currentPage) {
-                    case 'dashboard': renderDashboard(); break;
-                    case 'farmers': renderFarmers(); break;
-                    case 'farms': renderFarmsGIS(); break;
-                    case 'carbon': renderProjects(); break;
-                    case 'mrv': renderMRV(); break;
-                    case 'contracts': renderContracts(); break;
-                    case 'communities': renderCommunities(); break;
-                    case 'payments': renderPayments(); break;
-                    case 'verification': renderVerification(); break;
-                    case 'audit': renderAudit(); break;
+                    case 'dashboard':
+                        renderDashboard();
+                        break;
+                    case 'farmers':
+                        renderFarmers();
+                        break;
+                    case 'farms':
+                        renderFarmsGIS();
+                        break;
+                    case 'carbon':
+                        renderProjects();
+                        break;
+                    case 'mrv':
+                        renderMRV();
+                        break;
+                    case 'contracts':
+                        renderContracts();
+                        break;
+                    case 'communities':
+                        renderCommunities();
+                        break;
+                    case 'payments':
+                        renderPayments();
+                        break;
+                    case 'verification':
+                        renderVerification();
+                        break;
+                    case 'audit':
+                        renderAudit();
+                        break;
                 }
             }
 
@@ -1925,16 +1996,16 @@
 
                 const personal = $('#tab-personal');
                 personal.innerHTML = `
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div><label class="text-xs text-slate-400">Full Name</label><p class="font-medium dark:text-white">${farmer.firstName} ${farmer.lastName}</p></div>
-                        <div><label class="text-xs text-slate-400">Farmer Code</label><p class="font-medium dark:text-white">${farmer.farmerCode}</p></div>
-                        <div><label class="text-xs text-slate-400">Phone</label><p class="font-medium dark:text-white">${farmer.phone}</p></div>
-                        <div><label class="text-xs text-slate-400">National ID</label><p class="font-medium dark:text-white">${farmer.nationalIdMasked}</p></div>
-                        <div><label class="text-xs text-slate-400">County</label><p class="font-medium dark:text-white">${farmer.county}</p></div>
-                        <div><label class="text-xs text-slate-400">Gender</label><p class="font-medium dark:text-white">${farmer.gender}</p></div>
-                        <div><label class="text-xs text-slate-400">Status</label><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${farmer.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}">${farmer.status}</span></div>
-                        <div><label class="text-xs text-slate-400">Registration Date</label><p class="font-medium dark:text-white">${formatDate(farmer.registrationDate)}</p></div>
-                    </div>`;
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div><label class="text-xs text-slate-400">Full Name</label><p class="font-medium dark:text-white">${farmer.firstName} ${farmer.lastName}</p></div>
+                            <div><label class="text-xs text-slate-400">Farmer Code</label><p class="font-medium dark:text-white">${farmer.farmerCode}</p></div>
+                            <div><label class="text-xs text-slate-400">Phone</label><p class="font-medium dark:text-white">${farmer.phone}</p></div>
+                            <div><label class="text-xs text-slate-400">National ID</label><p class="font-medium dark:text-white">${farmer.nationalIdMasked}</p></div>
+                            <div><label class="text-xs text-slate-400">County</label><p class="font-medium dark:text-white">${farmer.county}</p></div>
+                            <div><label class="text-xs text-slate-400">Gender</label><p class="font-medium dark:text-white">${farmer.gender}</p></div>
+                            <div><label class="text-xs text-slate-400">Status</label><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${farmer.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}">${farmer.status}</span></div>
+                            <div><label class="text-xs text-slate-400">Registration Date</label><p class="font-medium dark:text-white">${formatDate(farmer.registrationDate)}</p></div>
+                        </div>`;
 
                 openModal('farmerDetailModal');
             };
@@ -1942,7 +2013,9 @@
             window.viewProject = function(id) {
                 const project = state.projects.find(p => p.id === id);
                 if (!project) { showToast('❌ Project not found'); return; }
-                showToast(`🌳 ${project.name} | ${project.projectType} | ${(project.enrolledAreaHa || 0).toFixed(1)} ha | ${project.projectStatus}`);
+                showToast(
+                    `🌳 ${project.name} | ${project.projectType} | ${(project.enrolledAreaHa || 0).toFixed(1)} ha | ${project.projectStatus}`
+                    );
             };
 
             window.viewMRV = function(id) {
@@ -2028,40 +2101,63 @@
                     farmer: {
                         title: 'Farmer Report',
                         headers: ['Farmer Code', 'Name', 'County', 'Farms', 'Area (ha)', 'Carbon (tCO₂e)', 'Status'],
-                        rows: state.farmers.map(f => [f.farmerCode, `${f.firstName} ${f.lastName}`, f.county, f.farmIds.length, f.totalFarmArea.toFixed(1), f.estimatedCarbonCredits.toFixed(1), f.status])
+                        rows: state.farmers.map(f => [f.farmerCode, `${f.firstName} ${f.lastName}`, f.county, f
+                            .farmIds.length, f.totalFarmArea.toFixed(1), f.estimatedCarbonCredits.toFixed(1),
+                            f.status
+                        ])
                     },
                     project: {
                         title: 'Project Report',
-                        headers: ['Project Code', 'Name', 'Type', 'County', 'Area (ha)', 'Credits', 'Farmers', 'Status'],
-                        rows: state.projects.map(p => [p.projectCode, p.name, p.projectType, p.county, (p.enrolledAreaHa || 0).toFixed(1), (p.availableCredits || 0), p.farmerCount || 0, p.projectStatus])
+                        headers: ['Project Code', 'Name', 'Type', 'County', 'Area (ha)', 'Credits', 'Farmers',
+                            'Status'
+                        ],
+                        rows: state.projects.map(p => [p.projectCode, p.name, p.projectType, p.county, (p
+                            .enrolledAreaHa || 0).toFixed(1), (p.availableCredits || 0), p.farmerCount || 0, p
+                            .projectStatus
+                        ])
                     },
                     mrv: {
                         title: 'MRV Evidence Report',
                         headers: ['Record ID', 'Farm', 'Enumerator', 'Date', 'Quality', 'Carbon (t)', 'Status'],
-                        rows: state.monitoringRecords.map(m => [m.id, m.farmId, m.enumerator, formatDate(m.monitoringDate), `${m.dataQualityScore}%`, (m.carbonStock || 0).toFixed(1), m.verificationStatus])
+                        rows: state.monitoringRecords.map(m => [m.id, m.farmId, m.enumerator, formatDate(m
+                                .monitoringDate), `${m.dataQualityScore}%`, (m.carbonStock || 0).toFixed(1), m
+                            .verificationStatus
+                        ])
                     },
                     financial: {
                         title: 'Financial Report',
                         headers: ['Ref', 'Recipient', 'Type', 'Amount (KES)', 'Date', 'Status'],
                         rows: state.payments.map(p => {
                             const farmer = state.farmers.find(f => f.id === p.farmerId);
-                            return [p.paymentReference, farmer ? farmer.firstName + ' ' + farmer.lastName : 'Unknown', p.paymentType, p.amount.toFixed(0), formatDate(p.paymentDate), p.status];
+                            return [p.paymentReference, farmer ? farmer.firstName + ' ' + farmer.lastName :
+                                'Unknown', p.paymentType, p.amount.toFixed(0), formatDate(p.paymentDate), p
+                                .status
+                            ];
                         })
                     },
                     audit: {
                         title: 'Audit Trail Report',
                         headers: ['Timestamp', 'User', 'Action', 'Module', 'Description', 'Severity'],
-                        rows: state.auditRecords.slice(0, 200).map(a => [formatDateTime(a.timestamp), a.userName, a.action, a.module, a.description, a.severity])
+                        rows: state.auditRecords.slice(0, 200).map(a => [formatDateTime(a.timestamp), a.userName, a
+                            .action, a.module, a.description, a.severity
+                        ])
                     },
                     community: {
                         title: 'Community Report',
-                        headers: ['Community', 'County', 'Farmers', 'Farms', 'Area (ha)', 'Carbon (t)', 'Payments (KES)'],
+                        headers: ['Community', 'County', 'Farmers', 'Farms', 'Area (ha)', 'Carbon (t)',
+                            'Payments (KES)'
+                        ],
                         rows: state.communities.map(c => {
                             const farmers = state.farmers.filter(f => f.communityId === c.id);
                             const farmIds = new Set(farmers.map(f => f.id));
                             const farms = state.farms.filter(f => farmIds.has(f.farmerId));
-                            const payments = state.payments.filter(p => farmIds.has(p.farmerId) && p.status === 'Completed');
-                            return [c.name, c.county, farmers.length, farms.length, farms.reduce((s, f) => s + (f.areaHa || 0), 0).toFixed(1), farms.reduce((s, f) => s + (f.estimatedSequestration || 0), 0).toFixed(1), payments.reduce((s, p) => s + (p.amount || 0), 0).toFixed(0)];
+                            const payments = state.payments.filter(p => farmIds.has(p.farmerId) && p
+                                .status === 'Completed');
+                            return [c.name, c.county, farmers.length, farms.length, farms.reduce((s, f) =>
+                                    s + (f.areaHa || 0), 0).toFixed(1), farms.reduce((s, f) => s + (f
+                                    .estimatedSequestration || 0), 0).toFixed(1), payments.reduce((s, p) =>
+                                    s + (p.amount || 0), 0).toFixed(0)
+                            ];
                         })
                     }
                 };
@@ -2074,8 +2170,10 @@
 
                 let html = `<h3 class="font-bold text-lg mb-3">${report.title}</h3>`;
                 html += `<p class="text-xs text-slate-400 mb-4">Generated: ${formatDateTime(new Date().toISOString())} · ${report.rows.length} records</p>`;
-                html += `<div class="overflow-x-auto"><table class="w-full text-xs"><thead class="bg-slate-50 dark:bg-charcoal-700"><tr>`;
-                report.headers.forEach(h => html += `<th class="px-3 py-2 text-left font-semibold dark:text-slate-300">${h}</th>`);
+                html +=
+                `<div class="overflow-x-auto"><table class="w-full text-xs"><thead class="bg-slate-50 dark:bg-charcoal-700"><tr>`;
+                report.headers.forEach(h => html +=
+                    `<th class="px-3 py-2 text-left font-semibold dark:text-slate-300">${h}</th>`);
                 html += `</tr></thead><tbody class="divide-y divide-slate-100 dark:divide-charcoal-700">`;
                 report.rows.slice(0, 100).forEach(row => {
                     html += `<tr class="table-row-hover">`;
@@ -2083,7 +2181,8 @@
                     html += `</tr>`;
                 });
                 html += `</tbody></table></div>`;
-                if (report.rows.length > 100) html += `<p class="text-xs text-slate-400 mt-2">Showing first 100 of ${report.rows.length} records</p>`;
+                if (report.rows.length > 100) html +=
+                    `<p class="text-xs text-slate-400 mt-2">Showing first 100 of ${report.rows.length} records</p>`;
 
                 document.getElementById('reportContent').innerHTML = html;
                 output.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -2136,11 +2235,13 @@
                 });
 
                 // Mobile menu
-                $('#mobileMenuBtn')?.addEventListener('click', () => $('#sidebar').classList.remove('-translate-x-full'));
+                $('#mobileMenuBtn')?.addEventListener('click', () => $('#sidebar').classList.remove(
+                '-translate-x-full'));
                 document.addEventListener('click', (e) => {
                     if (window.innerWidth < 768) {
                         const sidebar = $('#sidebar');
-                        if (sidebar && !sidebar.contains(e.target) && !$('#mobileMenuBtn')?.contains(e.target)) {
+                        if (sidebar && !sidebar.contains(e.target) && !$('#mobileMenuBtn')?.contains(e
+                            .target)) {
                             sidebar.classList.add('-translate-x-full');
                         }
                     }
@@ -2339,7 +2440,8 @@
                 $('#nextStepBtn')?.addEventListener('click', () => {
                     if (farmerWizardStep < 3) {
                         // Validate current step
-                        const stepContent = document.querySelector(`.wizard-step-content[data-step="${farmerWizardStep}"]`);
+                        const stepContent = document.querySelector(
+                            `.wizard-step-content[data-step="${farmerWizardStep}"]`);
                         const inputs = stepContent.querySelectorAll('input[required], select[required]');
                         let valid = true;
                         inputs.forEach(input => {
@@ -2475,7 +2577,8 @@
                                 gender: row.gender || 'Unknown',
                                 county: row.county || 'Machakos',
                                 subCounty: row.subCounty || '',
-                                communityId: state.communities.find(c => c.county === row.county)?.id || state.communities[0]?.id || '',
+                                communityId: state.communities.find(c => c.county === row.county)?.id || state
+                                    .communities[0]?.id || '',
                                 farmIds: [],
                                 registrationDate: new Date().toISOString(),
                                 status: 'Pending',
@@ -2524,10 +2627,12 @@
 
                     const headerRow = document.getElementById('importPreviewHeader');
                     const bodyRow = document.getElementById('importPreviewBody');
-                    headerRow.innerHTML = headers.map(h => `<th class="px-3 py-2 text-left text-xs">${h}</th>`).join('');
+                    headerRow.innerHTML = headers.map(h =>
+                        `<th class="px-3 py-2 text-left text-xs">${h}</th>`).join('');
                     bodyRow.innerHTML = data.slice(0, 10).map(row =>
-                        `<tr>${headers.map(h => `<td class="px-3 py-2 text-xs border-t border-slate-100 dark:border-charcoal-700">${row[h] || ''}</td>`).join('')}</tr>`
-                    ).join('');
+                            `<tr>${headers.map(h => `<td class="px-3 py-2 text-xs border-t border-slate-100 dark:border-charcoal-700">${row[h] || ''}</td>`).join('')}</tr>`
+                            )
+                        .join('');
                     document.getElementById('importCount').textContent = data.length;
                 };
                 reader.readAsText(file);
@@ -2641,15 +2746,21 @@
                         data: {
                             labels: months,
                             datasets: [
-                                { label: 'Estimated', data: estimated, borderColor: '#43a047', backgroundColor: 'rgba(67,160,71,0.08)', fill: true, tension: 0.4, borderWidth: 2, pointRadius: 3 },
-                                { label: 'Verified', data: verified, borderColor: '#1e4d34', backgroundColor: 'transparent', borderDash: [5, 5], tension: 0.4, borderWidth: 2, pointRadius: 3 }
+                                { label: 'Estimated', data: estimated, borderColor: '#43a047',
+                                    backgroundColor: 'rgba(67,160,71,0.08)', fill: true, tension: 0.4,
+                                    borderWidth: 2, pointRadius: 3 },
+                                { label: 'Verified', data: verified, borderColor: '#1e4d34',
+                                    backgroundColor: 'transparent', borderDash: [5, 5], tension: 0.4,
+                                    borderWidth: 2, pointRadius: 3 }
                             ]
                         },
                         options: {
                             responsive: true,
                             maintainAspectRatio: false,
-                            plugins: { legend: { position: 'top', labels: { color: textColor, font: { size: 10, family: 'Inter' }, boxWidth: 10 } } },
-                            scales: { x: { grid: { display: false }, ticks: { color: textColor, font: { size: 9 } } }, y: { grid: { color: gridColor }, ticks: { color: textColor, font: { size: 9 } } } }
+                            plugins: { legend: { position: 'top', labels: { color: textColor, font: { size: 10,
+                                        family: 'Inter' }, boxWidth: 10 } } },
+                            scales: { x: { grid: { display: false }, ticks: { color: textColor, font: { size: 9 } } },
+                                y: { grid: { color: gridColor }, ticks: { color: textColor, font: { size: 9 } } } }
                         }
                     });
                 }
@@ -2658,7 +2769,8 @@
                 const ctx2 = $('#verificationChart')?.getContext('2d');
                 if (ctx2) {
                     if (charts.verification) { charts.verification.destroy(); }
-                    const approved = state.verificationRecords.filter(v => v.status === 'Verified' || v.status === 'Approved').length || 35;
+                    const approved = state.verificationRecords.filter(v => v.status === 'Verified' || v.status ===
+                        'Approved').length || 35;
                     const underReview = state.verificationRecords.filter(v => v.status === 'Under Review').length || 12;
                     const pending = state.verificationRecords.filter(v => v.status === 'Pending').length || 18;
                     const rejected = state.verificationRecords.filter(v => v.status === 'Rejected').length || 8;
@@ -2666,13 +2778,16 @@
                         type: 'doughnut',
                         data: {
                             labels: ['Approved', 'Under Review', 'Pending', 'Rejected'],
-                            datasets: [{ data: [approved, underReview, pending, rejected], backgroundColor: ['#43a047', '#3b82f6', '#f59e0b', '#ef4444'], borderWidth: 0 }]
+                            datasets: [{ data: [approved, underReview, pending, rejected],
+                                backgroundColor: ['#43a047', '#3b82f6', '#f59e0b', '#ef4444'],
+                                borderWidth: 0 }]
                         },
                         options: {
                             responsive: true,
                             maintainAspectRatio: false,
                             cutout: '72%',
-                            plugins: { legend: { position: 'bottom', labels: { color: textColor, boxWidth: 10, font: { size: 9, family: 'Inter' }, padding: 8 } } }
+                            plugins: { legend: { position: 'bottom', labels: { color: textColor, boxWidth: 10,
+                                        font: { size: 9, family: 'Inter' }, padding: 8 } } }
                         }
                     });
                 }
@@ -2690,15 +2805,19 @@
 
                 dashboardMap = L.map('map', { zoomControl: false }).setView([-1.3, 37.0], 7);
                 L.control.zoom({ position: 'bottomright' }).addTo(dashboardMap);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OSM' }).addTo(dashboardMap);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OSM' }).addTo(
+                    dashboardMap);
 
                 // Show sample farms
                 state.farms.slice(0, 50).forEach(f => {
                     if (f.latitude && f.longitude) {
                         const color = f.monitoringStatus === 'Active' ? '#43a047' : '#94a3b8';
-                        L.circleMarker([f.latitude, f.longitude], { radius: 4, fillColor: color, color: '#fff', weight: 1, fillOpacity: 0.8 })
+                        L.circleMarker([f.latitude, f.longitude], { radius: 4, fillColor: color, color: '#fff',
+                                weight: 1, fillOpacity: 0.8 })
                             .addTo(dashboardMap)
-                            .bindPopup(`<strong>${f.farmName || 'Farm'}</strong><br/>${(f.areaHa || 0).toFixed(1)} ha<br/>${f.county || 'N/A'}`);
+                            .bindPopup(
+                                `<strong>${f.farmName || 'Farm'}</strong><br/>${(f.areaHa || 0).toFixed(1)} ha<br/>${f.county || 'N/A'}`
+                                );
                     }
                 });
                 setTimeout(() => dashboardMap?.invalidateSize(), 300);
