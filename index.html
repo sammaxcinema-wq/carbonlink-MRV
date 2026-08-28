@@ -206,6 +206,263 @@
         .btn-primary:active {
             transform: translateY(0);
         }
+        .form-control {
+            width: 100%;
+            padding: 0.625rem 0.875rem;
+            border-radius: 0.75rem;
+            border: 1.5px solid #e2e8f0;
+            background: white;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+        }
+        .dark .form-control {
+            background: #1e293b;
+            border-color: #334155;
+            color: #e2e8f0;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: #43a047;
+            box-shadow: 0 0 0 3px rgba(67, 160, 71, 0.15);
+        }
+        .form-control.error {
+            border-color: #ef4444;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+        }
+        .form-control.success {
+            border-color: #43a047;
+            box-shadow: 0 0 0 3px rgba(67, 160, 71, 0.15);
+        }
+        .form-error {
+            font-size: 0.75rem;
+            color: #ef4444;
+            margin-top: 0.25rem;
+            display: none;
+        }
+        .form-error.visible {
+            display: block;
+        }
+        .form-hint {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            margin-top: 0.25rem;
+        }
+        .form-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e2e8f0;
+        }
+        .dark .form-actions {
+            border-top-color: #334155;
+        }
+        .wizard-steps {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            padding: 0.5rem;
+            background: #f8fafc;
+            border-radius: 0.75rem;
+        }
+        .dark .wizard-steps {
+            background: #1e293b;
+        }
+        .wizard-step {
+            flex: 1;
+            padding: 0.5rem;
+            text-align: center;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #94a3b8;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .wizard-step.active {
+            background: #43a047;
+            color: white;
+        }
+        .wizard-step.completed {
+            background: rgba(67, 160, 71, 0.15);
+            color: #43a047;
+        }
+        .dark .wizard-step.completed {
+            background: rgba(67, 160, 71, 0.25);
+        }
+        .drop-zone {
+            border: 2px dashed #e2e8f0;
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .dark .drop-zone {
+            border-color: #334155;
+        }
+        .drop-zone:hover,
+        .drop-zone.dragover {
+            border-color: #43a047;
+            background: rgba(67, 160, 71, 0.05);
+        }
+        .drop-zone .icon {
+            font-size: 2.5rem;
+            color: #94a3b8;
+            margin-bottom: 0.5rem;
+        }
+        .dark .drop-zone .icon {
+            color: #64748b;
+        }
+        .auto-save-indicator {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            z-index: 100;
+            background: #43a047;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(67, 160, 71, 0.3);
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+        .auto-save-indicator.visible {
+            opacity: 1;
+        }
+        .history-controls {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        .history-controls button {
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.5rem;
+            border: 1px solid #e2e8f0;
+            background: white;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .dark .history-controls button {
+            background: #1e293b;
+            border-color: #334155;
+            color: #e2e8f0;
+        }
+        .history-controls button:hover:not(:disabled) {
+            background: #43a047;
+            color: white;
+            border-color: #43a047;
+        }
+        .history-controls button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .report-output table {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 0.8rem;
+        }
+        .report-output th {
+            background: #f1f5f9;
+            text-align: left;
+            padding: 0.5rem 0.75rem;
+            font-weight: 600;
+        }
+        .dark .report-output th {
+            background: #1e293b;
+        }
+        .report-output td {
+            padding: 0.4rem 0.75rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .dark .report-output td {
+            border-bottom-color: #334155;
+        }
+        .report-output tr:hover {
+            background: rgba(67, 160, 71, 0.04);
+        }
+        .dark .report-output tr:hover {
+            background: rgba(67, 160, 71, 0.08);
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #64748b;
+            margin-bottom: 0.25rem;
+        }
+        .dark .form-group label {
+            color: #94a3b8;
+        }
+        .form-group .required {
+            color: #ef4444;
+            margin-left: 2px;
+        }
+        #farmMap {
+            min-height: 400px;
+            width: 100%;
+        }
+        @media (max-width: 768px) {
+            #farmMap {
+                min-height: 300px;
+            }
+        }
+        .farm-list-item {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .farm-list-item:hover {
+            background: rgba(67, 160, 71, 0.08);
+            transform: translateX(4px);
+        }
+        .dark .farm-list-item:hover {
+            background: rgba(67, 160, 71, 0.15);
+        }
+        .farm-list-item.selected {
+            background: rgba(67, 160, 71, 0.15);
+            border-left: 3px solid #43a047;
+        }
+        .dark .farm-list-item.selected {
+            background: rgba(67, 160, 71, 0.2);
+        }
+        .gis-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 8px;
+        }
+        .gis-stat-card {
+            background: rgba(67, 160, 71, 0.06);
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+        }
+        .dark .gis-stat-card {
+            background: rgba(67, 160, 71, 0.1);
+        }
+        .gis-stat-card .label {
+            font-size: 10px;
+            text-transform: uppercase;
+            color: #64748b;
+            letter-spacing: 0.5px;
+        }
+        .dark .gis-stat-card .label {
+            color: #94a3b8;
+        }
+        .gis-stat-card .value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+        .dark .gis-stat-card .value {
+            color: #e2e8f0;
+        }
         .gis-controls {
             display: flex;
             gap: 8px;
@@ -266,64 +523,6 @@
         .dark .leaflet-popup-tip {
             background: #1e293b !important;
         }
-        .farm-list-item {
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
-        .farm-list-item:hover {
-            background: rgba(67, 160, 71, 0.08);
-            transform: translateX(4px);
-        }
-        .dark .farm-list-item:hover {
-            background: rgba(67, 160, 71, 0.15);
-        }
-        .farm-list-item.selected {
-            background: rgba(67, 160, 71, 0.15);
-            border-left: 3px solid #43a047;
-        }
-        .dark .farm-list-item.selected {
-            background: rgba(67, 160, 71, 0.2);
-        }
-        .gis-stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 8px;
-        }
-        .gis-stat-card {
-            background: rgba(67, 160, 71, 0.06);
-            border-radius: 8px;
-            padding: 10px;
-            text-align: center;
-        }
-        .dark .gis-stat-card {
-            background: rgba(67, 160, 71, 0.1);
-        }
-        .gis-stat-card .label {
-            font-size: 10px;
-            text-transform: uppercase;
-            color: #64748b;
-            letter-spacing: 0.5px;
-        }
-        .dark .gis-stat-card .label {
-            color: #94a3b8;
-        }
-        .gis-stat-card .value {
-            font-size: 18px;
-            font-weight: 700;
-            color: #1e293b;
-        }
-        .dark .gis-stat-card .value {
-            color: #e2e8f0;
-        }
-        #farmMap {
-            min-height: 400px;
-            width: 100%;
-        }
-        @media (max-width: 768px) {
-            #farmMap {
-                min-height: 300px;
-            }
-        }
         .marker-cluster-small {
             background-color: rgba(67, 160, 71, 0.6);
         }
@@ -342,242 +541,6 @@
         .marker-cluster-large div {
             background-color: rgba(30, 77, 52, 0.8);
         }
-        .report-output table {
-            border-collapse: collapse;
-            width: 100%;
-            font-size: 0.8rem;
-        }
-        .report-output th {
-            background: #f1f5f9;
-            text-align: left;
-            padding: 0.5rem 0.75rem;
-            font-weight: 600;
-        }
-        .dark .report-output th {
-            background: #1e293b;
-        }
-        .report-output td {
-            padding: 0.4rem 0.75rem;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        .dark .report-output td {
-            border-bottom-color: #334155;
-        }
-        .report-output tr:hover {
-            background: rgba(67, 160, 71, 0.04);
-        }
-        .dark .report-output tr:hover {
-            background: rgba(67, 160, 71, 0.08);
-        }
-        .toast-undo button {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            padding: 0.25rem 0.75rem;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 0.8rem;
-            color: #fff;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .toast-undo button:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        /* Advanced Form Styles */
-        .form-group {
-            margin-bottom: 1rem;
-        }
-        .form-group label {
-            display: block;
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: #64748b;
-            margin-bottom: 0.25rem;
-        }
-        .dark .form-group label {
-            color: #94a3b8;
-        }
-        .form-group .required {
-            color: #ef4444;
-            margin-left: 2px;
-        }
-        .form-control {
-            width: 100%;
-            padding: 0.625rem 0.875rem;
-            border-radius: 0.75rem;
-            border: 1.5px solid #e2e8f0;
-            background: white;
-            font-size: 0.875rem;
-            transition: all 0.2s ease;
-        }
-        .dark .form-control {
-            background: #1e293b;
-            border-color: #334155;
-            color: #e2e8f0;
-        }
-        .form-control:focus {
-            outline: none;
-            border-color: #43a047;
-            box-shadow: 0 0 0 3px rgba(67, 160, 71, 0.15);
-        }
-        .form-control.error {
-            border-color: #ef4444;
-            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
-        }
-        .form-control.success {
-            border-color: #43a047;
-            box-shadow: 0 0 0 3px rgba(67, 160, 71, 0.15);
-        }
-        .form-error {
-            font-size: 0.75rem;
-            color: #ef4444;
-            margin-top: 0.25rem;
-            display: none;
-        }
-        .form-error.visible {
-            display: block;
-        }
-        .form-hint {
-            font-size: 0.75rem;
-            color: #94a3b8;
-            margin-top: 0.25rem;
-        }
-        .form-actions {
-            display: flex;
-            gap: 0.75rem;
-            margin-top: 1.5rem;
-            padding-top: 1rem;
-            border-top: 1px solid #e2e8f0;
-        }
-        .dark .form-actions {
-            border-top-color: #334155;
-        }
-        .input-group {
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
-        }
-        .input-group .form-control {
-            flex: 1;
-        }
-
-        /* Bulk Import Styles */
-        .drop-zone {
-            border: 2px dashed #e2e8f0;
-            border-radius: 1rem;
-            padding: 2rem;
-            text-align: center;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        .dark .drop-zone {
-            border-color: #334155;
-        }
-        .drop-zone:hover,
-        .drop-zone.dragover {
-            border-color: #43a047;
-            background: rgba(67, 160, 71, 0.05);
-        }
-        .drop-zone .icon {
-            font-size: 2.5rem;
-            color: #94a3b8;
-            margin-bottom: 0.5rem;
-        }
-        .dark .drop-zone .icon {
-            color: #64748b;
-        }
-
-        /* Auto-save indicator */
-        .auto-save-indicator {
-            position: fixed;
-            bottom: 80px;
-            right: 20px;
-            z-index: 100;
-            background: #43a047;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 0.75rem;
-            font-size: 0.75rem;
-            font-weight: 600;
-            box-shadow: 0 4px 12px rgba(67, 160, 71, 0.3);
-            opacity: 0;
-            transition: all 0.3s ease;
-            pointer-events: none;
-        }
-        .auto-save-indicator.visible {
-            opacity: 1;
-        }
-        .dark .auto-save-indicator {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-        }
-
-        /* Undo/Redo buttons */
-        .history-controls {
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
-        }
-        .history-controls button {
-            padding: 0.25rem 0.75rem;
-            border-radius: 0.5rem;
-            border: 1px solid #e2e8f0;
-            background: white;
-            font-size: 0.75rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        .dark .history-controls button {
-            background: #1e293b;
-            border-color: #334155;
-            color: #e2e8f0;
-        }
-        .history-controls button:hover:not(:disabled) {
-            background: #43a047;
-            color: white;
-            border-color: #43a047;
-        }
-        .history-controls button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        /* Form wizard steps */
-        .wizard-steps {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-            padding: 0.5rem;
-            background: #f8fafc;
-            border-radius: 0.75rem;
-        }
-        .dark .wizard-steps {
-            background: #1e293b;
-        }
-        .wizard-step {
-            flex: 1;
-            padding: 0.5rem;
-            text-align: center;
-            border-radius: 0.5rem;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: #94a3b8;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        .wizard-step.active {
-            background: #43a047;
-            color: white;
-        }
-        .wizard-step.completed {
-            background: rgba(67, 160, 71, 0.15);
-            color: #43a047;
-        }
-        .dark .wizard-step.completed {
-            background: rgba(67, 160, 71, 0.25);
-        }
-
-        /* Print styles */
         @media print {
             .no-print { display: none !important; }
             .page-content { display: block !important; }
@@ -793,55 +756,25 @@
                         </div>
                     </div>
 
-                    <!-- GIS Stats -->
                     <div class="gis-stats-grid" id="gisStats">
-                        <div class="gis-stat-card">
-                            <div class="label">Total Farms</div>
-                            <div class="value" id="gisTotalFarms">0</div>
-                        </div>
-                        <div class="gis-stat-card">
-                            <div class="label">Total Area (ha)</div>
-                            <div class="value" id="gisTotalArea">0</div>
-                        </div>
-                        <div class="gis-stat-card">
-                            <div class="label">Active Parcels</div>
-                            <div class="value" id="gisActiveParcels">0</div>
-                        </div>
-                        <div class="gis-stat-card">
-                            <div class="label">Carbon Stock (t)</div>
-                            <div class="value" id="gisCarbonStock">0</div>
-                        </div>
-                        <div class="gis-stat-card">
-                            <div class="label">Avg Area/ha</div>
-                            <div class="value" id="gisAvgArea">0</div>
-                        </div>
-                        <div class="gis-stat-card">
-                            <div class="label">Map Coverage</div>
-                            <div class="value" id="gisMapCoverage">0%</div>
-                        </div>
+                        <div class="gis-stat-card"><div class="label">Total Farms</div><div class="value" id="gisTotalFarms">0</div></div>
+                        <div class="gis-stat-card"><div class="label">Total Area (ha)</div><div class="value" id="gisTotalArea">0</div></div>
+                        <div class="gis-stat-card"><div class="label">Active Parcels</div><div class="value" id="gisActiveParcels">0</div></div>
+                        <div class="gis-stat-card"><div class="label">Carbon Stock (t)</div><div class="value" id="gisCarbonStock">0</div></div>
+                        <div class="gis-stat-card"><div class="label">Avg Area/ha</div><div class="value" id="gisAvgArea">0</div></div>
+                        <div class="gis-stat-card"><div class="label">Map Coverage</div><div class="value" id="gisMapCoverage">0%</div></div>
                     </div>
 
-                    <!-- Search and Filter -->
                     <div class="flex flex-col sm:flex-row gap-3">
                         <div class="relative flex-1">
                             <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
                             <input type="text" id="farmSearch" placeholder="Search farms by name, code, county..." class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-charcoal-600 bg-white dark:bg-charcoal-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
                         </div>
-                        <select id="farmCountyFilter" class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-charcoal-600 bg-white dark:bg-charcoal-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
-                            <option value="all">All Counties</option>
-                        </select>
-                        <select id="farmProjectFilter" class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-charcoal-600 bg-white dark:bg-charcoal-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
-                            <option value="all">All Projects</option>
-                        </select>
-                        <select id="farmStatusFilter" class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-charcoal-600 bg-white dark:bg-charcoal-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
-                            <option value="all">All Statuses</option>
-                            <option value="Active">Active</option>
-                            <option value="Inactive">Inactive</option>
-                            <option value="Under Review">Under Review</option>
-                        </select>
+                        <select id="farmCountyFilter" class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-charcoal-600 bg-white dark:bg-charcoal-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"><option value="all">All Counties</option></select>
+                        <select id="farmProjectFilter" class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-charcoal-600 bg-white dark:bg-charcoal-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"><option value="all">All Projects</option></select>
+                        <select id="farmStatusFilter" class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-charcoal-600 bg-white dark:bg-charcoal-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"><option value="all">All Statuses</option><option value="Active">Active</option><option value="Inactive">Inactive</option><option value="Under Review">Under Review</option></select>
                     </div>
 
-                    <!-- GIS Controls -->
                     <div class="gis-controls bg-white dark:bg-charcoal-800 rounded-xl p-2 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm">
                         <button id="zoomInBtn" class="active"><i class="fas fa-plus"></i> Zoom In</button>
                         <button id="zoomOutBtn"><i class="fas fa-minus"></i> Zoom Out</button>
@@ -851,7 +784,6 @@
                         <button id="exportGeoBtn"><i class="fas fa-download"></i> Export GeoJSON</button>
                     </div>
 
-                    <!-- Map and List -->
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
                         <div class="lg:col-span-2 bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm p-1 md:p-1.5">
                             <div id="farmMap" class="h-[400px] md:h-[520px] w-full rounded-xl overflow-hidden"></div>
@@ -862,10 +794,7 @@
                         </div>
                         <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm space-y-3 overflow-y-auto max-h-[540px]">
                             <div class="flex justify-between items-center">
-                                <div>
-                                    <h3 class="font-semibold dark:text-white">Farm List</h3>
-                                    <p class="text-xs text-slate-400">Click to view details & center map</p>
-                                </div>
+                                <div><h3 class="font-semibold dark:text-white">Farm List</h3><p class="text-xs text-slate-400">Click to view details & center map</p></div>
                                 <span class="text-xs bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 px-2 py-1 rounded-full" id="farmListCount">0</span>
                             </div>
                             <div id="farmListContainer" class="space-y-2 max-h-[420px] overflow-y-auto pr-1 no-scrollbar"></div>
@@ -1071,7 +1000,6 @@
     </nav>
 
     <!-- MODALS -->
-    <!-- Farmer Modal -->
     <div id="farmerModal" class="modal hidden fixed inset-0 z-[70] flex items-center justify-center p-4">
         <div class="modal-backdrop absolute inset-0" onclick="closeModal('farmerModal')"></div>
         <div class="relative bg-white dark:bg-charcoal-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 md:p-8">
@@ -1085,28 +1013,23 @@
                     <div class="wizard-step" data-step="2">Contact Details</div>
                     <div class="wizard-step" data-step="3">Farm Details</div>
                 </div>
-
                 <div class="wizard-step-content" data-step="1">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div class="form-group">
                             <label>First Name <span class="required">*</span></label>
-                            <input type="text" id="fFirstName" required class="form-control" placeholder="Enter first name" autocomplete="given-name">
+                            <input type="text" id="fFirstName" required class="form-control" placeholder="Enter first name">
                             <div class="form-error" id="fFirstNameError">Please enter a first name</div>
                         </div>
                         <div class="form-group">
                             <label>Last Name <span class="required">*</span></label>
-                            <input type="text" id="fLastName" required class="form-control" placeholder="Enter last name" autocomplete="family-name">
+                            <input type="text" id="fLastName" required class="form-control" placeholder="Enter last name">
                             <div class="form-error" id="fLastNameError">Please enter a last name</div>
                         </div>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div class="form-group">
                             <label>Gender</label>
-                            <select id="fGender" class="form-control">
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                                <option value="Other">Other</option>
-                            </select>
+                            <select id="fGender" class="form-control"><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select>
                         </div>
                         <div class="form-group">
                             <label>Date of Birth</label>
@@ -1114,25 +1037,23 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="wizard-step-content hidden" data-step="2">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div class="form-group">
                             <label>Phone Number <span class="required">*</span></label>
                             <input type="tel" id="fPhone" required class="form-control" placeholder="+254 7XX XXX XXX">
                             <div class="form-error" id="fPhoneError">Please enter a valid phone number</div>
-                            <div class="form-hint">Format: +254 7XX XXX XXX</div>
                         </div>
                         <div class="form-group">
                             <label>National ID <span class="required">*</span></label>
-                            <input type="text" id="fNationalId" required class="form-control" placeholder="Will be masked" autocomplete="off">
+                            <input type="text" id="fNationalId" required class="form-control" placeholder="Will be masked">
                             <div class="form-error" id="fNationalIdError">Please enter a valid National ID</div>
                         </div>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div class="form-group">
                             <label>Email Address</label>
-                            <input type="email" id="fEmail" class="form-control" placeholder="farmer@example.com" autocomplete="email">
+                            <input type="email" id="fEmail" class="form-control" placeholder="farmer@example.com">
                             <div class="form-error" id="fEmailError">Please enter a valid email address</div>
                         </div>
                         <div class="form-group">
@@ -1141,7 +1062,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="wizard-step-content hidden" data-step="3">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div class="form-group">
@@ -1171,10 +1091,9 @@
                     </div>
                     <div class="form-group">
                         <label>Notes</label>
-                        <textarea id="fNotes" class="form-control" rows="2" placeholder="Additional information about the farmer"></textarea>
+                        <textarea id="fNotes" class="form-control" rows="2" placeholder="Additional information"></textarea>
                     </div>
                 </div>
-
                 <div class="form-actions">
                     <button type="button" id="prevStepBtn" class="px-4 py-2.5 rounded-xl border border-slate-300 dark:border-charcoal-600 text-sm font-medium hover:bg-slate-50 dark:hover:bg-charcoal-700 hidden">Previous</button>
                     <button type="button" id="nextStepBtn" class="flex-1 px-4 py-2.5 rounded-xl bg-brand-600 text-white text-sm font-medium hover:bg-brand-700">Next</button>
@@ -1185,7 +1104,6 @@
         </div>
     </div>
 
-    <!-- Bulk Import Modal -->
     <div id="bulkImportModal" class="modal hidden fixed inset-0 z-[70] flex items-center justify-center p-4">
         <div class="modal-backdrop absolute inset-0" onclick="closeModal('bulkImportModal')"></div>
         <div class="relative bg-white dark:bg-charcoal-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 md:p-8">
@@ -1204,9 +1122,7 @@
                     <h4 class="font-semibold dark:text-white mb-2">Preview</h4>
                     <div class="overflow-x-auto max-h-60 overflow-y-auto border border-slate-200 dark:border-charcoal-700 rounded-lg">
                         <table class="w-full text-sm" id="importPreviewTable">
-                            <thead class="bg-slate-50 dark:bg-charcoal-850">
-                                <tr id="importPreviewHeader"></tr>
-                            </thead>
+                            <thead class="bg-slate-50 dark:bg-charcoal-850"><tr id="importPreviewHeader"></tr></thead>
                             <tbody id="importPreviewBody"></tbody>
                         </table>
                     </div>
@@ -1258,53 +1174,23 @@
         <div class="relative bg-white dark:bg-charcoal-800 rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 md:p-8">
             <div class="flex items-center justify-between mb-5"><h2 class="text-xl font-bold dark:text-white">Submit MRV Evidence</h2><button onclick="closeModal('evidenceModal')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fas fa-times text-xl"></i></button></div>
             <form id="evidenceForm" class="space-y-4" novalidate>
-                <div class="form-group">
-                    <label>Farm <span class="required">*</span></label>
-                    <select id="mrvFarmSelect" required class="form-control"></select>
-                    <div class="form-error" id="mrvFarmSelectError">Please select a farm</div>
-                </div>
-                <div class="form-group">
-                    <label>Monitoring Date <span class="required">*</span></label>
-                    <input type="date" id="mrvDate" required class="form-control">
-                    <div class="form-error" id="mrvDateError">Please select a monitoring date</div>
-                </div>
-                <div class="form-group">
-                    <label>Enumerator <span class="required">*</span></label>
-                    <input type="text" id="mrvEnumerator" required class="form-control" placeholder="Enter enumerator name">
-                    <div class="form-error" id="mrvEnumeratorError">Please enter enumerator name</div>
+                <div class="form-group"><label>Farm <span class="required">*</span></label><select id="mrvFarmSelect" required class="form-control"></select><div class="form-error" id="mrvFarmSelectError">Please select a farm</div></div>
+                <div class="form-group"><label>Monitoring Date <span class="required">*</span></label><input type="date" id="mrvDate" required class="form-control"><div class="form-error" id="mrvDateError">Please select a monitoring date</div></div>
+                <div class="form-group"><label>Enumerator <span class="required">*</span></label><input type="text" id="mrvEnumerator" required class="form-control" placeholder="Enter enumerator name"><div class="form-error" id="mrvEnumeratorError">Please enter enumerator name</div></div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="form-group"><label>Trees Planted</label><input type="number" id="mrvTreesPlanted" min="0" class="form-control" placeholder="0"></div>
+                    <div class="form-group"><label>Surviving Trees</label><input type="number" id="mrvSurvivingTrees" min="0" class="form-control" placeholder="0"></div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
-                    <div class="form-group">
-                        <label>Trees Planted</label>
-                        <input type="number" id="mrvTreesPlanted" min="0" class="form-control" placeholder="0">
-                    </div>
-                    <div class="form-group">
-                        <label>Surviving Trees</label>
-                        <input type="number" id="mrvSurvivingTrees" min="0" class="form-control" placeholder="0">
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div class="form-group">
-                        <label>Area Verified (ha)</label>
-                        <input type="number" id="mrvAreaVerified" step="0.01" min="0" class="form-control" placeholder="0.00">
-                    </div>
-                    <div class="form-group">
-                        <label>Biomass (t/ha)</label>
-                        <input type="number" id="mrvBiomass" step="0.01" min="0" class="form-control" placeholder="0.00">
-                    </div>
+                    <div class="form-group"><label>Area Verified (ha)</label><input type="number" id="mrvAreaVerified" step="0.01" min="0" class="form-control" placeholder="0.00"></div>
+                    <div class="form-group"><label>Biomass (t/ha)</label><input type="number" id="mrvBiomass" step="0.01" min="0" class="form-control" placeholder="0.00"></div>
                 </div>
                 <div class="form-group">
                     <label>GPS Coordinates</label>
-                    <div class="grid grid-cols-2 gap-3">
-                        <input type="text" id="mrvLatitude" placeholder="Latitude" class="form-control">
-                        <input type="text" id="mrvLongitude" placeholder="Longitude" class="form-control">
-                    </div>
+                    <div class="grid grid-cols-2 gap-3"><input type="text" id="mrvLatitude" placeholder="Latitude" class="form-control"><input type="text" id="mrvLongitude" placeholder="Longitude" class="form-control"></div>
                     <div class="form-hint">Format: decimal degrees (e.g., -1.2921, 36.8219)</div>
                 </div>
-                <div class="form-group">
-                    <label>Notes</label>
-                    <textarea id="mrvNotes" rows="3" class="form-control" placeholder="Additional observations or notes"></textarea>
-                </div>
+                <div class="form-group"><label>Notes</label><textarea id="mrvNotes" rows="3" class="form-control" placeholder="Additional observations"></textarea></div>
                 <div class="flex gap-3 pt-2">
                     <button type="button" onclick="closeModal('evidenceModal')" class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 dark:border-charcoal-600 text-sm font-medium hover:bg-slate-50 dark:hover:bg-charcoal-700">Cancel</button>
                     <button type="submit" class="flex-1 px-4 py-2.5 rounded-xl bg-brand-600 text-white text-sm font-medium hover:bg-brand-700">Submit</button>
@@ -1328,24 +1214,19 @@
     <script>
         // ================================================================
         // CARBONLINK MRV – ENTERPRISE ULTRA PRO
-        // FIXED: Farmer registration now properly stores data
+        // FULLY FUNCTIONAL WITH ALL BUTTONS WORKING
         // ================================================================
 
         (function() {
             'use strict';
 
             // ============================================================
-            // STATE & CONFIG
+            // CONFIGURATION
             // ============================================================
-            const STORAGE_KEY = 'carbonlink_mrv_state_v4';
+            const STORAGE_KEY = 'carbonlink_mrv_state_v5';
             const KENYAN_COUNTIES = ['Machakos', 'Makueni', 'Kitui', 'Kajiado', 'Nairobi', 'Kiambu', 'Murang\'a',
                 'Nyeri', 'Kirinyaga', 'Embu', 'Meru', 'Tharaka-Nithi', 'Laikipia', 'Nakuru'
             ];
-            const PROJECT_TYPES = ['Agroforestry', 'Reforestation', 'Soil Carbon', 'Improved Agriculture',
-                'Conservation', 'Restoration'
-            ];
-            const PAYMENT_TYPES = ['Carbon Revenue', 'Farmer Incentive', 'Community Benefit', 'Project Expense'];
-            const CONTRACT_TYPES = ['Carbon Purchase', 'Benefit Sharing', 'Lease Agreement', 'Service Agreement'];
             const FIRST_NAMES = ['James', 'Grace', 'Samuel', 'Mary', 'John', 'Janet', 'Peter', 'Esther', 'David',
                 'Susan', 'Michael', 'Ruth', 'Daniel', 'Mercy', 'George', 'Ann', 'Paul', 'Wanjiru', 'Kamau',
                 'Atieno', 'Kiprop', 'Chebet', 'Muthoni', 'Odhiambo', 'Wambui', 'Njoroge', 'Achieng'
@@ -1357,41 +1238,34 @@
             const $ = (s) => document.querySelector(s);
             const $$ = (s) => document.querySelectorAll(s);
 
+            // ============================================================
+            // UTILITY FUNCTIONS
+            // ============================================================
             function generateId(prefix, num) { return `${prefix}-${String(num).padStart(4, '0')}`; }
-
             function maskNationalId(id) { if (!id) return 'N/A'; return '********' + id.slice(-4); }
-
             function formatCurrency(amount) { return `KES ${Math.round(amount).toLocaleString()}`; }
-
-            function formatDate(dateStr) { if (!dateStr) return '—'; return new Date(dateStr).toLocaleDateString(
-                'en-KE'); }
-
+            function formatDate(dateStr) { if (!dateStr) return '—'; return new Date(dateStr).toLocaleDateString('en-KE'); }
             function formatDateTime(ts) { return new Date(ts).toLocaleString('en-KE'); }
-
             function randomInRange(min, max) { return Math.random() * (max - min) + min; }
-
             function randomInt(min, max) { return Math.floor(randomInRange(min, max + 1)); }
-
             function pickRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
-
-            function debounce(fn, ms = 300) { let timer; return function(...args) { clearTimeout(timer);
-                    timer = setTimeout(() => fn.apply(this, args), ms); }; }
+            function debounce(fn, ms = 300) { let timer; return function(...args) { clearTimeout(timer); timer = setTimeout(() => fn.apply(this, args), ms); }; }
 
             // ============================================================
             // STORAGE
             // ============================================================
             const Storage = {
-                save(state) { 
-                    try { 
-                        localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); 
+                save(state) {
+                    try {
+                        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
                         this.showAutoSaveIndicator();
-                    } catch (e) {} 
+                    } catch (e) {}
                 },
-                load() { 
-                    try { 
-                        const d = localStorage.getItem(STORAGE_KEY); 
-                        return d ? JSON.parse(d) : null; 
-                    } catch (e) { return null; } 
+                load() {
+                    try {
+                        const d = localStorage.getItem(STORAGE_KEY);
+                        return d ? JSON.parse(d) : null;
+                    } catch (e) { return null; }
                 },
                 hasData() { return !!localStorage.getItem(STORAGE_KEY); },
                 showAutoSaveIndicator() {
@@ -1399,15 +1273,13 @@
                     if (indicator) {
                         indicator.classList.add('visible');
                         clearTimeout(this._indicatorTimer);
-                        this._indicatorTimer = setTimeout(() => {
-                            indicator.classList.remove('visible');
-                        }, 2000);
+                        this._indicatorTimer = setTimeout(() => indicator.classList.remove('visible'), 2000);
                     }
                 }
             };
 
             // ============================================================
-            // INIT STATE
+            // STATE
             // ============================================================
             const defaultState = {
                 currentUser: { id: 'USR-0001', name: 'John Doe', role: 'super_admin' },
@@ -1432,7 +1304,18 @@
             if (!state.currentUser) state.currentUser = defaultState.currentUser;
 
             // ============================================================
-            // DEMO DATA GENERATOR (simplified for speed)
+            // PAGINATION STATE
+            // ============================================================
+            const pagination = {
+                farmers: { page: 0, sort: { key: 'lastName', dir: 'asc' } },
+                projects: { page: 0, sort: { key: 'projectCode', dir: 'asc' } },
+                mrv: { page: 0, sort: { key: 'monitoringDate', dir: 'desc' } }
+            };
+
+            function getPageSize() { return state.settings.defaultPageSize || 25; }
+
+            // ============================================================
+            // GENERATE DEMO DATA
             // ============================================================
             function generateDemoData() {
                 if (Storage.hasData() && state.farmers.length > 0) return;
@@ -1457,10 +1340,10 @@
                     });
                 });
 
-                // Farmers - 30 sample farmers
-                for (let i = 0; i < 30; i++) {
+                // Farmers
+                for (let i = 0; i < 35; i++) {
                     const comm = state.communities[i % state.communities.length];
-                    const statuses = ['Active', 'Active', 'Active', 'Active', 'Active', 'Pending', 'Suspended'];
+                    const statuses = ['Active', 'Active', 'Active', 'Active', 'Pending', 'Suspended'];
                     state.farmers.push({
                         id: generateId('FRM', i + 1),
                         farmerCode: generateId('FRM', i + 1),
@@ -1486,14 +1369,44 @@
             }
 
             // ============================================================
+            // TOAST NOTIFICATIONS
+            // ============================================================
+            let toastTimer = null;
+
+            function showToast(msg, isError = false, duration = 4000) {
+                const toast = $('#toast');
+                const msgEl = $('#toastMessage');
+                msgEl.textContent = msg;
+                if (isError) {
+                    toast.style.backgroundColor = '#dc2626';
+                } else {
+                    toast.style.backgroundColor = '';
+                }
+                clearTimeout(toastTimer);
+                toast.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
+                toast.classList.add('opacity-100', 'translate-y-0');
+                toastTimer = setTimeout(() => {
+                    toast.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
+                    toast.classList.remove('opacity-100', 'translate-y-0');
+                }, duration);
+            }
+
+            // ============================================================
+            // MODAL FUNCTIONS
+            // ============================================================
+            window.closeModal = function(id) {
+                const modal = $(`#${id}`);
+                if (modal) modal.classList.add('hidden');
+            };
+
+            function openModal(id) {
+                const modal = $(`#${id}`);
+                if (modal) modal.classList.remove('hidden');
+            }
+
+            // ============================================================
             // RENDER FUNCTIONS
             // ============================================================
-            let sortState = { farmers: { key: 'lastName', dir: 'asc' }, projects: { key: 'projectCode',
-                    dir: 'asc' }, mrv: { key: 'monitoringDate', dir: 'desc' } };
-            let paginationState = { farmers: 0, projects: 0, mrv: 0 };
-
-            function getPageSize() { return state.settings.defaultPageSize || 25; }
-
             function sortData(data, key, dir) {
                 return [...data].sort((a, b) => {
                     const aVal = key.split('.').reduce((o, k) => o?.[k], a);
@@ -1505,6 +1418,7 @@
                 });
             }
 
+            // ---------- DASHBOARD ----------
             function renderDashboard() {
                 const metrics = {
                     totalFarmers: state.farmers.length,
@@ -1512,28 +1426,20 @@
                     totalAreaHa: state.farms.reduce((s, f) => s + (f.areaHa || 0), 0),
                     verifiedCredits: state.monitoringRecords.filter(m => m.verificationStatus === 'Verified')
                         .reduce((s, m) => s + (m.carbonStock || 0), 0),
-                    pendingVerification: state.verificationRecords.filter(v => v.status === 'Pending' || v
-                        .status === 'Under Review').length,
-                    totalPayments: state.payments.filter(p => p.status === 'Completed').reduce((s, p) => s + (p
-                        .amount || 0), 0),
+                    pendingVerification: state.verificationRecords.filter(v => v.status === 'Pending' || v.status === 'Under Review').length,
+                    totalPayments: state.payments.filter(p => p.status === 'Completed').reduce((s, p) => s + (p.amount || 0), 0),
                     activeProjects: state.projects.filter(p => p.projectStatus === 'Active').length,
                     mrvRecords: state.monitoringRecords.length
                 };
 
                 const kpis = [
                     { label: 'Total Farmers', value: metrics.totalFarmers, icon: 'fa-users', color: 'emerald' },
-                    { label: 'Active Farms', value: metrics.activeFarms, icon: 'fa-map-marked-alt',
-                    color: 'blue' },
-                    { label: 'Total Area (ha)', value: Math.round(metrics.totalAreaHa).toLocaleString(),
-                        icon: 'fa-vector-square', color: 'purple' },
-                    { label: 'Verified Carbon', value: Math.round(metrics.verifiedCredits).toLocaleString(),
-                        icon: 'fa-cloud-sun', color: 'amber' },
-                    { label: 'Pending Verification', value: metrics.pendingVerification,
-                        icon: 'fa-clipboard-check', color: 'orange' },
-                    { label: 'Total Payments', value: Math.round(metrics.totalPayments).toLocaleString(),
-                        icon: 'fa-wallet', color: 'green' },
-                    { label: 'Active Projects', value: metrics.activeProjects, icon: 'fa-tree',
-                    color: 'teal' },
+                    { label: 'Active Farms', value: metrics.activeFarms, icon: 'fa-map-marked-alt', color: 'blue' },
+                    { label: 'Total Area (ha)', value: Math.round(metrics.totalAreaHa).toLocaleString(), icon: 'fa-vector-square', color: 'purple' },
+                    { label: 'Verified Carbon', value: Math.round(metrics.verifiedCredits).toLocaleString(), icon: 'fa-cloud-sun', color: 'amber' },
+                    { label: 'Pending Verification', value: metrics.pendingVerification, icon: 'fa-clipboard-check', color: 'orange' },
+                    { label: 'Total Payments', value: Math.round(metrics.totalPayments).toLocaleString(), icon: 'fa-wallet', color: 'green' },
+                    { label: 'Active Projects', value: metrics.activeProjects, icon: 'fa-tree', color: 'teal' },
                     { label: 'MRV Records', value: metrics.mrvRecords, icon: 'fa-file-alt', color: 'pink' }
                 ];
 
@@ -1550,6 +1456,7 @@
                     </div>
                 `).join('');
 
+                // Activity feed
                 const feed = $('#dashActivityFeed');
                 feed.innerHTML = state.auditRecords.slice(0, 8).map(a => `
                     <div class="flex items-start space-x-3">
@@ -1561,6 +1468,7 @@
                     </div>
                 `).join('') || '<p class="text-xs text-slate-400">No activity yet</p>';
 
+                // Recent payments
                 const recentPayments = state.payments.filter(p => p.status === 'Completed').slice(0, 5);
                 $('#dashRecentPayments').innerHTML = recentPayments.map(p => {
                     const farmer = state.farmers.find(f => f.id === p.farmerId);
@@ -1572,10 +1480,9 @@
                     `;
                 }).join('') || '<p class="text-xs text-slate-400">No payments yet</p>';
 
-                const pending = state.verificationRecords.filter(v => v.status === 'Pending' || v.status ===
-                    'Under Review').slice(0, 4);
-                $('#dashPendingVerifCount').textContent = state.verificationRecords.filter(v => v.status ===
-                    'Pending' || v.status === 'Under Review').length;
+                // Pending verification
+                const pending = state.verificationRecords.filter(v => v.status === 'Pending' || v.status === 'Under Review').slice(0, 4);
+                $('#dashPendingVerifCount').textContent = state.verificationRecords.filter(v => v.status === 'Pending' || v.status === 'Under Review').length;
                 $('#dashPendingVerification').innerHTML = pending.map(v => {
                     const project = state.projects.find(p => p.id === v.projectId);
                     return `
@@ -1588,149 +1495,44 @@
                 }).join('') || '<p class="text-xs text-slate-400">No pending verification</p>';
             }
 
-            // ============================================================
-            // CRITICAL FIX: Farmer Registration with proper data storage
-            // ============================================================
-            function setupFarmerForm() {
-                const form = $('#farmerForm');
-                if (!form) return;
-
-                form.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    
-                    console.log('📝 Farmer form submitted - processing...');
-
-                    // Get ALL form values
-                    const firstName = document.getElementById('fFirstName').value.trim();
-                    const lastName = document.getElementById('fLastName').value.trim();
-                    const phone = document.getElementById('fPhone').value.trim();
-                    const nationalId = document.getElementById('fNationalId').value.trim();
-                    const county = document.getElementById('fCounty').value || 'Machakos';
-                    const communityId = document.getElementById('fCommunity').value || '';
-                    const gender = document.getElementById('fGender').value || 'Male';
-                    const dob = document.getElementById('fDob').value || '';
-                    const email = document.getElementById('fEmail').value.trim() || '';
-                    const altPhone = document.getElementById('fAltPhone').value.trim() || '';
-                    const estimatedArea = parseFloat(document.getElementById('fEstimatedArea').value) || 0;
-                    const landUse = document.getElementById('fLandUse').value || 'Agroforestry';
-                    const notes = document.getElementById('fNotes').value.trim() || '';
-
-                    // Validate required fields
-                    if (!firstName || !lastName || !phone || !nationalId) {
-                        showToast('⚠️ Please fill all required fields (First Name, Last Name, Phone, National ID)');
-                        return;
-                    }
-
-                    // Create new farmer object
-                    const newId = generateId('FRM', state.farmers.length + 1);
-                    const farmer = {
-                        id: newId,
-                        farmerCode: newId,
-                        firstName: firstName,
-                        lastName: lastName,
-                        phone: phone,
-                        nationalIdMasked: maskNationalId(nationalId),
-                        gender: gender,
-                        dob: dob,
-                        email: email,
-                        altPhone: altPhone,
-                        county: county,
-                        subCounty: '',
-                        communityId: communityId || state.communities[0]?.id || '',
-                        farmIds: [],
-                        registrationDate: new Date().toISOString(),
-                        status: 'Pending',
-                        verificationStatus: 'Not Verified',
-                        totalFarmArea: estimatedArea,
-                        estimatedCarbonCredits: estimatedArea * 2.5,
-                        notes: notes,
-                        landUse: landUse,
-                        createdAt: new Date().toISOString()
-                    };
-
-                    console.log('👤 New farmer:', farmer);
-
-                    // CRITICAL: Add to state array
-                    state.farmers.push(farmer);
-                    
-                    // CRITICAL: Save to localStorage
-                    try {
-                        localStorage.setItem('carbonlink_mrv_state_v4', JSON.stringify(state));
-                        console.log('💾 Data saved! Total farmers:', state.farmers.length);
-                    } catch (err) {
-                        console.error('❌ Save error:', err);
-                        showToast('❌ Error saving data');
-                        return;
-                    }
-                    
-                    // Close modal and reset form
-                    closeModal('farmerModal');
-                    form.reset();
-                    document.querySelectorAll('#farmerForm .form-control').forEach(el => {
-                        el.classList.remove('error', 'success');
-                    });
-                    document.querySelectorAll('#farmerForm .form-error').forEach(el => {
-                        el.classList.remove('visible');
-                    });
-                    
-                    // Refresh the farmer table
-                    renderFarmersPage();
-                    renderDashboard();
-                    
-                    // Show success
-                    showToast(`✅ Farmer ${firstName} ${lastName} registered successfully (ID: ${newId})`);
-                    
-                    // Verify it was added
-                    console.log('📊 Total farmers now:', state.farmers.length);
-                    console.log('🔍 Latest farmer:', state.farmers[state.farmers.length - 1]);
-                });
-            }
-
-            // ============================================================
-            // RENDER FARMERS PAGE
-            // ============================================================
-            function renderFarmersPage() {
+            // ---------- FARMERS ----------
+            function renderFarmers() {
                 const search = ($('#farmerSearch')?.value || '').toLowerCase();
                 const county = $('#farmerCountyFilter')?.value || 'all';
                 const statusFilter = $('#farmerStatusFilter')?.value || 'all';
 
                 let filtered = state.farmers.filter(f => {
-                    const matchSearch = !search || f.firstName.toLowerCase().includes(search) || f.lastName
-                        .toLowerCase().includes(search) || f.farmerCode.toLowerCase().includes(search) ||
-                        f.phone.toLowerCase().includes(search);
+                    const matchSearch = !search || f.firstName.toLowerCase().includes(search) || f.lastName.toLowerCase().includes(search) || f.farmerCode.toLowerCase().includes(search) || f.phone.toLowerCase().includes(search);
                     const matchCounty = county === 'all' || f.county === county;
                     const matchStatus = statusFilter === 'all' || f.status === statusFilter;
                     return matchSearch && matchCounty && matchStatus;
                 });
 
-                const sorted = sortData(filtered, sortState.farmers.key, sortState.farmers.dir);
+                const sorted = sortData(filtered, pagination.farmers.sort.key, pagination.farmers.sort.dir);
                 const pageSize = getPageSize();
-                const page = paginationState.farmers;
+                const page = pagination.farmers.page;
                 const start = page * pageSize;
                 const end = Math.min(start + pageSize, sorted.length);
                 const items = sorted.slice(start, end);
                 const total = sorted.length;
-                const totalPages = Math.ceil(total / pageSize);
+                const totalPages = Math.ceil(total / pageSize) || 1;
 
                 $('#farmerStart').textContent = total > 0 ? start + 1 : 0;
                 $('#farmerEnd').textContent = end;
                 $('#farmerTotal').textContent = total;
                 $('#farmerPrev').disabled = page === 0;
                 $('#farmerNext').disabled = page >= totalPages - 1;
-                $('#farmerPageInfo').textContent = `Page ${page + 1} of ${totalPages || 1}`;
+                $('#farmerPageInfo').textContent = `Page ${page + 1} of ${totalPages}`;
 
                 const tbody = $('#farmerTableBody');
                 if (items.length === 0) {
-                    tbody.innerHTML =
-                        `<tr><td colspan="7" class="px-4 py-8 text-center text-slate-400 text-sm">No farmers found</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="7" class="px-4 py-8 text-center text-slate-400 text-sm">No farmers found</td></tr>`;
                     return;
                 }
 
                 tbody.innerHTML = items.map(f => {
-                    const statusColor = f.status === 'Active' ?
-                        'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' :
-                        f.status === 'Pending' ?
-                        'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' :
+                    const statusColor = f.status === 'Active' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' :
+                        f.status === 'Pending' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' :
                         'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300';
                     return `
                         <tr class="table-row-hover">
@@ -1749,8 +1551,369 @@
                 }).join('');
             }
 
+            // ---------- FARMS (GIS) ----------
+            function renderFarmsGIS() {
+                // This would be populated with real farm data in a full implementation
+                // For now, show a message
+                const container = $('#farmListContainer');
+                if (state.farms.length === 0) {
+                    container.innerHTML = `
+                        <div class="text-center py-8">
+                            <i class="fas fa-map-marked-alt text-4xl text-slate-300 dark:text-slate-600 mb-3"></i>
+                            <p class="text-sm text-slate-400">No farms registered yet</p>
+                            <p class="text-xs text-slate-500 mt-1">Add farms to see them on the map</p>
+                        </div>
+                    `;
+                    return;
+                }
+                // Show sample farms
+                container.innerHTML = state.farms.slice(0, 20).map(f => {
+                    const farmer = state.farmers.find(fr => fr.id === f.farmerId);
+                    return `
+                        <div class="farm-list-item p-3 rounded-lg border border-slate-100 dark:border-charcoal-700">
+                            <div class="flex items-start justify-between">
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-semibold dark:text-white truncate">${f.farmName || 'Farm'}</p>
+                                    <p class="text-xs text-slate-400 truncate">${farmer ? farmer.firstName + ' ' + farmer.lastName : 'Unknown Farmer'}</p>
+                                    <div class="flex items-center gap-2 mt-1 flex-wrap">
+                                        <span class="text-[10px] text-slate-400">${(f.areaHa || 0).toFixed(1)} ha</span>
+                                        <span class="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-600"></span>
+                                        <span class="text-[10px] text-slate-400">${f.county || 'N/A'}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            // ---------- PROJECTS ----------
+            function renderProjects() {
+                const search = ($('#projectSearch')?.value || '').toLowerCase();
+                const statusFilter = $('#projectStatusFilter')?.value || 'all';
+
+                let filtered = state.projects.filter(p => {
+                    const matchSearch = !search || p.name.toLowerCase().includes(search) || p.projectCode.toLowerCase().includes(search);
+                    const matchStatus = statusFilter === 'all' || p.projectStatus === statusFilter;
+                    return matchSearch && matchStatus;
+                });
+
+                const sorted = sortData(filtered, pagination.projects.sort.key, pagination.projects.sort.dir);
+                const pageSize = getPageSize();
+                const page = pagination.projects.page;
+                const start = page * pageSize;
+                const end = Math.min(start + pageSize, sorted.length);
+                const items = sorted.slice(start, end);
+                const total = sorted.length;
+                const totalPages = Math.ceil(total / pageSize) || 1;
+
+                $('#projectStart').textContent = total > 0 ? start + 1 : 0;
+                $('#projectEnd').textContent = end;
+                $('#projectTotal').textContent = total;
+                $('#projectPrev').disabled = page === 0;
+                $('#projectNext').disabled = page >= totalPages - 1;
+
+                const tbody = $('#projectTableBody');
+                if (items.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="7" class="px-4 py-8 text-center text-slate-400 text-sm">No projects found</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = items.map(p => {
+                    const statusColor = p.projectStatus === 'Active' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' :
+                        p.projectStatus === 'Monitoring' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' :
+                        'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300';
+                    return `
+                        <tr class="table-row-hover">
+                            <td class="px-4 py-3 font-mono text-xs">${p.projectCode}</td>
+                            <td class="px-4 py-3 font-medium">${p.name}</td>
+                            <td class="px-4 py-3 hidden sm:table-cell">${p.county}</td>
+                            <td class="px-4 py-3 hidden md:table-cell">${(p.enrolledAreaHa || 0).toFixed(1)}</td>
+                            <td class="px-4 py-3 hidden lg:table-cell">${(p.availableCredits || 0).toLocaleString()}</td>
+                            <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${statusColor}">${p.projectStatus}</span></td>
+                            <td class="px-4 py-3 text-right space-x-2">
+                                <button onclick="viewProject('${p.id}')" class="text-brand-600 dark:text-brand-400 hover:underline text-xs"><i class="fas fa-eye mr-1"></i>View</button>
+                                <button onclick="deleteEntity('projects','${p.id}')" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-trash-alt"></i></button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            // ---------- MRV ----------
+            function renderMRV() {
+                const search = ($('#mrvSearch')?.value || '').toLowerCase();
+                const statusFilter = $('#mrvStatusFilter')?.value || 'all';
+
+                let filtered = state.monitoringRecords.filter(m => {
+                    const matchSearch = !search || m.id.toLowerCase().includes(search) || m.farmId.toLowerCase().includes(search) || m.enumerator.toLowerCase().includes(search);
+                    const matchStatus = statusFilter === 'all' || m.verificationStatus === statusFilter;
+                    return matchSearch && matchStatus;
+                });
+
+                const sorted = sortData(filtered, pagination.mrv.sort.key, pagination.mrv.sort.dir);
+                const pageSize = getPageSize();
+                const page = pagination.mrv.page;
+                const start = page * pageSize;
+                const end = Math.min(start + pageSize, sorted.length);
+                const items = sorted.slice(start, end);
+                const total = sorted.length;
+                const totalPages = Math.ceil(total / pageSize) || 1;
+
+                $('#mrvStart').textContent = total > 0 ? start + 1 : 0;
+                $('#mrvEnd').textContent = end;
+                $('#mrvTotal').textContent = total;
+                $('#mrvPrev').disabled = page === 0;
+                $('#mrvNext').disabled = page >= totalPages - 1;
+
+                const tbody = $('#mrvTableBody');
+                if (items.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="7" class="px-4 py-8 text-center text-slate-400 text-sm">No MRV records found</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = items.map(m => {
+                    const statusColor = m.verificationStatus === 'Verified' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' :
+                        m.verificationStatus === 'Pending' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' :
+                        m.verificationStatus === 'Rejected' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300' :
+                        'bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300';
+                    const qualityLabel = m.dataQualityScore >= 75 ? 'Good' : m.dataQualityScore >= 50 ? 'Needs Review' : 'Poor';
+                    return `
+                        <tr class="table-row-hover">
+                            <td class="px-4 py-3 font-mono text-xs">${m.id}</td>
+                            <td class="px-4 py-3">${m.farmId}</td>
+                            <td class="px-4 py-3 hidden sm:table-cell">${formatDate(m.monitoringDate)}</td>
+                            <td class="px-4 py-3 hidden md:table-cell">${(m.carbonStock || 0).toFixed(1)}</td>
+                            <td class="px-4 py-3"><span class="text-xs font-medium">${m.dataQualityScore || 0}%</span> <span class="text-[10px] text-slate-400">${qualityLabel}</span></td>
+                            <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${statusColor}">${m.verificationStatus}</span></td>
+                            <td class="px-4 py-3 text-right space-x-2">
+                                <button onclick="viewMRV('${m.id}')" class="text-brand-600 dark:text-brand-400 hover:underline text-xs"><i class="fas fa-eye mr-1"></i>View</button>
+                                <button onclick="deleteEntity('mrv','${m.id}')" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-trash-alt"></i></button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            // ---------- CONTRACTS ----------
+            function renderContracts() {
+                const search = ($('#contractSearch')?.value || '').toLowerCase();
+                const statusFilter = $('#contractStatusFilter')?.value || 'all';
+
+                let filtered = state.contracts.filter(c => {
+                    const matchSearch = !search || c.contractNumber.toLowerCase().includes(search);
+                    const matchStatus = statusFilter === 'all' || c.status === statusFilter;
+                    return matchSearch && matchStatus;
+                });
+
+                const tbody = $('#contractTableBody');
+                if (filtered.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="6" class="px-4 py-8 text-center text-slate-400 text-sm">No contracts found</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = filtered.slice(0, 50).map(c => {
+                    const farmer = state.farmers.find(f => f.id === c.farmerId);
+                    const statusColor = c.status === 'Active' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' :
+                        c.status === 'Pending Signature' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' :
+                        'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300';
+                    return `
+                        <tr class="table-row-hover">
+                            <td class="px-4 py-3 font-mono text-xs">${c.contractNumber}</td>
+                            <td class="px-4 py-3">${farmer ? farmer.firstName + ' ' + farmer.lastName : 'Unknown'}</td>
+                            <td class="px-4 py-3 hidden sm:table-cell">${c.contractType}</td>
+                            <td class="px-4 py-3 hidden md:table-cell">${formatDate(c.endDate)}</td>
+                            <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${statusColor}">${c.status}</span></td>
+                            <td class="px-4 py-3 text-right space-x-2">
+                                <button onclick="viewContract('${c.id}')" class="text-brand-600 dark:text-brand-400 hover:underline text-xs"><i class="fas fa-eye mr-1"></i>View</button>
+                                <button onclick="deleteEntity('contracts','${c.id}')" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-trash-alt"></i></button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            // ---------- COMMUNITIES ----------
+            function renderCommunities() {
+                const container = $('#communityList');
+                if (state.communities.length === 0) {
+                    container.innerHTML = '<p class="text-slate-400 text-sm">No communities found</p>';
+                    return;
+                }
+
+                container.innerHTML = state.communities.map(c => {
+                    const farmers = state.farmers.filter(f => f.communityId === c.id);
+                    const farmIds = new Set(farmers.map(f => f.id));
+                    const farms = state.farms.filter(f => farmIds.has(f.farmerId));
+                    const totalArea = farms.reduce((s, f) => s + (f.areaHa || 0), 0);
+                    const totalCarbon = farms.reduce((s, f) => s + (f.estimatedSequestration || 0), 0);
+                    const payments = state.payments.filter(p => farmIds.has(p.farmerId) && p.status === 'Completed');
+                    const totalPayments = payments.reduce((s, p) => s + (p.amount || 0), 0);
+
+                    return `
+                        <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm">
+                            <h3 class="font-bold dark:text-white">${c.name}</h3>
+                            <p class="text-xs text-slate-400">${c.county}</p>
+                            <div class="mt-3 grid grid-cols-2 gap-2 text-sm">
+                                <div><span class="text-slate-400 text-xs">Farmers</span><p class="font-semibold dark:text-white">${farmers.length}</p></div>
+                                <div><span class="text-slate-400 text-xs">Farms</span><p class="font-semibold dark:text-white">${farms.length}</p></div>
+                                <div><span class="text-slate-400 text-xs">Area (ha)</span><p class="font-semibold dark:text-white">${totalArea.toFixed(1)}</p></div>
+                                <div><span class="text-slate-400 text-xs">Carbon (tCO₂e)</span><p class="font-semibold dark:text-white">${totalCarbon.toFixed(1)}</p></div>
+                                <div><span class="text-slate-400 text-xs">Payments</span><p class="font-semibold text-emerald-600 dark:text-emerald-400">${formatCurrency(totalPayments)}</p></div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            // ---------- PAYMENTS ----------
+            function renderPayments() {
+                const totals = { total: 0, completed: 0, pending: 0, failed: 0 };
+                state.payments.forEach(p => {
+                    totals.total += p.amount || 0;
+                    if (p.status === 'Completed') totals.completed += p.amount || 0;
+                    else if (p.status === 'Pending') totals.pending += p.amount || 0;
+                    else if (p.status === 'Failed') totals.failed += p.amount || 0;
+                });
+
+                $('#paymentStatsGrid').innerHTML = `
+                    <div class="bg-white dark:bg-charcoal-800 rounded-xl p-4 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center"><p class="text-xs text-slate-400">Total Volume</p><p class="text-xl font-bold dark:text-white">${formatCurrency(totals.total)}</p></div>
+                    <div class="bg-white dark:bg-charcoal-800 rounded-xl p-4 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center"><p class="text-xs text-slate-400">Completed</p><p class="text-xl font-bold text-emerald-600 dark:text-emerald-400">${formatCurrency(totals.completed)}</p></div>
+                    <div class="bg-white dark:bg-charcoal-800 rounded-xl p-4 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center"><p class="text-xs text-slate-400">Pending</p><p class="text-xl font-bold text-amber-600 dark:text-amber-400">${formatCurrency(totals.pending)}</p></div>
+                    <div class="bg-white dark:bg-charcoal-800 rounded-xl p-4 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center"><p class="text-xs text-slate-400">Failed</p><p class="text-xl font-bold text-red-600 dark:text-red-400">${formatCurrency(totals.failed)}</p></div>
+                `;
+
+                const search = ($('#paymentSearch')?.value || '').toLowerCase();
+                const statusFilter = $('#paymentStatusFilter')?.value || 'all';
+
+                let filtered = state.payments.filter(p => {
+                    const matchSearch = !search || p.paymentReference.toLowerCase().includes(search);
+                    const matchStatus = statusFilter === 'all' || p.status === statusFilter;
+                    return matchSearch && matchStatus;
+                });
+
+                const tbody = $('#paymentTableBody');
+                if (filtered.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="6" class="px-4 py-8 text-center text-slate-400 text-sm">No payments found</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = filtered.slice(0, 50).map(p => {
+                    const farmer = state.farmers.find(f => f.id === p.farmerId);
+                    const statusColor = p.status === 'Completed' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' :
+                        p.status === 'Pending' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' :
+                        'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300';
+                    return `
+                        <tr class="table-row-hover">
+                            <td class="px-4 py-3 font-mono text-xs">${p.paymentReference}</td>
+                            <td class="px-4 py-3">${farmer ? farmer.firstName + ' ' + farmer.lastName : 'Unknown'}</td>
+                            <td class="px-4 py-3 hidden sm:table-cell">${p.paymentType}</td>
+                            <td class="px-4 py-3 hidden md:table-cell">${formatCurrency(p.amount)}</td>
+                            <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${statusColor}">${p.status}</span></td>
+                            <td class="px-4 py-3 text-right space-x-2">
+                                ${p.status === 'Pending' ? `<button onclick="completePayment('${p.id}')" class="text-emerald-600 hover:text-emerald-700 text-xs"><i class="fas fa-check mr-1"></i>Complete</button>` : ''}
+                                <button onclick="deleteEntity('payments','${p.id}')" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-trash-alt"></i></button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            // ---------- VERIFICATION ----------
+            function renderVerification() {
+                const tbody = $('#verificationTableBody');
+                if (state.verificationRecords.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="6" class="px-4 py-8 text-center text-slate-400 text-sm">No verification records</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = state.verificationRecords.slice(0, 50).map(v => {
+                    const project = state.projects.find(p => p.id === v.projectId);
+                    const statusColor = v.status === 'Verified' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' :
+                        v.status === 'Approved' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300' :
+                        v.status === 'Pending' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' :
+                        v.status === 'Rejected' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300' :
+                        'bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300';
+                    return `
+                        <tr class="table-row-hover">
+                            <td class="px-4 py-3 font-mono text-xs">${v.referenceNumber}</td>
+                            <td class="px-4 py-3">${project ? project.name : 'Unknown'}</td>
+                            <td class="px-4 py-3 hidden sm:table-cell">${v.monitoringRecordIds.length}</td>
+                            <td class="px-4 py-3 hidden md:table-cell">${formatDate(v.submittedDate)}</td>
+                            <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${statusColor}">${v.status}</span></td>
+                            <td class="px-4 py-3 text-right space-x-2">
+                                ${v.status === 'Pending' ? `<button onclick="approveVerification('${v.id}')" class="text-emerald-600 hover:text-emerald-700 text-xs"><i class="fas fa-check mr-1"></i>Approve</button><button onclick="rejectVerification('${v.id}')" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-times mr-1"></i>Reject</button>` : ''}
+                                ${v.status === 'Under Review' ? `<button onclick="completeVerification('${v.id}')" class="text-blue-600 hover:text-blue-700 text-xs"><i class="fas fa-check-double mr-1"></i>Complete</button>` : ''}
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            // ---------- AUDIT ----------
+            function renderAudit() {
+                const search = ($('#auditSearch')?.value || '').toLowerCase();
+                let filtered = state.auditRecords.filter(a =>
+                    !search || a.description.toLowerCase().includes(search) || a.module.toLowerCase().includes(search) || a.userName.toLowerCase().includes(search) || a.action.toLowerCase().includes(search)
+                );
+
+                const tbody = $('#auditTableBody');
+                if (filtered.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="6" class="px-4 py-8 text-center text-slate-400 text-sm">No audit records found</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = filtered.slice(0, 100).map(a => {
+                    const severityColor = a.severity === 'critical' ? 'text-red-600 dark:text-red-400' :
+                        a.severity === 'high' ? 'text-orange-600 dark:text-orange-400' :
+                        a.severity === 'medium' ? 'text-yellow-600 dark:text-yellow-400' :
+                        'text-slate-500 dark:text-slate-400';
+                    return `
+                        <tr class="table-row-hover">
+                            <td class="px-4 py-3 text-xs">${formatDateTime(a.timestamp)}</td>
+                            <td class="px-4 py-3 text-xs">${a.userName}</td>
+                            <td class="px-4 py-3 text-xs"><span class="font-semibold">${a.action}</span></td>
+                            <td class="px-4 py-3 text-xs hidden sm:table-cell">${a.module}</td>
+                            <td class="px-4 py-3 text-xs hidden md:table-cell">${a.entityId}</td>
+                            <td class="px-4 py-3 text-xs font-medium ${severityColor}">${a.severity}</td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
             // ============================================================
-            // GLOBAL FUNCTIONS
+            // REFRESH FUNCTIONS
+            // ============================================================
+            function refreshCurrentPage() {
+                switch (state.currentPage) {
+                    case 'dashboard': renderDashboard(); break;
+                    case 'farmers': renderFarmers(); break;
+                    case 'farms': renderFarmsGIS(); break;
+                    case 'carbon': renderProjects(); break;
+                    case 'mrv': renderMRV(); break;
+                    case 'contracts': renderContracts(); break;
+                    case 'communities': renderCommunities(); break;
+                    case 'payments': renderPayments(); break;
+                    case 'verification': renderVerification(); break;
+                    case 'audit': renderAudit(); break;
+                }
+            }
+
+            function refreshAll() {
+                renderDashboard();
+                renderFarmers();
+                renderFarmsGIS();
+                renderProjects();
+                renderMRV();
+                renderContracts();
+                renderCommunities();
+                renderPayments();
+                renderVerification();
+                renderAudit();
+            }
+
+            // ============================================================
+            // VIEW FUNCTIONS
             // ============================================================
             window.viewFarmer = function(id) {
                 const farmer = state.farmers.find(f => f.id === id);
@@ -1759,7 +1922,7 @@
                 $('#detailAvatar').textContent = initials;
                 $('#detailName').textContent = `${farmer.firstName} ${farmer.lastName}`;
                 $('#detailId').textContent = farmer.farmerCode;
-                
+
                 const personal = $('#tab-personal');
                 personal.innerHTML = `
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1772,8 +1935,69 @@
                         <div><label class="text-xs text-slate-400">Status</label><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${farmer.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}">${farmer.status}</span></div>
                         <div><label class="text-xs text-slate-400">Registration Date</label><p class="font-medium dark:text-white">${formatDate(farmer.registrationDate)}</p></div>
                     </div>`;
-                    
+
                 openModal('farmerDetailModal');
+            };
+
+            window.viewProject = function(id) {
+                const project = state.projects.find(p => p.id === id);
+                if (!project) { showToast('❌ Project not found'); return; }
+                showToast(`🌳 ${project.name} | ${project.projectType} | ${(project.enrolledAreaHa || 0).toFixed(1)} ha | ${project.projectStatus}`);
+            };
+
+            window.viewMRV = function(id) {
+                const record = state.monitoringRecords.find(m => m.id === id);
+                if (!record) { showToast('❌ MRV record not found'); return; }
+                showToast(`📋 ${record.id} | Quality: ${record.dataQualityScore}% | Status: ${record.verificationStatus}`);
+            };
+
+            window.viewContract = function(id) {
+                const contract = state.contracts.find(c => c.id === id);
+                if (!contract) { showToast('❌ Contract not found'); return; }
+                showToast(`📄 ${contract.contractNumber} | ${contract.status} | ${formatCurrency(contract.contractValue)}`);
+            };
+
+            // ============================================================
+            // ACTION FUNCTIONS
+            // ============================================================
+            window.approveVerification = function(id) {
+                const record = state.verificationRecords.find(v => v.id === id);
+                if (!record) return;
+                record.status = 'Approved';
+                record.reviewDate = new Date().toISOString();
+                Storage.save(state);
+                refreshAll();
+                showToast('✅ Verification approved');
+            };
+
+            window.rejectVerification = function(id) {
+                const record = state.verificationRecords.find(v => v.id === id);
+                if (!record) return;
+                record.status = 'Rejected';
+                record.rejectionReason = 'Rejected by verifier';
+                Storage.save(state);
+                refreshAll();
+                showToast('❌ Verification rejected');
+            };
+
+            window.completeVerification = function(id) {
+                const record = state.verificationRecords.find(v => v.id === id);
+                if (!record) return;
+                record.status = 'Verified';
+                record.verifiedDate = new Date().toISOString();
+                Storage.save(state);
+                refreshAll();
+                showToast('✅ Verification completed successfully');
+            };
+
+            window.completePayment = function(id) {
+                const payment = state.payments.find(p => p.id === id);
+                if (!payment) return;
+                payment.status = 'Completed';
+                payment.transactionReference = `TXN-${randomInt(100000, 999999)}`;
+                Storage.save(state);
+                refreshAll();
+                showToast(`💰 Payment ${payment.paymentReference} completed`);
             };
 
             window.deleteEntity = function(entityType, id) {
@@ -1783,45 +2007,96 @@
                     projects: { arr: 'projects', label: 'Project', nameField: 'name' },
                     mrv: { arr: 'monitoringRecords', label: 'MRV Record', nameField: 'id' },
                     contracts: { arr: 'contracts', label: 'Contract', nameField: 'contractNumber' },
-                    payments: { arr: 'payments', label: 'Payment', nameField: 'paymentReference' }
+                    payments: { arr: 'payments', label: 'Payment', nameField: 'paymentReference' },
+                    verification: { arr: 'verificationRecords', label: 'Verification', nameField: 'referenceNumber' }
                 };
                 const map = entityMap[entityType];
                 if (!map) return;
                 const entity = state[map.arr].find(e => e.id === id);
-                if (!entity) return;
+                if (!entity) { showToast('❌ Entity not found'); return; }
                 const name = entity[map.nameField] || entity.id;
-                $('#deleteMessage').textContent = `Are you sure you want to delete "${name}"?`;
+                $('#deleteMessage').textContent = `Are you sure you want to delete "${name}"? This action cannot be undone.`;
                 openModal('deleteModal');
                 window._pendingDelete = { entityType, id, arr: map.arr, label: map.label, name };
             };
 
-            window.closeModal = function(id) { 
-                const modal = $(`#${id}`);
-                if (modal) modal.classList.add('hidden'); 
+            // ============================================================
+            // REPORT GENERATION
+            // ============================================================
+            window.generateReport = function(type) {
+                const reportData = {
+                    farmer: {
+                        title: 'Farmer Report',
+                        headers: ['Farmer Code', 'Name', 'County', 'Farms', 'Area (ha)', 'Carbon (tCO₂e)', 'Status'],
+                        rows: state.farmers.map(f => [f.farmerCode, `${f.firstName} ${f.lastName}`, f.county, f.farmIds.length, f.totalFarmArea.toFixed(1), f.estimatedCarbonCredits.toFixed(1), f.status])
+                    },
+                    project: {
+                        title: 'Project Report',
+                        headers: ['Project Code', 'Name', 'Type', 'County', 'Area (ha)', 'Credits', 'Farmers', 'Status'],
+                        rows: state.projects.map(p => [p.projectCode, p.name, p.projectType, p.county, (p.enrolledAreaHa || 0).toFixed(1), (p.availableCredits || 0), p.farmerCount || 0, p.projectStatus])
+                    },
+                    mrv: {
+                        title: 'MRV Evidence Report',
+                        headers: ['Record ID', 'Farm', 'Enumerator', 'Date', 'Quality', 'Carbon (t)', 'Status'],
+                        rows: state.monitoringRecords.map(m => [m.id, m.farmId, m.enumerator, formatDate(m.monitoringDate), `${m.dataQualityScore}%`, (m.carbonStock || 0).toFixed(1), m.verificationStatus])
+                    },
+                    financial: {
+                        title: 'Financial Report',
+                        headers: ['Ref', 'Recipient', 'Type', 'Amount (KES)', 'Date', 'Status'],
+                        rows: state.payments.map(p => {
+                            const farmer = state.farmers.find(f => f.id === p.farmerId);
+                            return [p.paymentReference, farmer ? farmer.firstName + ' ' + farmer.lastName : 'Unknown', p.paymentType, p.amount.toFixed(0), formatDate(p.paymentDate), p.status];
+                        })
+                    },
+                    audit: {
+                        title: 'Audit Trail Report',
+                        headers: ['Timestamp', 'User', 'Action', 'Module', 'Description', 'Severity'],
+                        rows: state.auditRecords.slice(0, 200).map(a => [formatDateTime(a.timestamp), a.userName, a.action, a.module, a.description, a.severity])
+                    },
+                    community: {
+                        title: 'Community Report',
+                        headers: ['Community', 'County', 'Farmers', 'Farms', 'Area (ha)', 'Carbon (t)', 'Payments (KES)'],
+                        rows: state.communities.map(c => {
+                            const farmers = state.farmers.filter(f => f.communityId === c.id);
+                            const farmIds = new Set(farmers.map(f => f.id));
+                            const farms = state.farms.filter(f => farmIds.has(f.farmerId));
+                            const payments = state.payments.filter(p => farmIds.has(p.farmerId) && p.status === 'Completed');
+                            return [c.name, c.county, farmers.length, farms.length, farms.reduce((s, f) => s + (f.areaHa || 0), 0).toFixed(1), farms.reduce((s, f) => s + (f.estimatedSequestration || 0), 0).toFixed(1), payments.reduce((s, p) => s + (p.amount || 0), 0).toFixed(0)];
+                        })
+                    }
+                };
+
+                const report = reportData[type];
+                if (!report) { showToast('❌ Report type not found'); return; }
+
+                const output = $('#reportOutput');
+                output.classList.remove('hidden');
+
+                let html = `<h3 class="font-bold text-lg mb-3">${report.title}</h3>`;
+                html += `<p class="text-xs text-slate-400 mb-4">Generated: ${formatDateTime(new Date().toISOString())} · ${report.rows.length} records</p>`;
+                html += `<div class="overflow-x-auto"><table class="w-full text-xs"><thead class="bg-slate-50 dark:bg-charcoal-700"><tr>`;
+                report.headers.forEach(h => html += `<th class="px-3 py-2 text-left font-semibold dark:text-slate-300">${h}</th>`);
+                html += `</tr></thead><tbody class="divide-y divide-slate-100 dark:divide-charcoal-700">`;
+                report.rows.slice(0, 100).forEach(row => {
+                    html += `<tr class="table-row-hover">`;
+                    row.forEach(cell => html += `<td class="px-3 py-2 dark:text-slate-200">${cell}</td>`);
+                    html += `</tr>`;
+                });
+                html += `</tbody></table></div>`;
+                if (report.rows.length > 100) html += `<p class="text-xs text-slate-400 mt-2">Showing first 100 of ${report.rows.length} records</p>`;
+
+                document.getElementById('reportContent').innerHTML = html;
+                output.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                showToast(`📄 ${report.title} generated (${report.rows.length} records)`);
             };
-
-            function openModal(id) { 
-                const modal = $(`#${id}`);
-                if (modal) modal.classList.remove('hidden'); 
-            }
-
-            function showToast(msg, duration = 4000) {
-                const toast = $('#toast');
-                const msgEl = $('#toastMessage');
-                msgEl.textContent = msg;
-                clearTimeout(window._toastTimer);
-                toast.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
-                toast.classList.add('opacity-100', 'translate-y-0');
-                window._toastTimer = setTimeout(() => {
-                    toast.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
-                    toast.classList.remove('opacity-100', 'translate-y-0');
-                }, duration);
-            }
 
             // ============================================================
             // NAVIGATION
             // ============================================================
+            let currentPage = 'dashboard';
+
             function navigateTo(page) {
+                currentPage = page;
                 $$('.page-content').forEach(el => el.classList.add('hidden'));
                 const target = $(`#page-${page}`);
                 if (target) target.classList.remove('hidden');
@@ -1841,16 +2116,592 @@
                 });
 
                 state.currentPage = page;
-                if (window.innerWidth < 768) $('#sidebar').classList.add('-translate-x-full');
+                if (window.innerWidth < 768) {
+                    $('#sidebar').classList.add('-translate-x-full');
+                }
                 refreshCurrentPage();
             }
 
-            function refreshCurrentPage() {
-                switch (state.currentPage) {
-                    case 'dashboard': renderDashboard(); break;
-                    case 'farmers': renderFarmersPage(); break;
-                    default: break;
+            // ============================================================
+            // EVENTS SETUP
+            // ============================================================
+            function initEvents() {
+                // Navigation
+                $$('.nav-link').forEach(link => {
+                    link.addEventListener('click', (e) => { e.preventDefault();
+                        navigateTo(link.dataset.page); });
+                });
+                $$('.bottom-nav-btn').forEach(btn => {
+                    btn.addEventListener('click', () => navigateTo(btn.dataset.page));
+                });
+
+                // Mobile menu
+                $('#mobileMenuBtn')?.addEventListener('click', () => $('#sidebar').classList.remove('-translate-x-full'));
+                document.addEventListener('click', (e) => {
+                    if (window.innerWidth < 768) {
+                        const sidebar = $('#sidebar');
+                        if (sidebar && !sidebar.contains(e.target) && !$('#mobileMenuBtn')?.contains(e.target)) {
+                            sidebar.classList.add('-translate-x-full');
+                        }
+                    }
+                });
+
+                // Theme toggle
+                $('#themeToggle')?.addEventListener('click', toggleTheme);
+                $('#settingsThemeToggle')?.addEventListener('click', toggleTheme);
+
+                // Farmer search and filters
+                $('#farmerSearch')?.addEventListener('input', debounce(() => { pagination.farmers.page = 0;
+                    renderFarmers(); }));
+                $('#farmerCountyFilter')?.addEventListener('change', () => { pagination.farmers.page = 0;
+                    renderFarmers(); });
+                $('#farmerStatusFilter')?.addEventListener('change', () => { pagination.farmers.page = 0;
+                    renderFarmers(); });
+
+                // Farmer pagination
+                $('#farmerPrev')?.addEventListener('click', () => {
+                    if (pagination.farmers.page > 0) { pagination.farmers.page--;
+                        renderFarmers(); }
+                });
+                $('#farmerNext')?.addEventListener('click', () => { pagination.farmers.page++;
+                    renderFarmers(); });
+
+                // Farmer sort
+                $$('#page-farmers .sortable-header[data-sort]').forEach(th => {
+                    th.addEventListener('click', function() {
+                        const key = this.dataset.sort;
+                        const s = pagination.farmers.sort;
+                        if (s.key === key) s.dir = s.dir === 'asc' ? 'desc' : 'asc';
+                        else { s.key = key;
+                            s.dir = 'asc'; }
+                        pagination.farmers.page = 0;
+                        renderFarmers();
+                    });
+                });
+
+                // Project search and filters
+                $('#projectSearch')?.addEventListener('input', debounce(() => { pagination.projects.page = 0;
+                    renderProjects(); }));
+                $('#projectStatusFilter')?.addEventListener('change', () => { pagination.projects.page = 0;
+                    renderProjects(); });
+                $('#projectPrev')?.addEventListener('click', () => {
+                    if (pagination.projects.page > 0) { pagination.projects.page--;
+                        renderProjects(); }
+                });
+                $('#projectNext')?.addEventListener('click', () => { pagination.projects.page++;
+                    renderProjects(); });
+
+                // MRV search and filters
+                $('#mrvSearch')?.addEventListener('input', debounce(() => { pagination.mrv.page = 0;
+                    renderMRV(); }));
+                $('#mrvStatusFilter')?.addEventListener('change', () => { pagination.mrv.page = 0;
+                    renderMRV(); });
+                $('#mrvPrev')?.addEventListener('click', () => {
+                    if (pagination.mrv.page > 0) { pagination.mrv.page--;
+                        renderMRV(); }
+                });
+                $('#mrvNext')?.addEventListener('click', () => { pagination.mrv.page++;
+                    renderMRV(); });
+
+                // Contract search
+                $('#contractSearch')?.addEventListener('input', debounce(renderContracts));
+                $('#contractStatusFilter')?.addEventListener('change', renderContracts);
+
+                // Payment search
+                $('#paymentSearch')?.addEventListener('input', debounce(renderPayments));
+                $('#paymentStatusFilter')?.addEventListener('change', renderPayments);
+
+                // Audit search
+                $('#auditSearch')?.addEventListener('input', debounce(renderAudit));
+
+                // View all payments
+                $('#viewAllPayments')?.addEventListener('click', (e) => { e.preventDefault();
+                    navigateTo('payments'); });
+
+                // Add farmer
+                $('#addFarmerBtn')?.addEventListener('click', openFarmerModal);
+
+                // Bulk import
+                $('#bulkImportFarmersBtn')?.addEventListener('click', () => {
+                    openModal('bulkImportModal');
+                    $('#importPreview').classList.add('hidden');
+                    window._importPreviewData = null;
+                });
+
+                // Add evidence
+                $('#addEvidenceBtn')?.addEventListener('click', () => {
+                    const farmSelect = $('#mrvFarmSelect');
+                    if (farmSelect) {
+                        farmSelect.innerHTML = state.farms.map(f =>
+                            `<option value="${f.id}">${f.farmName || f.id} - ${f.county || 'N/A'}</option>`
+                        ).join('');
+                    }
+                    openModal('evidenceModal');
+                });
+
+                // Settings
+                $('#pageSizeSetting')?.addEventListener('change', function() {
+                    state.settings.defaultPageSize = parseInt(this.value);
+                    Storage.save(state);
+                    refreshAll();
+                    showToast(`📄 Page size set to ${this.value}`);
+                });
+                $('#exportDataBtn')?.addEventListener('click', () => {
+                    const dataStr = JSON.stringify(state, null, 2);
+                    const blob = new Blob([dataStr], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `carbonlink_mrv_export_${new Date().toISOString().slice(0,10)}.json`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    showToast('📦 Data exported successfully');
+                });
+
+                // Role switcher
+                $('#roleSwitcher')?.addEventListener('change', function() {
+                    state.currentUser.role = this.value;
+                    Storage.save(state);
+                    $('#userRole').textContent = this.value.replace('_', ' ').toUpperCase();
+                    showToast(`👤 Role changed to ${this.value}`);
+                });
+
+                // Delete confirmation
+                $('#deleteConfirmBtn')?.addEventListener('click', function() {
+                    const pending = window._pendingDelete;
+                    if (!pending) return;
+                    const { arr, id, label, name } = pending;
+                    const index = state[arr].findIndex(e => e.id === id);
+                    if (index !== -1) {
+                        state[arr].splice(index, 1);
+                        Storage.save(state);
+                        closeModal('deleteModal');
+                        window._pendingDelete = null;
+                        refreshAll();
+                        showToast(`🗑️ Deleted ${label}: ${name}`);
+                    }
+                });
+
+                // Edit farmer button
+                $('#editFarmerBtn')?.addEventListener('click', function() {
+                    showToast('✏️ Edit mode coming soon');
+                });
+
+                // Profile tabs
+                $$('.profile-tab').forEach(tab => {
+                    tab.addEventListener('click', function() {
+                        $$('.profile-tab').forEach(t => t.classList.remove('active'));
+                        this.classList.add('active');
+                        $$('.tab-content').forEach(t => t.classList.add('hidden'));
+                        const target = $(`#tab-${this.dataset.tab}`);
+                        if (target) target.classList.remove('hidden');
+                    });
+                });
+            }
+
+            // ============================================================
+            // FARMER MODAL
+            // ============================================================
+            let farmerWizardStep = 1;
+
+            function openFarmerModal() {
+                farmerWizardStep = 1;
+                $('#farmerModalTitle').textContent = 'Register Farmer';
+                $('#farmerForm').reset();
+                $$('#farmerForm .form-control').forEach(el => el.classList.remove('error', 'success'));
+                $$('#farmerForm .form-error').forEach(el => el.classList.remove('visible'));
+                updateFarmerWizard();
+                openModal('farmerModal');
+            }
+
+            function updateFarmerWizard() {
+                $$('.wizard-step-content').forEach(el => el.classList.add('hidden'));
+                const content = document.querySelector(`.wizard-step-content[data-step="${farmerWizardStep}"]`);
+                if (content) content.classList.remove('hidden');
+
+                $$('.wizard-step').forEach(el => {
+                    const s = parseInt(el.dataset.step);
+                    el.classList.remove('active', 'completed');
+                    if (s === farmerWizardStep) el.classList.add('active');
+                    else if (s < farmerWizardStep) el.classList.add('completed');
+                });
+
+                $('#prevStepBtn').classList.toggle('hidden', farmerWizardStep === 1);
+                $('#nextStepBtn').classList.toggle('hidden', farmerWizardStep === 3);
+                $('#submitFarmerBtn').classList.toggle('hidden', farmerWizardStep !== 3);
+            }
+
+            // Setup farmer form
+            function setupFarmerForm() {
+                const form = $('#farmerForm');
+                if (!form) return;
+
+                $('#nextStepBtn')?.addEventListener('click', () => {
+                    if (farmerWizardStep < 3) {
+                        // Validate current step
+                        const stepContent = document.querySelector(`.wizard-step-content[data-step="${farmerWizardStep}"]`);
+                        const inputs = stepContent.querySelectorAll('input[required], select[required]');
+                        let valid = true;
+                        inputs.forEach(input => {
+                            if (!input.value.trim()) {
+                                input.classList.add('error');
+                                valid = false;
+                            } else {
+                                input.classList.remove('error');
+                            }
+                        });
+                        if (valid) {
+                            farmerWizardStep++;
+                            updateFarmerWizard();
+                        } else {
+                            showToast('⚠️ Please fill all required fields');
+                        }
+                    }
+                });
+
+                $('#prevStepBtn')?.addEventListener('click', () => {
+                    if (farmerWizardStep > 1) {
+                        farmerWizardStep--;
+                        updateFarmerWizard();
+                    }
+                });
+
+                // Submit form
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    const firstName = $('#fFirstName').value.trim();
+                    const lastName = $('#fLastName').value.trim();
+                    const phone = $('#fPhone').value.trim();
+                    const nationalId = $('#fNationalId').value.trim();
+
+                    if (!firstName || !lastName || !phone || !nationalId) {
+                        showToast('⚠️ Please fill all required fields', true);
+                        return;
+                    }
+
+                    const newId = generateId('FRM', state.farmers.length + 1);
+                    const farmer = {
+                        id: newId,
+                        farmerCode: newId,
+                        firstName: firstName,
+                        lastName: lastName,
+                        phone: phone,
+                        nationalIdMasked: maskNationalId(nationalId),
+                        gender: $('#fGender').value || 'Male',
+                        dob: $('#fDob').value || '',
+                        email: $('#fEmail').value.trim() || '',
+                        altPhone: $('#fAltPhone').value.trim() || '',
+                        county: $('#fCounty').value || 'Machakos',
+                        subCounty: '',
+                        communityId: $('#fCommunity').value || state.communities[0]?.id || '',
+                        farmIds: [],
+                        registrationDate: new Date().toISOString(),
+                        status: 'Pending',
+                        verificationStatus: 'Not Verified',
+                        totalFarmArea: parseFloat($('#fEstimatedArea').value) || 0,
+                        estimatedCarbonCredits: (parseFloat($('#fEstimatedArea').value) || 0) * 2.5,
+                        notes: $('#fNotes').value.trim() || '',
+                        landUse: $('#fLandUse').value || 'Agroforestry',
+                        createdAt: new Date().toISOString()
+                    };
+
+                    state.farmers.push(farmer);
+                    Storage.save(state);
+
+                    // Add audit record
+                    state.auditRecords.unshift({
+                        id: generateId('AUD', state.auditRecords.length + 1),
+                        timestamp: new Date().toISOString(),
+                        userName: state.currentUser.name,
+                        action: 'CREATE',
+                        module: 'Farmers',
+                        entityId: farmer.id,
+                        description: `Created farmer ${farmer.firstName} ${farmer.lastName}`,
+                        severity: 'low'
+                    });
+                    Storage.save(state);
+
+                    closeModal('farmerModal');
+                    form.reset();
+                    refreshAll();
+                    showToast(`✅ Farmer ${firstName} ${lastName} registered successfully (ID: ${newId})`);
+                });
+            }
+
+            // ============================================================
+            // BULK IMPORT
+            // ============================================================
+            function setupBulkImport() {
+                const dropZone = $('#dropZone');
+                const fileInput = $('#fileInput');
+
+                if (!dropZone || !fileInput) return;
+
+                dropZone.addEventListener('click', () => fileInput.click());
+                dropZone.addEventListener('dragover', (e) => { e.preventDefault();
+                    dropZone.classList.add('dragover'); });
+                dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+                dropZone.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    dropZone.classList.remove('dragover');
+                    if (e.dataTransfer.files.length > 0) {
+                        fileInput.files = e.dataTransfer.files;
+                        handleFileImport(fileInput.files[0]);
+                    }
+                });
+
+                fileInput.addEventListener('change', () => {
+                    if (fileInput.files.length > 0) {
+                        handleFileImport(fileInput.files[0]);
+                    }
+                });
+
+                $('#confirmImportBtn')?.addEventListener('click', () => {
+                    const previewData = window._importPreviewData;
+                    if (!previewData || previewData.length === 0) { showToast('⚠️ No data to import'); return; }
+
+                    let imported = 0;
+                    for (const row of previewData) {
+                        try {
+                            const newId = generateId('FRM', state.farmers.length + 1);
+                            state.farmers.push({
+                                id: newId,
+                                farmerCode: newId,
+                                firstName: row.firstName || 'Unknown',
+                                lastName: row.lastName || 'Farmer',
+                                phone: row.phone || '+254 700 000000',
+                                nationalIdMasked: maskNationalId(row.nationalId || '00000000'),
+                                gender: row.gender || 'Unknown',
+                                county: row.county || 'Machakos',
+                                subCounty: row.subCounty || '',
+                                communityId: state.communities.find(c => c.county === row.county)?.id || state.communities[0]?.id || '',
+                                farmIds: [],
+                                registrationDate: new Date().toISOString(),
+                                status: 'Pending',
+                                verificationStatus: 'Not Verified',
+                                totalFarmArea: 0,
+                                estimatedCarbonCredits: 0,
+                                notes: row.notes || '',
+                                createdAt: new Date().toISOString()
+                            });
+                            imported++;
+                        } catch (e) { console.error('Import error:', e); }
+                    }
+
+                    Storage.save(state);
+                    closeModal('bulkImportModal');
+                    refreshAll();
+                    showToast(`✅ Imported ${imported} farmers successfully`);
+                });
+            }
+
+            function handleFileImport(file) {
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const content = e.target.result;
+                    const lines = content.split('\n').filter(line => line.trim());
+                    if (lines.length < 2) { showToast('⚠️ File must contain header row and data rows', true); return; }
+
+                    let delimiter = ',';
+                    if (lines[0].includes('\t')) delimiter = '\t';
+                    else if (lines[0].includes(';')) delimiter = ';';
+
+                    const headers = lines[0].split(delimiter).map(h => h.trim().toLowerCase());
+                    const data = [];
+                    for (let i = 1; i < Math.min(lines.length, 101); i++) {
+                        const values = lines[i].split(delimiter).map(v => v.trim());
+                        const row = {};
+                        headers.forEach((h, idx) => { row[h] = values[idx] || ''; });
+                        if (row.firstName || row.lastName || row.phone) data.push(row);
+                    }
+
+                    window._importPreviewData = data;
+
+                    const preview = $('#importPreview');
+                    preview.classList.remove('hidden');
+
+                    const headerRow = document.getElementById('importPreviewHeader');
+                    const bodyRow = document.getElementById('importPreviewBody');
+                    headerRow.innerHTML = headers.map(h => `<th class="px-3 py-2 text-left text-xs">${h}</th>`).join('');
+                    bodyRow.innerHTML = data.slice(0, 10).map(row =>
+                        `<tr>${headers.map(h => `<td class="px-3 py-2 text-xs border-t border-slate-100 dark:border-charcoal-700">${row[h] || ''}</td>`).join('')}</tr>`
+                    ).join('');
+                    document.getElementById('importCount').textContent = data.length;
+                };
+                reader.readAsText(file);
+            }
+
+            // ============================================================
+            // EVIDENCE FORM
+            // ============================================================
+            function setupEvidenceForm() {
+                const form = $('#evidenceForm');
+                if (!form) return;
+
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    const farmId = $('#mrvFarmSelect').value;
+                    const date = $('#mrvDate').value;
+                    const enumerator = $('#mrvEnumerator').value.trim();
+
+                    if (!farmId || !date || !enumerator) {
+                        showToast('⚠️ Please fill all required fields', true);
+                        return;
+                    }
+
+                    const farm = state.farms.find(f => f.id === farmId);
+                    const quality = randomInt(40, 100);
+
+                    const record = {
+                        id: generateId('MRV', state.monitoringRecords.length + 1),
+                        farmId: farmId,
+                        farmerId: farm?.farmerId || null,
+                        projectId: farm?.projectId || null,
+                        monitoringDate: date,
+                        enumerator: enumerator,
+                        treesPlanted: parseInt($('#mrvTreesPlanted').value) || 0,
+                        survivingTrees: parseInt($('#mrvSurvivingTrees').value) || 0,
+                        areaVerifiedHa: parseFloat($('#mrvAreaVerified').value) || 0,
+                        biomassEstimate: parseFloat($('#mrvBiomass').value) || 0,
+                        carbonStock: (parseFloat($('#mrvBiomass').value) || 0) * 2,
+                        dataQualityScore: quality,
+                        verificationStatus: 'Pending',
+                        notes: $('#mrvNotes').value.trim() || '',
+                        latitude: $('#mrvLatitude').value.trim() || '',
+                        longitude: $('#mrvLongitude').value.trim() || '',
+                        anomalies: [],
+                        createdAt: new Date().toISOString()
+                    };
+
+                    state.monitoringRecords.push(record);
+                    Storage.save(state);
+
+                    // Add audit
+                    state.auditRecords.unshift({
+                        id: generateId('AUD', state.auditRecords.length + 1),
+                        timestamp: new Date().toISOString(),
+                        userName: state.currentUser.name,
+                        action: 'CREATE',
+                        module: 'MRV',
+                        entityId: record.id,
+                        description: `Submitted MRV record ${record.id}`,
+                        severity: 'low'
+                    });
+                    Storage.save(state);
+
+                    closeModal('evidenceModal');
+                    form.reset();
+                    refreshAll();
+                    showToast(`📤 MRV record ${record.id} submitted (Quality: ${quality}%)`);
+                });
+            }
+
+            // ============================================================
+            // THEME
+            // ============================================================
+            function toggleTheme() {
+                state.settings.darkMode = !state.settings.darkMode;
+                applyTheme();
+                Storage.save(state);
+                showToast('🌓 Theme switched');
+            }
+
+            function applyTheme() {
+                if (state.settings.darkMode) {
+                    document.documentElement.classList.add('dark');
+                    $('#themeIcon').className = 'fas fa-sun text-amber-400';
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    $('#themeIcon').className = 'fas fa-moon text-slate-600';
                 }
+            }
+
+            // ============================================================
+            // CHART INIT
+            // ============================================================
+            let charts = {};
+
+            function initCharts() {
+                const isDark = state.settings.darkMode;
+                const textColor = isDark ? '#cbd5e1' : '#475569';
+                const gridColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)';
+
+                // Carbon trend chart
+                const ctx1 = $('#carbonTrendChart')?.getContext('2d');
+                if (ctx1) {
+                    if (charts.carbon) { charts.carbon.destroy(); }
+                    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                    const estimated = months.map(() => randomInt(50, 200));
+                    const verified = months.map(() => randomInt(20, 150));
+                    charts.carbon = new Chart(ctx1, {
+                        type: 'line',
+                        data: {
+                            labels: months,
+                            datasets: [
+                                { label: 'Estimated', data: estimated, borderColor: '#43a047', backgroundColor: 'rgba(67,160,71,0.08)', fill: true, tension: 0.4, borderWidth: 2, pointRadius: 3 },
+                                { label: 'Verified', data: verified, borderColor: '#1e4d34', backgroundColor: 'transparent', borderDash: [5, 5], tension: 0.4, borderWidth: 2, pointRadius: 3 }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { legend: { position: 'top', labels: { color: textColor, font: { size: 10, family: 'Inter' }, boxWidth: 10 } } },
+                            scales: { x: { grid: { display: false }, ticks: { color: textColor, font: { size: 9 } } }, y: { grid: { color: gridColor }, ticks: { color: textColor, font: { size: 9 } } } }
+                        }
+                    });
+                }
+
+                // Verification chart
+                const ctx2 = $('#verificationChart')?.getContext('2d');
+                if (ctx2) {
+                    if (charts.verification) { charts.verification.destroy(); }
+                    const approved = state.verificationRecords.filter(v => v.status === 'Verified' || v.status === 'Approved').length || 35;
+                    const underReview = state.verificationRecords.filter(v => v.status === 'Under Review').length || 12;
+                    const pending = state.verificationRecords.filter(v => v.status === 'Pending').length || 18;
+                    const rejected = state.verificationRecords.filter(v => v.status === 'Rejected').length || 8;
+                    charts.verification = new Chart(ctx2, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Approved', 'Under Review', 'Pending', 'Rejected'],
+                            datasets: [{ data: [approved, underReview, pending, rejected], backgroundColor: ['#43a047', '#3b82f6', '#f59e0b', '#ef4444'], borderWidth: 0 }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            cutout: '72%',
+                            plugins: { legend: { position: 'bottom', labels: { color: textColor, boxWidth: 10, font: { size: 9, family: 'Inter' }, padding: 8 } } }
+                        }
+                    });
+                }
+            }
+
+            // ============================================================
+            // DASHBOARD MAP
+            // ============================================================
+            let dashboardMap = null;
+
+            function initDashboardMap() {
+                const container = $('#map');
+                if (!container) return;
+                if (dashboardMap) { setTimeout(() => dashboardMap.invalidateSize(), 300); return; }
+
+                dashboardMap = L.map('map', { zoomControl: false }).setView([-1.3, 37.0], 7);
+                L.control.zoom({ position: 'bottomright' }).addTo(dashboardMap);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OSM' }).addTo(dashboardMap);
+
+                // Show sample farms
+                state.farms.slice(0, 50).forEach(f => {
+                    if (f.latitude && f.longitude) {
+                        const color = f.monitoringStatus === 'Active' ? '#43a047' : '#94a3b8';
+                        L.circleMarker([f.latitude, f.longitude], { radius: 4, fillColor: color, color: '#fff', weight: 1, fillOpacity: 0.8 })
+                            .addTo(dashboardMap)
+                            .bindPopup(`<strong>${f.farmName || 'Farm'}</strong><br/>${(f.areaHa || 0).toFixed(1)} ha<br/>${f.county || 'N/A'}`);
+                    }
+                });
+                setTimeout(() => dashboardMap?.invalidateSize(), 300);
             }
 
             // ============================================================
@@ -1863,187 +2714,57 @@
                 const countyFilter = $('#farmerCountyFilter');
                 if (countyFilter) {
                     const counties = [...new Set(state.farmers.map(f => f.county))].sort();
-                    counties.forEach(c => {
-                        countyFilter.innerHTML += `<option value="${c}">${c}</option>`;
-                    });
+                    counties.forEach(c => { countyFilter.innerHTML += `<option value="${c}">${c}</option>`; });
                 }
 
                 const countySelect = $('#fCounty');
                 if (countySelect) {
-                    countySelect.innerHTML = KENYAN_COUNTIES.map(c => `<option value="${c}">${c}</option>`).join('');
+                    KENYAN_COUNTIES.forEach(c => { countySelect.innerHTML += `<option value="${c}">${c}</option>`; });
                 }
 
                 const communitySelect = $('#fCommunity');
                 if (communitySelect) {
-                    communitySelect.innerHTML = state.communities.map(c =>
-                        `<option value="${c.id}">${c.name} (${c.county})</option>`).join('');
+                    state.communities.forEach(c => {
+                        communitySelect.innerHTML += `<option value="${c.id}">${c.name} (${c.county})</option>`;
+                    });
                 }
 
                 // Apply theme
-                if (state.settings.darkMode) {
-                    document.documentElement.classList.add('dark');
-                    $('#themeIcon').className = 'fas fa-sun text-amber-400';
-                }
+                applyTheme();
+                $('#userRole').textContent = state.currentUser.role.replace('_', ' ').toUpperCase();
 
-                // Render
-                renderDashboard();
-                renderFarmersPage();
+                // Init charts and map
+                setTimeout(() => {
+                    initCharts();
+                    initDashboardMap();
+                }, 100);
 
-                // Setup form
+                // Setup forms
                 setupFarmerForm();
+                setupBulkImport();
+                setupEvidenceForm();
+                initEvents();
 
-                // Navigation
-                $$('.nav-link').forEach(link => {
-                    link.addEventListener('click', (e) => { e.preventDefault();
-                        navigateTo(link.dataset.page); });
-                });
-                $$('.bottom-nav-btn').forEach(btn => {
-                    btn.addEventListener('click', () => navigateTo(btn.dataset.page));
-                });
+                // Render initial page
+                navigateTo('dashboard');
 
-                // Add farmer button
-                $('#addFarmerBtn')?.addEventListener('click', () => {
-                    $('#farmerModalTitle').textContent = 'Register Farmer';
-                    $('#farmerForm').reset();
-                    $$('#farmerForm .form-control').forEach(el => el.classList.remove('error', 'success'));
-                    $$('#farmerForm .form-error').forEach(el => el.classList.remove('visible'));
-                    // Reset wizard
-                    document.querySelectorAll('.wizard-step-content').forEach(el => el.classList.add('hidden'));
-                    document.querySelector('.wizard-step-content[data-step="1"]')?.classList.remove('hidden');
-                    document.querySelectorAll('.wizard-step').forEach(el => {
-                        el.classList.remove('active', 'completed');
-                    });
-                    document.querySelector('.wizard-step[data-step="1"]')?.classList.add('active');
-                    $('#prevStepBtn').classList.add('hidden');
-                    $('#nextStepBtn').classList.remove('hidden');
-                    $('#submitFarmerBtn').classList.add('hidden');
-                    openModal('farmerModal');
-                });
-
-                // Wizard navigation
-                $('#nextStepBtn')?.addEventListener('click', function() {
-                    const currentStep = document.querySelector('.wizard-step.active');
-                    if (!currentStep) return;
-                    const step = parseInt(currentStep.dataset.step);
-                    if (step < 3) {
-                        const nextStep = document.querySelector(`.wizard-step[data-step="${step + 1}"]`);
-                        if (nextStep) {
-                            currentStep.classList.remove('active');
-                            currentStep.classList.add('completed');
-                            nextStep.classList.add('active');
-                            document.querySelectorAll('.wizard-step-content').forEach(el => el.classList.add('hidden'));
-                            document.querySelector(`.wizard-step-content[data-step="${step + 1}"]`)?.classList.remove('hidden');
-                            if (step + 1 === 3) {
-                                $('#nextStepBtn').classList.add('hidden');
-                                $('#submitFarmerBtn').classList.remove('hidden');
-                            }
-                            $('#prevStepBtn').classList.remove('hidden');
-                        }
-                    }
-                });
-
-                $('#prevStepBtn')?.addEventListener('click', function() {
-                    const currentStep = document.querySelector('.wizard-step.active');
-                    if (!currentStep) return;
-                    const step = parseInt(currentStep.dataset.step);
-                    if (step > 1) {
-                        const prevStep = document.querySelector(`.wizard-step[data-step="${step - 1}"]`);
-                        if (prevStep) {
-                            currentStep.classList.remove('active');
-                            prevStep.classList.remove('completed');
-                            prevStep.classList.add('active');
-                            document.querySelectorAll('.wizard-step-content').forEach(el => el.classList.add('hidden'));
-                            document.querySelector(`.wizard-step-content[data-step="${step - 1}"]`)?.classList.remove('hidden');
-                            if (step - 1 < 3) {
-                                $('#nextStepBtn').classList.remove('hidden');
-                                $('#submitFarmerBtn').classList.add('hidden');
-                            }
-                            if (step - 1 === 1) {
-                                $('#prevStepBtn').classList.add('hidden');
-                            }
-                        }
-                    }
-                });
-
-                // Delete confirmation
-                $('#deleteConfirmBtn')?.addEventListener('click', function() {
-                    const pending = window._pendingDelete;
-                    if (!pending) return;
-                    const { arr, id, label, name } = pending;
-                    const index = state[arr].findIndex(e => e.id === id);
-                    if (index !== -1) {
-                        state[arr].splice(index, 1);
-                        localStorage.setItem('carbonlink_mrv_state_v4', JSON.stringify(state));
-                        closeModal('deleteModal');
-                        window._pendingDelete = null;
-                        refreshCurrentPage();
-                        renderDashboard();
-                        showToast(`🗑️ Deleted ${label}: ${name}`);
-                    }
-                });
-
-                // Theme toggle
-                $('#themeToggle')?.addEventListener('click', function() {
-                    state.settings.darkMode = !state.settings.darkMode;
-                    if (state.settings.darkMode) {
-                        document.documentElement.classList.add('dark');
-                        $('#themeIcon').className = 'fas fa-sun text-amber-400';
-                    } else {
-                        document.documentElement.classList.remove('dark');
-                        $('#themeIcon').className = 'fas fa-moon text-slate-600';
-                    }
-                    localStorage.setItem('carbonlink_mrv_state_v4', JSON.stringify(state));
-                });
-
-                // Search and filter
-                $('#farmerSearch')?.addEventListener('input', debounce(() => { paginationState.farmers = 0;
-                    renderFarmersPage(); }));
-                $('#farmerCountyFilter')?.addEventListener('change', () => { paginationState.farmers = 0;
-                    renderFarmersPage(); });
-                $('#farmerStatusFilter')?.addEventListener('change', () => { paginationState.farmers = 0;
-                    renderFarmersPage(); });
-
-                // Pagination
-                $('#farmerPrev')?.addEventListener('click', () => { if (paginationState.farmers > 0) {
-                        paginationState.farmers--;
-                        renderFarmersPage(); } });
-                $('#farmerNext')?.addEventListener('click', () => { paginationState.farmers++;
-                    renderFarmersPage(); });
-
-                // Sortable headers
-                $$('.sortable-header[data-sort]').forEach(th => {
-                    th.addEventListener('click', function() {
-                        const key = this.dataset.sort;
-                        if (sortState.farmers.key === key) sortState.farmers.dir = sortState.farmers
-                            .dir === 'asc' ? 'desc' : 'asc';
-                        else sortState.farmers = { key, dir: 'asc' };
-                        paginationState.farmers = 0;
-                        renderFarmersPage();
-                    });
-                });
-
-                // Mobile menu
-                $('#mobileMenuBtn')?.addEventListener('click', function() {
-                    $('#sidebar').classList.remove('-translate-x-full');
-                });
-                document.addEventListener('click', (e) => {
-                    if (window.innerWidth < 768) {
-                        const sidebar = $('#sidebar');
-                        if (sidebar && !sidebar.contains(e.target) && !$('#mobileMenuBtn')?.contains(e
-                            .target)) {
-                            sidebar.classList.add('-translate-x-full');
-                        }
-                    }
-                });
-
-                // Show initial toast
-                setTimeout(() => showToast('🌿 CarbonLink MRV ready'), 800);
+                // Initial toast
+                setTimeout(() => showToast('🌿 CarbonLink MRV Enterprise Ultra Pro ready'), 800);
             }
 
-            // Expose to window
+            // Expose globals
             window.closeModal = closeModal;
             window.deleteEntity = deleteEntity;
             window.viewFarmer = viewFarmer;
+            window.viewProject = viewProject;
+            window.viewMRV = viewMRV;
+            window.viewContract = viewContract;
+            window.approveVerification = approveVerification;
+            window.rejectVerification = rejectVerification;
+            window.completeVerification = completeVerification;
+            window.completePayment = completePayment;
+            window.generateReport = generateReport;
+            window.navigateTo = navigateTo;
 
             document.addEventListener('DOMContentLoaded', init);
         })();
