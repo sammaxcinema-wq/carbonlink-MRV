@@ -371,6 +371,13 @@
         .data-toolbar .btn-export:hover {
             background: #7c3aed;
         }
+        .data-toolbar .btn-sync {
+            background: #f59e0b;
+            color: white;
+        }
+        .data-toolbar .btn-sync:hover {
+            background: #d97706;
+        }
         .data-toolbar input[type="file"] {
             display: none;
         }
@@ -417,6 +424,55 @@
         }
         .btn-cancel-edit:hover {
             background: #4b5563;
+        }
+        
+        /* MRV Evidence Cards */
+        .evidence-card {
+            border-left: 4px solid #43a047;
+            transition: all 0.2s ease;
+        }
+        .evidence-card:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        .dark .evidence-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .evidence-card.pending {
+            border-left-color: #f59e0b;
+        }
+        .evidence-card.verified {
+            border-left-color: #43a047;
+        }
+        .evidence-card.rejected {
+            border-left-color: #ef4444;
+        }
+        
+        /* Farmer - MRV Relationship Indicators */
+        .relation-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 10px;
+            border-radius: 9999px;
+            font-size: 10px;
+            font-weight: 500;
+        }
+        .relation-badge.has-mrv {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        .dark .relation-badge.has-mrv {
+            background: #1e3a5f;
+            color: #93bbfc;
+        }
+        .relation-badge.no-mrv {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+        .dark .relation-badge.no-mrv {
+            background: #374151;
+            color: #9ca3af;
         }
     </style>
 </head>
@@ -608,6 +664,7 @@
                         <button class="btn-delete-all" onclick="deleteAllData('farmers')"><i class="fas fa-trash"></i> Delete All</button>
                         <button class="btn-edit" onclick="toggleEditMode('farmers')"><i class="fas fa-pen"></i> Edit Mode</button>
                         <button class="btn-export" onclick="exportData('farmers')"><i class="fas fa-download"></i> Export</button>
+                        <button class="btn-sync" onclick="syncFarmerMRV()"><i class="fas fa-link"></i> Sync MRV</button>
                         <span class="text-xs text-slate-500 ml-auto" id="farmerCount">0 farmers</span>
                     </div>
                     
@@ -627,6 +684,7 @@
                                         <th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden sm:table-cell sortable-header" data-sort="county">County</th>
                                         <th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden md:table-cell sortable-header" data-sort="totalFarmArea">Area (ha)</th>
                                         <th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden lg:table-cell sortable-header" data-sort="estimatedCarbonCredits">Est. Credits</th>
+                                        <th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">MRV</th>
                                         <th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">Status</th>
                                         <th class="px-4 py-3 text-right font-semibold text-slate-600 dark:text-slate-300">Actions</th>
                                     </tr>
@@ -757,23 +815,30 @@
                         <div><h2 class="text-lg md:text-xl font-bold dark:text-white">MRV Monitoring</h2><p class="text-xs text-slate-400">Evidence collection & verification pipeline</p></div>
                         <button id="addEvidenceBtn" class="inline-flex items-center justify-center px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm gap-2"><i class="fas fa-upload"></i> Submit Evidence</button>
                     </div>
+                    
+                    <!-- MRV Data Toolbar -->
+                    <div class="data-toolbar">
+                        <button class="btn-upload" onclick="document.getElementById('mrvUploadInput').click()"><i class="fas fa-upload"></i> Upload MRV</button>
+                        <input type="file" id="mrvUploadInput" accept=".json,.csv" onchange="uploadData('monitoringRecords', this)">
+                        <button class="btn-delete-all" onclick="deleteAllData('monitoringRecords')"><i class="fas fa-trash"></i> Delete All</button>
+                        <button class="btn-edit" onclick="toggleEditMode('mrv')"><i class="fas fa-pen"></i> Edit Mode</button>
+                        <button class="btn-export" onclick="exportData('monitoringRecords')"><i class="fas fa-download"></i> Export</button>
+                        <button class="btn-sync" onclick="syncFarmerMRV()"><i class="fas fa-link"></i> Sync with Farmers</button>
+                        <span class="text-xs text-slate-500 ml-auto" id="mrvCount">0 records</span>
+                    </div>
+                    
                     <div class="flex flex-col sm:flex-row gap-3">
                         <div class="relative flex-1"><i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i><input type="text" id="mrvSearch" placeholder="Search MRV records..." class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-charcoal-600 bg-white dark:bg-charcoal-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"></div>
-                        <select id="mrvStatusFilter" class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-charcoal-600 bg-white dark:bg-charcoal-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"><option value="all">All Statuses</option></select>
+                        <select id="mrvStatusFilter" class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-charcoal-600 bg-white dark:bg-charcoal-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"><option value="all">All Statuses</option><option value="Pending">Pending</option><option value="Verified">Verified</option><option value="Rejected">Rejected</option></select>
+                        <select id="mrvFarmerFilter" class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-charcoal-600 bg-white dark:bg-charcoal-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"><option value="all">All Farmers</option></select>
                     </div>
-                    <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm overflow-hidden">
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-sm">
-                                <thead class="bg-slate-50 dark:bg-charcoal-850 border-b border-slate-200 dark:border-charcoal-700">
-                                    <tr><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 sortable-header" data-sort="id">ID</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 sortable-header" data-sort="farmId">Farm</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden sm:table-cell sortable-header" data-sort="monitoringDate">Date</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 hidden md:table-cell sortable-header" data-sort="carbonStock">Carbon (t)</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300 sortable-header" data-sort="dataQualityScore">Quality</th><th class="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">Status</th><th class="px-4 py-3 text-right font-semibold text-slate-600 dark:text-slate-300">Actions</th></tr>
-                                </thead>
-                                <tbody id="mrvTableBody" class="divide-y divide-slate-100 dark:divide-charcoal-700"></tbody>
-                            </table>
-                        </div>
-                        <div class="px-4 py-3 border-t border-slate-200 dark:border-charcoal-700 flex flex-col sm:flex-row justify-between items-center gap-2 text-xs text-slate-500">
-                            <span>Showing <span id="mrvStart">0</span>-<span id="mrvEnd">0</span> of <span id="mrvTotal">0</span></span>
-                            <div class="flex gap-2"><button id="mrvPrev" class="px-3 py-1 rounded-lg border border-slate-200 dark:border-charcoal-600 hover:bg-slate-50 dark:hover:bg-charcoal-700 disabled:opacity-50">Prev</button><button id="mrvNext" class="px-3 py-1 rounded-lg border border-slate-200 dark:border-charcoal-600 hover:bg-slate-50 dark:hover:bg-charcoal-700 disabled:opacity-50">Next</button></div>
-                        </div>
+                    
+                    <!-- MRV Cards View -->
+                    <div id="mrvCardsContainer" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+                    
+                    <div class="px-4 py-3 border-t border-slate-200 dark:border-charcoal-700 flex flex-col sm:flex-row justify-between items-center gap-2 text-xs text-slate-500">
+                        <span>Showing <span id="mrvStart">0</span>-<span id="mrvEnd">0</span> of <span id="mrvTotal">0</span></span>
+                        <div class="flex gap-2"><button id="mrvPrev" class="px-3 py-1 rounded-lg border border-slate-200 dark:border-charcoal-600 hover:bg-slate-50 dark:hover:bg-charcoal-700 disabled:opacity-50">Prev</button><span id="mrvPageInfo" class="px-2 py-1 text-xs">Page 1</span><button id="mrvNext" class="px-3 py-1 rounded-lg border border-slate-200 dark:border-charcoal-600 hover:bg-slate-50 dark:hover:bg-charcoal-700 disabled:opacity-50">Next</button></div>
                     </div>
                 </div>
 
@@ -974,6 +1039,10 @@
 
             <form id="evidenceForm" class="space-y-4">
                 <div>
+                    <label class="block text-sm font-medium mb-1 dark:text-slate-300">Farmer *</label>
+                    <select id="mrvFarmerSelect" required class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm"></select>
+                </div>
+                <div>
                     <label class="block text-sm font-medium mb-1 dark:text-slate-300">Farm *</label>
                     <select id="mrvFarmSelect" required class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm"></select>
                 </div>
@@ -1021,6 +1090,45 @@
         </div>
     </div>
 
+    <!-- Edit MRV Modal -->
+    <div id="editMRVModal" class="modal hidden fixed inset-0 z-[72] flex items-center justify-center p-4">
+        <div class="modal-backdrop absolute inset-0" onclick="closeModal('editMRVModal')"></div>
+        <div class="relative bg-white dark:bg-charcoal-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 md:p-8">
+            <div class="flex items-center justify-between mb-5">
+                <div><h2 class="text-xl font-bold dark:text-white">Edit MRV Record</h2><p class="text-xs text-slate-400" id="editMRVId">MRV-0001</p></div>
+                <button onclick="closeModal('editMRVModal')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <form id="editMRVForm" class="space-y-4">
+                <input type="hidden" id="editMRVRecordId">
+                <div class="grid grid-cols-2 gap-3">
+                    <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Trees Planted</label><input type="number" id="editMRVTreesPlanted" min="0" class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm"></div>
+                    <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Surviving Trees</label><input type="number" id="editMRVSurvivingTrees" min="0" class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm"></div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Area Verified (ha)</label><input type="number" id="editMRVAreaVerified" step="0.01" min="0" class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm"></div>
+                    <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Biomass (t/ha)</label><input type="number" id="editMRVBiomass" step="0.01" min="0" class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm"></div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1 dark:text-slate-300">Status</label>
+                    <select id="editMRVStatus" class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm">
+                        <option value="Pending">Pending</option>
+                        <option value="Verified">Verified</option>
+                        <option value="Rejected">Rejected</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1 dark:text-slate-300">Notes</label>
+                    <textarea id="editMRVNotes" rows="3" class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm"></textarea>
+                </div>
+                <div class="flex gap-3 pt-2">
+                    <button type="button" onclick="closeModal('editMRVModal')" class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 dark:border-charcoal-600 text-sm font-medium hover:bg-slate-50 dark:hover:bg-charcoal-700">Cancel</button>
+                    <button type="submit" class="flex-1 px-4 py-2.5 rounded-xl bg-brand-600 text-white text-sm font-medium hover:bg-brand-700">Update Record</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
     <div id="deleteModal" class="modal hidden fixed inset-0 z-[80] flex items-center justify-center p-4">
         <div class="modal-backdrop absolute inset-0" onclick="closeModal('deleteModal')"></div>
         <div class="relative bg-white dark:bg-charcoal-800 rounded-2xl shadow-2xl max-w-md w-full p-6 md:p-8">
@@ -1037,7 +1145,8 @@
         /**
          * ================================================================
          * CARBONLINK MRV – ENTERPRISE ULTRA PRO
-         * Enhanced with Collapsible Tables & Data Management
+         * Full Sync Logic between Farmers and MRV Monitoring
+         * Complete CRUD Operations with Update & Delete
          * ================================================================
          */
         (function() {
@@ -1169,9 +1278,9 @@
             // DATA MANAGEMENT ENGINE
             // ============================================================
             const DataManager = {
-                editMode: { farmers: false, farms: false },
-                deletedItems: { farmers: [], farms: [] },
-                deletedItemsMap: { farmers: new Map(), farms: new Map() },
+                editMode: { farmers: false, farms: false, mrv: false },
+                deletedItems: { farmers: [], farms: [], monitoringRecords: [] },
+                deletedItemsMap: { farmers: new Map(), farms: new Map(), monitoringRecords: new Map() },
 
                 toggleEditMode(type) {
                     this.editMode[type] = !this.editMode[type];
@@ -1198,7 +1307,6 @@
                     const item = collection.find(d => d.id === id);
                     if (!item) return;
 
-                    // Parse numeric values
                     if (typeof item[field] === 'number') {
                         value = parseFloat(value);
                         if (isNaN(value)) return;
@@ -1207,7 +1315,6 @@
                     item[field] = value;
                     item.updatedAt = new Date().toISOString();
                     
-                    // Add to audit
                     state.auditRecords.unshift({
                         id: generateId('AUD', (state.auditRecords || []).length + 1),
                         timestamp: new Date().toISOString(),
@@ -1231,14 +1338,10 @@
                     const index = collection.findIndex(d => d.id === id);
                     if (index === -1) return;
 
-                    // Store for undo
                     const deletedItem = collection[index];
                     this.deletedItemsMap[type].set(id, deletedItem);
-
-                    // Remove from state
                     collection.splice(index, 1);
 
-                    // Add to audit
                     state.auditRecords.unshift({
                         id: generateId('AUD', (state.auditRecords || []).length + 1),
                         timestamp: new Date().toISOString(),
@@ -1254,7 +1357,6 @@
                     StorageService.save(state);
                     refreshCurrentPage();
                     
-                    // Show toast with undo
                     showToast(`🗑️ Deleted ${id}`, () => {
                         this.undoDelete(type, id);
                     }, 5000);
@@ -1269,7 +1371,6 @@
                     collection.push(deletedItem);
                     this.deletedItemsMap[type].delete(id);
 
-                    // Add to audit
                     state.auditRecords.unshift({
                         id: generateId('AUD', (state.auditRecords || []).length + 1),
                         timestamp: new Date().toISOString(),
@@ -1295,19 +1396,16 @@
                         return;
                     }
 
-                    // Confirm deletion
                     const confirmModal = $('#deleteModal');
                     const message = $('#deleteMessage');
                     message.textContent = `Delete all ${collection.length} ${type}? This action can be undone.`;
                     
-                    // Store for undo
                     this.deletedItems[type] = [...collection];
                     
                     const confirmBtn = $('#deleteConfirmBtn');
                     confirmBtn.onclick = function() {
                         collection.length = 0;
                         
-                        // Add to audit
                         state.auditRecords.unshift({
                             id: generateId('AUD', (state.auditRecords || []).length + 1),
                             timestamp: new Date().toISOString(),
@@ -1324,7 +1422,6 @@
                         refreshCurrentPage();
                         closeModal('deleteModal');
                         
-                        // Show toast with undo
                         showToast(`🗑️ Deleted all ${type}`, () => {
                             DataManager.undoDeleteAll(type);
                         }, 8000);
@@ -1348,7 +1445,6 @@
                     });
                     this.deletedItems[type] = [];
 
-                    // Add to audit
                     state.auditRecords.unshift({
                         id: generateId('AUD', (state.auditRecords || []).length + 1),
                         timestamp: new Date().toISOString(),
@@ -1374,15 +1470,19 @@
                     reader.onload = function(e) {
                         try {
                             const state = getState();
-                            const data = JSON.parse(e.target.result);
-                            const collection = state[type] || [];
+                            let data = JSON.parse(e.target.result);
+                            
+                            // Handle both array and object with records
+                            if (data.records && Array.isArray(data.records)) {
+                                data = data.records;
+                            }
                             
                             if (!Array.isArray(data)) {
                                 showToast('❌ Invalid data format - expected array');
                                 return;
                             }
 
-                            // Validate and add items
+                            const collection = state[type] || [];
                             let added = 0;
                             data.forEach(item => {
                                 if (item.id && !collection.find(d => d.id === item.id)) {
@@ -1425,6 +1525,111 @@
             };
 
             // ============================================================
+            // FARMER-MRV SYNC ENGINE
+            // ============================================================
+            const FarmerMRVSync = {
+                /**
+                 * Syncs MRV records with Farmer data
+                 * - Updates farmer names in MRV records
+                 * - Updates farmer status based on MRV verification
+                 * - Links MRV records to farmers
+                 */
+                sync() {
+                    const state = getState();
+                    let updates = 0;
+                    let farmerUpdates = 0;
+
+                    // Link MRV records to farmers
+                    state.monitoringRecords.forEach(record => {
+                        if (record.farmerId) {
+                            const farmer = state.farmers.find(f => f.id === record.farmerId);
+                            if (farmer) {
+                                // Update farmer name in MRV
+                                const expectedName = `${farmer.firstName} ${farmer.lastName}`;
+                                if (record.farmerName !== expectedName) {
+                                    record.farmerName = expectedName;
+                                    updates++;
+                                }
+                                
+                                // Update farmer status based on MRV verification
+                                const farmerMRVRecords = state.monitoringRecords.filter(
+                                    m => m.farmerId === record.farmerId
+                                );
+                                const hasVerified = farmerMRVRecords.some(m => m.verificationStatus === 'Verified');
+                                const hasPending = farmerMRVRecords.some(m => m.verificationStatus === 'Pending');
+                                
+                                if (hasVerified && farmer.verificationStatus !== 'Verified') {
+                                    farmer.verificationStatus = 'Verified';
+                                    farmerUpdates++;
+                                } else if (hasPending && farmer.verificationStatus !== 'Pending') {
+                                    farmer.verificationStatus = 'Pending';
+                                    farmerUpdates++;
+                                }
+                            }
+                        } else {
+                            // Try to find farmer by name match
+                            const nameParts = (record.farmerName || '').split(' ');
+                            if (nameParts.length >= 2) {
+                                const firstName = nameParts[0];
+                                const lastName = nameParts.slice(1).join(' ');
+                                const matchedFarmer = state.farmers.find(f => 
+                                    f.firstName === firstName && f.lastName === lastName
+                                );
+                                if (matchedFarmer) {
+                                    record.farmerId = matchedFarmer.id;
+                                    updates++;
+                                }
+                            }
+                        }
+                    });
+
+                    // Update farmer MRV counts
+                    state.farmers.forEach(farmer => {
+                        const mrvCount = state.monitoringRecords.filter(
+                            m => m.farmerId === farmer.id
+                        ).length;
+                        if (farmer.mrvCount !== mrvCount) {
+                            farmer.mrvCount = mrvCount;
+                            farmerUpdates++;
+                        }
+                    });
+
+                    if (updates > 0 || farmerUpdates > 0) {
+                        StorageService.save(state);
+                        refreshCurrentPage();
+                        showToast(`🔄 Synced: ${updates} MRV records, ${farmerUpdates} farmers updated`);
+                    } else {
+                        showToast('✅ All data is already in sync');
+                    }
+                    
+                    return { mrvUpdated: updates, farmerUpdated: farmerUpdates };
+                },
+
+                /**
+                 * Gets all MRV records for a farmer
+                 */
+                getFarmerMRV(farmerId) {
+                    const state = getState();
+                    return state.monitoringRecords.filter(m => m.farmerId === farmerId);
+                },
+
+                /**
+                 * Gets MRV summary for a farmer
+                 */
+                getFarmerMRVSummary(farmerId) {
+                    const records = this.getFarmerMRV(farmerId);
+                    return {
+                        total: records.length,
+                        verified: records.filter(m => m.verificationStatus === 'Verified').length,
+                        pending: records.filter(m => m.verificationStatus === 'Pending').length,
+                        rejected: records.filter(m => m.verificationStatus === 'Rejected').length,
+                        avgQuality: records.length > 0 ? 
+                            records.reduce((sum, m) => sum + (m.dataQualityScore || 0), 0) / records.length : 0
+                    };
+                }
+            };
+
+            // ============================================================
             // DATA SYNCHRONIZATION ENGINE
             // ============================================================
             const SyncEngine = {
@@ -1448,6 +1653,11 @@
                         results.paymentsUpdated = this._syncPayments();
                         results.mrvUpdated = this._syncMRV();
 
+                        // Run Farmer-MRV sync
+                        const fmrvSync = FarmerMRVSync.sync();
+                        results.mrvUpdated += fmrvSync.mrvUpdated;
+                        results.farmersUpdated += fmrvSync.farmerUpdated;
+
                         const issues = this._validateIntegrity();
                         if (issues.length > 0) {
                             results.errors.push(...issues);
@@ -1464,13 +1674,291 @@
                     }
                 },
 
-                _syncFarmers() { let count = 0; return count; },
-                _syncFarms() { let count = 0; return count; },
-                _syncProjects() { let count = 0; return count; },
-                _syncContracts() { let count = 0; return count; },
-                _syncPayments() { let count = 0; return count; },
-                _syncMRV() { let count = 0; return count; },
-                _validateIntegrity() { return []; }
+                _syncFarmers() {
+                    let count = 0;
+                    state.farmers.forEach(farmer => {
+                        const farms = state.farms.filter(f => f.farmerId === farmer.id);
+                        const totalArea = farms.reduce((sum, f) => sum + (f.areaHa || 0), 0);
+                        const totalCarbon = farms.reduce((sum, f) => sum + (f.estimatedSequestration || 0), 0);
+                        const hasActiveFarms = farms.some(f => f.monitoringStatus === 'Active');
+
+                        if (farmer.totalFarmArea !== totalArea) {
+                            farmer.totalFarmArea = totalArea;
+                            count++;
+                        }
+                        if (farmer.estimatedCarbonCredits !== totalCarbon) {
+                            farmer.estimatedCarbonCredits = totalCarbon;
+                            count++;
+                        }
+                        if (farmer.farmIds.length !== farms.length) {
+                            farmer.farmIds = farms.map(f => f.id);
+                            count++;
+                        }
+
+                        if (hasActiveFarms && farmer.status !== 'Active') {
+                            farmer.status = 'Active';
+                            count++;
+                        } else if (!hasActiveFarms && farms.length > 0 && farmer.status !== 'Inactive') {
+                            farmer.status = 'Inactive';
+                            count++;
+                        }
+
+                        farmer.updatedAt = new Date().toISOString();
+                    });
+                    return count;
+                },
+
+                _syncFarms() {
+                    let count = 0;
+                    state.farms.forEach(farm => {
+                        const farmer = state.farmers.find(f => f.id === farm.farmerId);
+                        if (farmer) {
+                            if (farm.farmerName !== `${farmer.firstName} ${farmer.lastName}`) {
+                                farm.farmerName = `${farmer.firstName} ${farmer.lastName}`;
+                                count++;
+                            }
+                            if (farm.county !== farmer.county) {
+                                farm.county = farmer.county;
+                                count++;
+                            }
+                        }
+
+                        const mrvRecords = state.monitoringRecords
+                            .filter(m => m.farmId === farm.id && m.verificationStatus === 'Verified')
+                            .sort((a, b) => new Date(b.monitoringDate) - new Date(a.monitoringDate));
+
+                        if (mrvRecords.length > 0) {
+                            const latest = mrvRecords[0];
+                            if (farm.currentCarbonStock !== latest.carbonStock) {
+                                farm.currentCarbonStock = latest.carbonStock;
+                                count++;
+                            }
+                            if (farm.lastMonitoringDate !== latest.monitoringDate) {
+                                farm.lastMonitoringDate = latest.monitoringDate;
+                                count++;
+                            }
+                            if (farm.monitoringStatus !== 'Active') {
+                                farm.monitoringStatus = 'Active';
+                                count++;
+                            }
+                        } else if (farm.monitoringStatus !== 'Pending') {
+                            farm.monitoringStatus = 'Pending';
+                            count++;
+                        }
+
+                        farm.updatedAt = new Date().toISOString();
+                    });
+                    return count;
+                },
+
+                _syncProjects() {
+                    let count = 0;
+                    state.projects.forEach(project => {
+                        const farms = state.farms.filter(f => f.projectId === project.id);
+                        const totalArea = farms.reduce((sum, f) => sum + (f.areaHa || 0), 0);
+                        const totalCarbon = farms.reduce((sum, f) => sum + (f.currentCarbonStock || 0), 0);
+                        const uniqueFarmers = new Set(farms.map(f => f.farmerId));
+
+                        if (project.enrolledAreaHa !== totalArea) {
+                            project.enrolledAreaHa = totalArea;
+                            count++;
+                        }
+                        if (project.farmerCount !== uniqueFarmers.size) {
+                            project.farmerCount = uniqueFarmers.size;
+                            count++;
+                        }
+                        if (project.estimatedAnnualCredits !== Math.round(totalCarbon * 0.8)) {
+                            project.estimatedAnnualCredits = Math.round(totalCarbon * 0.8);
+                            count++;
+                        }
+
+                        const issued = project.issuedCredits || 0;
+                        const retired = project.retiredCredits || 0;
+                        const available = issued - retired;
+                        if (project.availableCredits !== available) {
+                            project.availableCredits = available;
+                            count++;
+                        }
+
+                        const hasVerifiedFarms = farms.some(f => f.verificationStatus === 'Verified');
+                        const hasActiveFarms = farms.some(f => f.monitoringStatus === 'Active');
+
+                        if (hasVerifiedFarms && project.projectStatus !== 'Verified') {
+                            project.projectStatus = 'Verified';
+                            count++;
+                        } else if (hasActiveFarms && project.projectStatus !== 'Active') {
+                            project.projectStatus = 'Active';
+                            count++;
+                        } else if (farms.length > 0 && project.projectStatus !== 'Monitoring') {
+                            project.projectStatus = 'Monitoring';
+                            count++;
+                        }
+
+                        project.updatedAt = new Date().toISOString();
+                    });
+                    return count;
+                },
+
+                _syncContracts() {
+                    let count = 0;
+                    state.contracts.forEach(contract => {
+                        const farmer = state.farmers.find(f => f.id === contract.farmerId);
+                        if (farmer) {
+                            if (contract.farmerName !== `${farmer.firstName} ${farmer.lastName}`) {
+                                contract.farmerName = `${farmer.firstName} ${farmer.lastName}`;
+                                count++;
+                            }
+                        }
+
+                        const now = new Date();
+                        const endDate = new Date(contract.endDate);
+                        const startDate = new Date(contract.startDate);
+
+                        if (contract.status === 'Active' && endDate < now) {
+                            contract.status = 'Expired';
+                            contract.updatedAt = new Date().toISOString();
+                            count++;
+                        } else if (contract.status === 'Pending Signature' && startDate < now) {
+                            contract.status = 'Active';
+                            contract.signedDate = new Date().toISOString();
+                            contract.updatedAt = new Date().toISOString();
+                            count++;
+                        }
+
+                        const payments = state.payments.filter(p => p.contractId === contract.id);
+                        const totalPaid = payments
+                            .filter(p => p.status === 'Completed')
+                            .reduce((sum, p) => sum + (p.amount || 0), 0);
+
+                        if (contract.paymentsReceived !== totalPaid) {
+                            contract.paymentsReceived = totalPaid;
+                            count++;
+                        }
+
+                        contract.updatedAt = new Date().toISOString();
+                    });
+                    return count;
+                },
+
+                _syncPayments() {
+                    let count = 0;
+                    state.payments.forEach(payment => {
+                        const farmer = state.farmers.find(f => f.id === payment.farmerId);
+                        if (farmer) {
+                            if (payment.recipientName !== `${farmer.firstName} ${farmer.lastName}`) {
+                                payment.recipientName = `${farmer.firstName} ${farmer.lastName}`;
+                                count++;
+                            }
+                        }
+
+                        if (payment.status === 'Pending') {
+                            const daysPending = Math.floor((new Date() - new Date(payment.paymentDate)) / 86400000);
+                            if (daysPending > 30) {
+                                payment.status = 'Failed';
+                                payment.failureReason = 'Payment timeout after 30 days';
+                                count++;
+                            } else if (daysPending > 7 && Math.random() > 0.7) {
+                                payment.status = 'Completed';
+                                payment.transactionReference = `TXN-${randomInt(100000, 999999)}`;
+                                count++;
+                            }
+                        }
+
+                        payment.updatedAt = new Date().toISOString();
+                    });
+                    return count;
+                },
+
+                _syncMRV() {
+                    let count = 0;
+                    state.monitoringRecords.forEach(record => {
+                        const farm = state.farms.find(f => f.id === record.farmId);
+                        if (farm) {
+                            if (record.farmName !== farm.farmName) {
+                                record.farmName = farm.farmName;
+                                count++;
+                            }
+                            if (record.farmerId !== farm.farmerId) {
+                                record.farmerId = farm.farmerId;
+                                count++;
+                            }
+                            if (record.projectId !== farm.projectId) {
+                                record.projectId = farm.projectId;
+                                count++;
+                            }
+                            if (!record.latitude && farm.latitude) {
+                                record.latitude = farm.latitude;
+                                count++;
+                            }
+                            if (!record.longitude && farm.longitude) {
+                                record.longitude = farm.longitude;
+                                count++;
+                            }
+                        }
+
+                        // Update farmer name in MRV
+                        const farmer = state.farmers.find(f => f.id === record.farmerId);
+                        if (farmer) {
+                            const expectedName = `${farmer.firstName} ${farmer.lastName}`;
+                            if (record.farmerName !== expectedName) {
+                                record.farmerName = expectedName;
+                                count++;
+                            }
+                        }
+
+                        // Calculate quality score
+                        let quality = 40;
+                        if (record.latitude && record.longitude) quality += 15;
+                        if (record.areaVerifiedHa > 0) quality += 10;
+                        if (record.biomassEstimate > 0) quality += 10;
+                        if (record.treesPlanted > 0 && record.survivingTrees > 0) {
+                            const rate = record.survivingTrees / record.treesPlanted;
+                            if (rate >= 0.7) quality += 15;
+                            else if (rate >= 0.4) quality += 10;
+                            else quality += 5;
+                        }
+                        if (record.notes && record.notes.length > 10) quality += 10;
+
+                        const newQuality = Math.min(100, quality);
+                        if (record.dataQualityScore !== newQuality) {
+                            record.dataQualityScore = newQuality;
+                            count++;
+                        }
+
+                        // Auto-verify high quality records
+                        if (record.dataQualityScore >= 75 && record.verificationStatus === 'Pending') {
+                            record.verificationStatus = 'Verified';
+                            record._autoVerified = true;
+                            count++;
+                        }
+
+                        record.updatedAt = new Date().toISOString();
+                    });
+                    return count;
+                },
+
+                _validateIntegrity() {
+                    const issues = [];
+                    const farmerIds = new Set(state.farmers.map(f => f.id));
+                    const farmIds = new Set(state.farms.map(f => f.id));
+
+                    state.farms.forEach(f => {
+                        if (!farmerIds.has(f.farmerId)) {
+                            issues.push(`Farm ${f.farmCode} has orphaned farmer ID: ${f.farmerId}`);
+                        }
+                    });
+
+                    state.monitoringRecords.forEach(m => {
+                        if (!farmIds.has(m.farmId)) {
+                            issues.push(`MRV ${m.id} has orphaned farm ID: ${m.farmId}`);
+                        }
+                        if (m.farmerId && !farmerIds.has(m.farmerId)) {
+                            issues.push(`MRV ${m.id} has orphaned farmer ID: ${m.farmerId}`);
+                        }
+                    });
+
+                    return issues;
+                }
             };
 
             // Storage Service
@@ -1553,7 +2041,7 @@
                     const firstNames = ['James', 'Grace', 'Samuel', 'Mary', 'John', 'Janet', 'Peter', 'Esther',
                         'David', 'Susan', 'Michael', 'Ruth', 'Daniel', 'Mercy', 'George'
                     ];
-                    const lastNames = ['Mwangi', 'Akinyi', 'Kiprop', 'Wanjiru', 'Otieno', 'Auma', 'Njoroge',
+                    const lastNames = ['Muteti', 'Akinyi', 'Kiprop', 'Wanjiru', 'Otieno', 'Auma', 'Njoroge',
                         'Wambui', 'Kamau', 'Atieno'
                     ];
                     for (let i = 0; i < 60; i++) {
@@ -1577,6 +2065,7 @@
                             totalFarmArea: 0,
                             estimatedCarbonCredits: 0,
                             paymentStatus: 'Pending',
+                            mrvCount: 0,
                             createdAt: new Date().toISOString(),
                             updatedAt: new Date().toISOString()
                         });
@@ -1648,13 +2137,17 @@
                     const enumerators = ['J. Mwangi', 'S. Chebet', 'R. Ochieng', 'A. Wanjiku'];
                     for (let i = 0; i < 200; i++) {
                         const farm = state.farms[i % state.farms.length];
+                        const farmer = state.farmers.find(f => f.id === farm.farmerId);
                         const treesPlanted = randomInt(50, 500);
                         const survivingTrees = Math.floor(treesPlanted * randomInRange(0.3, 0.95));
+                        const statuses = ['Pending', 'Verified', 'Pending', 'Rejected'];
+                        const status = pickRandom(statuses);
                         state.monitoringRecords.push({
                             id: generateId('MRV', i + 1),
                             farmId: farm.id,
                             farmName: farm.farmName,
                             farmerId: farm.farmerId,
+                            farmerName: farmer ? `${farmer.firstName} ${farmer.lastName}` : 'Unknown',
                             projectId: farm.projectId,
                             monitoringDate: new Date(Date.now() - randomInt(5, 300) * 86400000)
                                 .toISOString(),
@@ -1667,7 +2160,7 @@
                             latitude: farm.latitude + (Math.random() - 0.5) * 0.01,
                             longitude: farm.longitude + (Math.random() - 0.5) * 0.01,
                             dataQualityScore: 0,
-                            verificationStatus: pickRandom(['Pending', 'Verified', 'Pending', 'Rejected']),
+                            verificationStatus: status,
                             notes: '',
                             anomalies: [],
                             createdAt: new Date().toISOString(),
@@ -1761,7 +2254,7 @@
             };
 
             // ============================================================
-            // RENDER FUNCTIONS WITH COLLAPSIBLE TABLES
+            // RENDER FUNCTIONS
             // ============================================================
             let paginationState = { farmers: 0, projects: 0, mrv: 0 };
 
@@ -1878,7 +2371,7 @@
                 `).join('') || '<p class="text-xs text-slate-400">No pending verification</p>';
             }
 
-            // FARMERS with collapsible rows
+            // FARMERS with MRV sync indicators
             function renderFarmersPage() {
                 const search = ($('#farmerSearch')?.value || '').toLowerCase();
                 const county = $('#farmerCountyFilter')?.value || 'all';
@@ -1917,12 +2410,13 @@
 
                 if (paginated.length === 0) {
                     tbody.innerHTML =
-                        `<tr><td colspan="8" class="px-4 py-8 text-center text-slate-400 text-sm">No farmers found</td></tr>`;
+                        `<tr><td colspan="9" class="px-4 py-8 text-center text-slate-400 text-sm">No farmers found</td></tr>`;
                     return;
                 }
 
-                tbody.innerHTML = paginated.map((f, index) => {
+                tbody.innerHTML = paginated.map(f => {
                     const farms = state.farms.filter(farm => farm.farmerId === f.id);
+                    const mrvSummary = FarmerMRVSync.getFarmerMRVSummary(f.id);
                     const rowId = f.id;
                     const collapseKey = `farmers-${rowId}`;
                     const isOpen = CollapsibleManager.isOpen('farmers', rowId);
@@ -1933,50 +2427,63 @@
                         'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' :
                         'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300';
 
-                    // Build expandable content
+                    // MRV Status Badge
+                    let mrvBadge = '';
+                    if (mrvSummary.total > 0) {
+                        const hasVerified = mrvSummary.verified > 0;
+                        const hasPending = mrvSummary.pending > 0;
+                        if (hasVerified && !hasPending) {
+                            mrvBadge = `<span class="relation-badge has-mrv"><i class="fas fa-check-circle text-emerald-500"></i> ${mrvSummary.verified} Verified</span>`;
+                        } else if (hasPending) {
+                            mrvBadge = `<span class="relation-badge has-mrv"><i class="fas fa-clock text-yellow-500"></i> ${mrvSummary.pending} Pending</span>`;
+                        } else {
+                            mrvBadge = `<span class="relation-badge has-mrv"><i class="fas fa-file-alt"></i> ${mrvSummary.total} Records</span>`;
+                        }
+                    } else {
+                        mrvBadge = `<span class="relation-badge no-mrv"><i class="fas fa-circle text-slate-400"></i> No MRV</span>`;
+                    }
+
+                    // Expand content - show MRV records
+                    const mrvRecords = FarmerMRVSync.getFarmerMRV(f.id);
                     let expandContent = '';
-                    if (farms.length > 0) {
+                    if (mrvRecords.length > 0) {
                         expandContent = `
                             <div class="p-4 inner-table rounded-lg">
-                                <h5 class="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2">Associated Farms (${farms.length})</h5>
-                                <table class="w-full text-xs">
-                                    <thead class="text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-charcoal-700">
-                                        <tr>
-                                            <th class="px-2 py-1 text-left">ID</th>
-                                            <th class="px-2 py-1 text-left">Name</th>
-                                            <th class="px-2 py-1 text-left hidden sm:table-cell">Area (ha)</th>
-                                            <th class="px-2 py-1 text-left hidden md:table-cell">Status</th>
-                                            <th class="px-2 py-1 text-right">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        ${farms.slice(0, 10).map(farm => `
-                                            <tr class="border-b border-slate-100 dark:border-charcoal-700/50">
-                                                <td class="px-2 py-1.5 font-mono">${farm.farmCode}</td>
-                                                <td class="px-2 py-1.5">${farm.farmName}</td>
-                                                <td class="px-2 py-1.5 hidden sm:table-cell">${farm.areaHa.toFixed(1)}</td>
-                                                <td class="px-2 py-1.5 hidden md:table-cell">
-                                                    <span class="inline-flex px-1.5 py-0.5 rounded-full text-[10px] ${farm.monitoringStatus === 'Active' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' : 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300'}">${farm.monitoringStatus}</span>
-                                                </td>
-                                                <td class="px-2 py-1.5 text-right">
-                                                    <button onclick="viewFarm('${farm.id}')" class="text-brand-600 dark:text-brand-400 hover:underline text-[10px]"><i class="fas fa-eye mr-1"></i>View</button>
-                                                </td>
-                                            </tr>
-                                        `).join('')}
-                                        ${farms.length > 10 ? `<tr><td colspan="5" class="px-2 py-2 text-center text-slate-400 text-[10px]">+ ${farms.length - 10} more farms</td></tr>` : ''}
-                                    </tbody>
-                                </table>
+                                <h5 class="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2">MRV Records (${mrvRecords.length})</h5>
+                                <div class="space-y-2 max-h-60 overflow-y-auto">
+                                    ${mrvRecords.slice(0, 10).map(m => `
+                                        <div class="flex items-center justify-between text-xs border-b border-slate-100 dark:border-charcoal-700/50 py-2 px-2 hover:bg-slate-50 dark:hover:bg-charcoal-700/30 rounded">
+                                            <div class="flex items-center gap-3">
+                                                <span class="font-mono text-brand-600 dark:text-brand-400">${m.id}</span>
+                                                <span>${formatDate(m.monitoringDate)}</span>
+                                                <span class="text-slate-400">${m.farmName || 'N/A'}</span>
+                                            </div>
+                                            <div class="flex items-center gap-3">
+                                                <span class="text-xs">${m.dataQualityScore || 0}%</span>
+                                                <span class="inline-flex px-2 py-0.5 rounded-full text-[10px] ${m.verificationStatus === 'Verified' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' : m.verificationStatus === 'Pending' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'}">${m.verificationStatus}</span>
+                                                <button onclick="viewMRV('${m.id}')" class="text-brand-600 dark:text-brand-400 hover:underline text-[10px]"><i class="fas fa-eye"></i></button>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                    ${mrvRecords.length > 10 ? `<div class="text-xs text-slate-400 text-center py-2">+ ${mrvRecords.length - 10} more records</div>` : ''}
+                                </div>
+                                <div class="mt-3 flex gap-4 text-xs text-slate-500">
+                                    <span><span class="font-medium text-emerald-600 dark:text-emerald-400">${mrvSummary.verified}</span> Verified</span>
+                                    <span><span class="font-medium text-yellow-600">${mrvSummary.pending}</span> Pending</span>
+                                    <span><span class="font-medium text-red-600">${mrvSummary.rejected}</span> Rejected</span>
+                                    <span>Avg Quality: <span class="font-medium">${mrvSummary.avgQuality.toFixed(0)}%</span></span>
+                                </div>
                             </div>
                         `;
                     } else {
                         expandContent = `
                             <div class="p-4 text-center text-sm text-slate-400 inner-table">
-                                <i class="fas fa-info-circle mr-2"></i>No farms associated with this farmer
+                                <i class="fas fa-info-circle mr-2"></i>No MRV records for this farmer
+                                <button onclick="openModal('evidenceModal')" class="ml-2 text-brand-600 hover:text-brand-700 text-xs font-medium">Submit Evidence</button>
                             </div>
                         `;
                     }
 
-                    // Edit mode controls
                     let editControls = '';
                     if (isEditMode) {
                         editControls = `
@@ -2019,6 +2526,9 @@
                                     f.estimatedCarbonCredits.toFixed(1)}
                             </td>
                             <td class="px-4 py-3">
+                                ${mrvBadge}
+                            </td>
+                            <td class="px-4 py-3">
                                 <span class="inline-flex px-2 py-0.5 rounded-full text-xs ${statusColor}">${f.status}</span>
                                 ${editControls}
                             </td>
@@ -2028,7 +2538,7 @@
                             </td>
                         </tr>
                         <tr class="expandable-row">
-                            <td colspan="8">
+                            <td colspan="9">
                                 <div class="collapse-content ${isOpen ? 'open' : ''}" data-collapse="${collapseKey}" data-collapse-parent="farmers">
                                     ${expandContent}
                                 </div>
@@ -2038,7 +2548,7 @@
                 }).join('');
             }
 
-            // FARMS with collapsible rows
+            // FARMS render
             function renderFarmsPage() {
                 const search = ($('#farmSearch')?.value || '').toLowerCase();
                 const projectFilter = $('#farmProjectFilter')?.value || 'all';
@@ -2064,7 +2574,6 @@
                     const collapseKey = `farms-${rowId}`;
                     const isOpen = CollapsibleManager.isOpen('farms', rowId);
                     
-                    // Get related MRV records
                     const mrvRecords = (state.monitoringRecords || []).filter(m => m.farmId === f.id);
                     
                     let expandContent = '';
@@ -2135,7 +2644,117 @@
                 }).join('');
             }
 
-            // Other render functions (simplified for brevity)
+            // MRV MONITORING with cards view and CRUD
+            function renderMRVPage() {
+                const search = ($('#mrvSearch')?.value || '').toLowerCase();
+                const statusFilter = $('#mrvStatusFilter')?.value || 'all';
+                const farmerFilter = $('#mrvFarmerFilter')?.value || 'all';
+                
+                let filtered = (state.monitoringRecords || []).filter(m => {
+                    const matchSearch = !search || m.id.toLowerCase().includes(search) || m.farmName.toLowerCase().includes(search) || (m.farmerName || '').toLowerCase().includes(search);
+                    const matchStatus = statusFilter === 'all' || m.verificationStatus === statusFilter;
+                    const matchFarmer = farmerFilter === 'all' || m.farmerId === farmerFilter;
+                    return matchSearch && matchStatus && matchFarmer;
+                });
+                
+                const sorted = sortData(filtered, 'monitoringDate', 'desc');
+                const pageSize = getPageSize();
+                const page = paginationState.mrv;
+                const start = page * pageSize;
+                const end = Math.min(start + pageSize, sorted.length);
+                const paginated = sorted.slice(start, end);
+                
+                const container = $('#mrvCardsContainer');
+                const startEl = $('#mrvStart');
+                const endEl = $('#mrvEnd');
+                const total = $('#mrvTotal');
+                const prev = $('#mrvPrev');
+                const next = $('#mrvNext');
+                const pageInfo = $('#mrvPageInfo');
+                const countEl = $('#mrvCount');
+                
+                startEl.textContent = sorted.length > 0 ? start + 1 : 0;
+                endEl.textContent = end;
+                total.textContent = sorted.length;
+                prev.disabled = page === 0;
+                next.disabled = end >= sorted.length;
+                pageInfo.textContent = `Page ${page + 1} of ${Math.max(1, Math.ceil(sorted.length / pageSize))}`;
+                countEl.textContent = `${sorted.length} records`;
+
+                const isEditMode = DataManager.isEditMode('mrv');
+
+                if (paginated.length === 0) {
+                    container.innerHTML = `
+                        <div class="col-span-full text-center py-12 text-slate-400">
+                            <i class="fas fa-clipboard text-4xl mb-3 opacity-30"></i>
+                            <p class="text-sm">No MRV records found</p>
+                            <p class="text-xs mt-1">Submit evidence or upload data to get started</p>
+                            <button onclick="openModal('evidenceModal')" class="mt-4 px-4 py-2 bg-brand-600 text-white text-sm rounded-lg hover:bg-brand-700 transition">Submit Evidence</button>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = paginated.map(m => {
+                    const farmer = state.farmers.find(f => f.id === m.farmerId);
+                    const statusClass = m.verificationStatus === 'Verified' ? 'verified' : 
+                                        m.verificationStatus === 'Pending' ? 'pending' : 'rejected';
+                    const qualityLabel = m.dataQualityScore >= 75 ? 'Good' : m.dataQualityScore >= 50 ? 'Needs Review' : 'Poor';
+                    
+                    let editControls = '';
+                    if (isEditMode) {
+                        editControls = `
+                            <div class="flex gap-1 mt-2">
+                                <button onclick="openEditMRV('${m.id}')" class="text-blue-600 hover:text-blue-700 text-xs font-medium"><i class="fas fa-edit mr-1"></i>Edit</button>
+                                <button onclick="DataManager.deleteItem('monitoringRecords', '${m.id}')" class="text-red-600 hover:text-red-700 text-xs font-medium"><i class="fas fa-trash mr-1"></i>Delete</button>
+                            </div>
+                        `;
+                    }
+
+                    return `
+                        <div class="evidence-card ${statusClass} bg-white dark:bg-charcoal-800 rounded-xl p-4 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm hover:shadow-md transition-all">
+                            <div class="flex items-start justify-between">
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="font-mono text-sm font-bold text-brand-600 dark:text-brand-400">${m.id}</span>
+                                        <span class="inline-flex px-2 py-0.5 rounded-full text-[10px] font-medium ${m.verificationStatus === 'Verified' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' : m.verificationStatus === 'Pending' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'}">${m.verificationStatus}</span>
+                                    </div>
+                                    <p class="text-sm font-medium dark:text-white mt-1">${m.farmName || 'Unknown Farm'}</p>
+                                    <p class="text-xs text-slate-400">${farmer ? farmer.firstName + ' ' + farmer.lastName : m.farmerName || 'Unknown Farmer'}</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-xs text-slate-400">${formatDate(m.monitoringDate)}</p>
+                                    <p class="text-xs font-medium ${m.dataQualityScore >= 75 ? 'text-emerald-600 dark:text-emerald-400' : 'text-yellow-600'}">${m.dataQualityScore || 0}% ${qualityLabel}</p>
+                                    ${m._autoVerified ? '<span class="text-[10px] text-emerald-500"><i class="fas fa-robot"></i> Auto-verified</span>' : ''}
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-3 gap-2 mt-3 text-xs">
+                                <div class="bg-slate-50 dark:bg-charcoal-700 rounded p-2 text-center">
+                                    <span class="block text-slate-400">Trees Planted</span>
+                                    <span class="font-medium dark:text-white">${m.treesPlanted || 0}</span>
+                                </div>
+                                <div class="bg-slate-50 dark:bg-charcoal-700 rounded p-2 text-center">
+                                    <span class="block text-slate-400">Surviving</span>
+                                    <span class="font-medium dark:text-white">${m.survivingTrees || 0}</span>
+                                </div>
+                                <div class="bg-slate-50 dark:bg-charcoal-700 rounded p-2 text-center">
+                                    <span class="block text-slate-400">Carbon (t)</span>
+                                    <span class="font-medium dark:text-white">${(m.carbonStock || 0).toFixed(1)}</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between mt-3 pt-2 border-t border-slate-100 dark:border-charcoal-700">
+                                <span class="text-[10px] text-slate-400">${m.enumerator || 'N/A'} · ${formatDate(m.createdAt)}</span>
+                                <div class="flex gap-2">
+                                    <button onclick="viewMRV('${m.id}')" class="text-brand-600 dark:text-brand-400 hover:underline text-xs"><i class="fas fa-eye mr-1"></i>View</button>
+                                    ${editControls}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            // Projects, Contracts, Payments, Verification, Audit render functions (simplified)
             function renderProjectsPage() {
                 const search = ($('#projectSearch')?.value || '').toLowerCase();
                 const statusFilter = $('#projectStatusFilter')?.value || 'all';
@@ -2184,58 +2803,6 @@
                             <td class="px-4 py-3 text-right">
                                 <button onclick="viewProject('${p.id}')" class="text-brand-600 dark:text-brand-400 hover:underline text-xs"><i class="fas fa-eye mr-1"></i>View</button>
                                 <span class="text-[10px] text-slate-400">${p.farmerCount} farmers</span>
-                            </td>
-                        </tr>`;
-                }).join('');
-            }
-
-            function renderMRVPage() {
-                const search = ($('#mrvSearch')?.value || '').toLowerCase();
-                const statusFilter = $('#mrvStatusFilter')?.value || 'all';
-                let filtered = (state.monitoringRecords || []).filter(m => {
-                    const matchSearch = !search || m.id.toLowerCase().includes(search) || m.farmId
-                        .toLowerCase().includes(search);
-                    const matchStatus = statusFilter === 'all' || m.verificationStatus === statusFilter;
-                    return matchSearch && matchStatus;
-                });
-                const sorted = sortData(filtered, 'monitoringDate', 'desc');
-                const pageSize = getPageSize();
-                const page = paginationState.mrv;
-                const start = page * pageSize;
-                const end = Math.min(start + pageSize, sorted.length);
-                const paginated = sorted.slice(start, end);
-                const tbody = $('#mrvTableBody');
-                const startEl = $('#mrvStart');
-                const endEl = $('#mrvEnd');
-                const total = $('#mrvTotal');
-                const prev = $('#mrvPrev');
-                const next = $('#mrvNext');
-                startEl.textContent = sorted.length > 0 ? start + 1 : 0;
-                endEl.textContent = end;
-                total.textContent = sorted.length;
-                prev.disabled = page === 0;
-                next.disabled = end >= sorted.length;
-                if (paginated.length === 0) {
-                    tbody.innerHTML =
-                        `<tr><td colspan="7" class="px-4 py-8 text-center text-slate-400 text-sm">No MRV records found</td></tr>`;
-                    return;
-                }
-                tbody.innerHTML = paginated.map(m => {
-                    const qualityLabel = m.dataQualityScore >= 75 ? 'Good' : m.dataQualityScore >= 50 ?
-                        'Needs Review' : 'Poor';
-                    const autoVerified = m._autoVerified ?
-                        '<span class="text-[10px] text-emerald-500 ml-1"><i class="fas fa-robot"></i></span>' :
-                        '';
-                    return `
-                        <tr class="table-row-hover">
-                            <td class="px-4 py-3 font-mono text-xs">${m.id}</td>
-                            <td class="px-4 py-3">${m.farmName || m.farmId}</td>
-                            <td class="px-4 py-3 hidden sm:table-cell">${formatDate(m.monitoringDate)}</td>
-                            <td class="px-4 py-3 hidden md:table-cell">${(m.carbonStock || 0).toFixed(1)}</td>
-                            <td class="px-4 py-3"><span class="text-xs font-medium">${m.dataQualityScore || 0}%</span> <span class="text-[10px] text-slate-400">${qualityLabel}</span>${autoVerified}</td>
-                            <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${m.verificationStatus === 'Verified' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' : m.verificationStatus === 'Pending' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'}">${m.verificationStatus}</span></td>
-                            <td class="px-4 py-3 text-right">
-                                <button onclick="viewMRV('${m.id}')" class="text-brand-600 dark:text-brand-400 hover:underline text-xs"><i class="fas fa-eye mr-1"></i>View</button>
                             </td>
                         </tr>`;
                 }).join('');
@@ -2378,7 +2945,9 @@
                 }).join('');
             }
 
-            // CRUD & Actions
+            // ============================================================
+            // CRUD & ACTIONS
+            // ============================================================
             window.viewFarmer = function(id) {
                 const farmer = state.farmers.find(f => f.id === id);
                 if (!farmer) { showToast('❌ Farmer not found'); return; }
@@ -2401,6 +2970,7 @@
                         <div><label class="text-xs text-slate-400">Total Area</label><p class="font-medium dark:text-white">${farmer.totalFarmArea.toFixed(1)} ha</p></div>
                         <div><label class="text-xs text-slate-400">Est. Carbon Credits</label><p class="font-medium dark:text-white">${farmer.estimatedCarbonCredits.toFixed(1)} tCO₂e</p></div>
                         <div><label class="text-xs text-slate-400">Status</label><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${farmer.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}">${farmer.status}</span></div>
+                        <div><label class="text-xs text-slate-400">MRV Records</label><p class="font-medium dark:text-white">${mrvRecords.length}</p></div>
                     </div>`;
 
                 $('#tab-farms').innerHTML = farms.length > 0 ? farms.map(f => `
@@ -2426,7 +2996,7 @@
 
                 $('#tab-mrv').innerHTML = mrvRecords.length > 0 ? mrvRecords.slice(0, 5).map(m => `
                     <div class="flex items-center justify-between p-3 rounded-lg bg-slate-50 dark:bg-charcoal-700">
-                        <div><p class="font-medium dark:text-white">${m.id}</p><p class="text-xs text-slate-400">${formatDate(m.monitoringDate)}</p></div>
+                        <div><p class="font-medium dark:text-white">${m.id}</p><p class="text-xs text-slate-400">${formatDate(m.monitoringDate)} · ${m.farmName}</p></div>
                         <span class="text-xs ${m.verificationStatus === 'Verified' ? 'text-emerald-600' : 'text-yellow-600'}">${m.verificationStatus}</span>
                     </div>
                 `).join('') : '<p class="text-sm text-slate-400">No MRV records</p>';
@@ -2459,8 +3029,9 @@
             window.viewMRV = function(id) {
                 const record = state.monitoringRecords.find(m => m.id === id);
                 if (!record) { showToast('❌ MRV record not found'); return; }
+                const farmer = state.farmers.find(f => f.id === record.farmerId);
                 showToast(
-                    `📋 ${record.id} | ${record.farmName || record.farmId} | Quality: ${record.dataQualityScore}% | Status: ${record.verificationStatus}`
+                    `📋 ${record.id} | ${record.farmName || record.farmId} | ${farmer ? farmer.firstName + ' ' + farmer.lastName : 'Unknown'} | Quality: ${record.dataQualityScore}% | Status: ${record.verificationStatus}`
                     );
             };
 
@@ -2498,7 +3069,29 @@
                 showToast(`📄 ${type.charAt(0).toUpperCase() + type.slice(1)} report generated`);
             };
 
-            // Expose DataManager to global scope
+            // Edit MRV Modal
+            window.openEditMRV = function(id) {
+                const record = state.monitoringRecords.find(m => m.id === id);
+                if (!record) { showToast('❌ Record not found'); return; }
+                
+                $('#editMRVRecordId').value = id;
+                $('#editMRVId').textContent = id;
+                $('#editMRVTreesPlanted').value = record.treesPlanted || 0;
+                $('#editMRVSurvivingTrees').value = record.survivingTrees || 0;
+                $('#editMRVAreaVerified').value = record.areaVerifiedHa || 0;
+                $('#editMRVBiomass').value = record.biomassEstimate || 0;
+                $('#editMRVStatus').value = record.verificationStatus || 'Pending';
+                $('#editMRVNotes').value = record.notes || '';
+                
+                openModal('editMRVModal');
+            };
+
+            // Sync Farmer-MRV
+            window.syncFarmerMRV = function() {
+                FarmerMRVSync.sync();
+            };
+
+            // Expose DataManager and CollapsibleManager to global scope
             window.DataManager = DataManager;
             window.CollapsibleManager = CollapsibleManager;
 
@@ -2519,7 +3112,7 @@
                 DataManager.exportData(type);
             };
 
-            // Sync Function
+            // Perform Sync
             function performSync() {
                 const syncBtn = $('#syncBtn');
                 const syncIcon = syncBtn?.querySelector('i');
@@ -2630,6 +3223,23 @@
                 if (state.farmMap) state.farmMap.invalidateSize();
                 if (state.geoMap) state.geoMap.invalidateSize();
                 if (state.evidenceMap) state.evidenceMap.invalidateSize();
+                
+                // Update MRV filter options
+                updateMRVFilters();
+            }
+
+            function updateMRVFilters() {
+                const farmerFilter = $('#mrvFarmerFilter');
+                if (farmerFilter) {
+                    const currentValue = farmerFilter.value;
+                    farmerFilter.innerHTML = '<option value="all">All Farmers</option>';
+                    state.farmers.forEach(f => {
+                        farmerFilter.innerHTML += `<option value="${f.id}">${f.firstName} ${f.lastName}</option>`;
+                    });
+                    if (currentValue && state.farmers.some(f => f.id === currentValue)) {
+                        farmerFilter.value = currentValue;
+                    }
+                }
             }
 
             function openMobileDrawer() {
@@ -2741,7 +3351,7 @@
                 }
             }
 
-            // Maps
+            // Maps (simplified)
             function initDashboardMap() {
                 const container = $('#map');
                 if (!container) return;
@@ -2938,7 +3548,9 @@
                 observer.observe($('#evidenceModal'), { attributes: true, attributeFilter: ['class'] });
             }
 
-            // Event Handlers
+            // ============================================================
+            // EVENT HANDLERS
+            // ============================================================
             function initEvents() {
                 $('#syncBtn')?.addEventListener('click', performSync);
                 $('#themeToggle')?.addEventListener('click', toggleTheme);
@@ -3024,10 +3636,25 @@
                     renderProjectsPage(); });
 
                 // MRV page events
-                $('#addEvidenceBtn')?.addEventListener('click', () => openModal('evidenceModal'));
+                $('#addEvidenceBtn')?.addEventListener('click', () => {
+                    // Populate farmer and farm selects
+                    const farmerSelect = $('#mrvFarmerSelect');
+                    farmerSelect.innerHTML = state.farmers.map(f => 
+                        `<option value="${f.id}">${f.firstName} ${f.lastName}</option>`
+                    ).join('');
+                    const farmSelect = $('#mrvFarmSelect');
+                    farmSelect.innerHTML = state.farms.map(f => 
+                        `<option value="${f.id}">${f.farmName}</option>`
+                    ).join('');
+                    $('#mrvDate').value = new Date().toISOString().split('T')[0];
+                    openModal('evidenceModal');
+                });
+                
                 $('#mrvSearch')?.addEventListener('input', debounce(() => { paginationState.mrv = 0;
                     renderMRVPage(); }));
                 $('#mrvStatusFilter')?.addEventListener('change', () => { paginationState.mrv = 0;
+                    renderMRVPage(); });
+                $('#mrvFarmerFilter')?.addEventListener('change', () => { paginationState.mrv = 0;
                     renderMRVPage(); });
                 $('#mrvPrev')?.addEventListener('click', () => { if (paginationState.mrv > 0) {
                         paginationState.mrv--;
@@ -3111,6 +3738,7 @@
                         totalFarmArea: 0,
                         estimatedCarbonCredits: 0,
                         paymentStatus: 'Pending',
+                        mrvCount: 0,
                         createdAt: new Date().toISOString(),
                         updatedAt: new Date().toISOString()
                     };
@@ -3126,6 +3754,7 @@
                 // Evidence form
                 $('#evidenceForm')?.addEventListener('submit', function(e) {
                     e.preventDefault();
+                    const farmerId = $('#mrvFarmerSelect').value;
                     const farmId = $('#mrvFarmSelect').value;
                     const date = $('#mrvDate').value;
                     const enumerator = $('#mrvEnumerator').value.trim();
@@ -3137,17 +3766,20 @@
                     const lng = parseFloat($('#mrvLongitude').value) || null;
                     const notes = $('#mrvNotes').value.trim();
 
-                    if (!farmId || !date || !enumerator) {
-                        showToast('⚠️ Farm, date, and enumerator required');
+                    if (!farmerId || !farmId || !date || !enumerator) {
+                        showToast('⚠️ Farmer, farm, date, and enumerator required');
                         return;
                     }
 
+                    const farmer = state.farmers.find(f => f.id === farmerId);
                     const farm = state.farms.find(f => f.id === farmId);
+                    
                     const record = {
                         id: generateId('MRV', state.monitoringRecords.length + 1),
-                        farmId,
-                        farmName: farm ? farm.farmName : farmId,
-                        farmerId: farm ? farm.farmerId : null,
+                        farmId: farmId,
+                        farmName: farm ? farm.farmName : 'Unknown Farm',
+                        farmerId: farmerId,
+                        farmerName: farmer ? `${farmer.firstName} ${farmer.lastName}` : 'Unknown',
                         projectId: farm ? farm.projectId : null,
                         monitoringDate: date,
                         enumerator,
@@ -3166,6 +3798,7 @@
                         updatedAt: new Date().toISOString()
                     };
 
+                    // Calculate quality score
                     let quality = 40;
                     if (lat && lng) quality += 15;
                     if (areaVerified > 0) quality += 10;
@@ -3179,12 +3812,19 @@
                     if (notes && notes.length > 10) quality += 10;
                     record.dataQualityScore = Math.min(100, quality);
 
+                    // Auto-verify high quality
                     if (record.dataQualityScore >= 75) {
                         record.verificationStatus = 'Verified';
                         record._autoVerified = true;
                     }
 
                     state.monitoringRecords.push(record);
+                    
+                    // Update farmer MRV count
+                    if (farmer) {
+                        farmer.mrvCount = (farmer.mrvCount || 0) + 1;
+                    }
+                    
                     SyncEngine.syncAll();
                     StorageService.save(state);
                     closeModal('evidenceModal');
@@ -3192,6 +3832,42 @@
                     refreshAll();
                     showToast(
                         `📤 MRV record ${record.id} submitted (Quality: ${record.dataQualityScore}%)`);
+                });
+
+                // Edit MRV form
+                $('#editMRVForm')?.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const id = $('#editMRVRecordId').value;
+                    const record = state.monitoringRecords.find(m => m.id === id);
+                    if (!record) { showToast('❌ Record not found'); return; }
+
+                    record.treesPlanted = parseInt($('#editMRVTreesPlanted').value) || 0;
+                    record.survivingTrees = parseInt($('#editMRVSurvivingTrees').value) || 0;
+                    record.areaVerifiedHa = parseFloat($('#editMRVAreaVerified').value) || 0;
+                    record.biomassEstimate = parseFloat($('#editMRVBiomass').value) || 0;
+                    record.verificationStatus = $('#editMRVStatus').value;
+                    record.notes = $('#editMRVNotes').value.trim();
+                    record.updatedAt = new Date().toISOString();
+                    
+                    // Recalculate quality
+                    let quality = 40;
+                    if (record.latitude && record.longitude) quality += 15;
+                    if (record.areaVerifiedHa > 0) quality += 10;
+                    if (record.biomassEstimate > 0) quality += 10;
+                    if (record.treesPlanted > 0 && record.survivingTrees > 0) {
+                        const rate = record.survivingTrees / record.treesPlanted;
+                        if (rate >= 0.7) quality += 15;
+                        else if (rate >= 0.4) quality += 10;
+                        else quality += 5;
+                    }
+                    if (record.notes && record.notes.length > 10) quality += 10;
+                    record.dataQualityScore = Math.min(100, quality);
+
+                    SyncEngine.syncAll();
+                    StorageService.save(state);
+                    closeModal('editMRVModal');
+                    refreshAll();
+                    showToast(`✅ MRV record ${id} updated`);
                 });
 
                 // Notification bell
@@ -3219,7 +3895,9 @@
                 }, 300000);
             }
 
-            // Initialization
+            // ============================================================
+            // INITIALIZATION
+            // ============================================================
             function init() {
                 DemoDataGenerator.generate();
 
@@ -3231,6 +3909,7 @@
                         countyFilter.innerHTML += `<option value="${c}">${c}</option>`;
                     });
                 }
+                
                 const projectFilter = $('#farmProjectFilter');
                 if (projectFilter) {
                     state.projects.forEach(p => {
@@ -3238,6 +3917,7 @@
                             `<option value="${p.id}">${p.projectCode}</option>`;
                     });
                 }
+                
                 const projectStatusFilter = $('#projectStatusFilter');
                 if (projectStatusFilter) {
                     const statuses = [...new Set(state.projects.map(p => p.projectStatus))].sort();
@@ -3245,14 +3925,16 @@
                         projectStatusFilter.innerHTML += `<option value="${s}">${s}</option>`;
                     });
                 }
+                
                 const mrvStatusFilter = $('#mrvStatusFilter');
                 if (mrvStatusFilter) {
-                    const statuses = [...new Set(state.monitoringRecords.map(m => m.verificationStatus))]
-                        .sort();
-                    statuses.forEach(s => {
+                    ['Pending', 'Verified', 'Rejected'].forEach(s => {
                         mrvStatusFilter.innerHTML += `<option value="${s}">${s}</option>`;
                     });
                 }
+                
+                updateMRVFilters();
+
                 const contractStatusFilter = $('#contractStatusFilter');
                 if (contractStatusFilter) {
                     const statuses = [...new Set(state.contracts.map(c => c.status))].sort();
@@ -3260,6 +3942,7 @@
                         contractStatusFilter.innerHTML += `<option value="${s}">${s}</option>`;
                     });
                 }
+                
                 const paymentStatusFilter = $('#paymentStatusFilter');
                 if (paymentStatusFilter) {
                     const statuses = [...new Set(state.payments.map(p => p.status))].sort();
@@ -3267,20 +3950,17 @@
                         paymentStatusFilter.innerHTML += `<option value="${s}">${s}</option>`;
                     });
                 }
+                
                 const communitySelect = $('#fCommunity');
                 if (communitySelect) {
                     communitySelect.innerHTML = (state.communities || []).map(c =>
                         `<option value="${c.id}">${c.name}</option>`).join('');
                 }
+                
                 const countySelect = $('#fCounty');
                 if (countySelect) {
                     countySelect.innerHTML = KENYAN_COUNTIES.map(c => `<option value="${c}">${c}</option>`)
                         .join('');
-                }
-                const mrvFarmSelect = $('#mrvFarmSelect');
-                if (mrvFarmSelect) {
-                    mrvFarmSelect.innerHTML = state.farms.slice(0, 100).map(f =>
-                        `<option value="${f.id}">${f.farmName} (${f.farmCode})</option>`).join('');
                 }
 
                 applyTheme();
@@ -3320,6 +4000,7 @@
             window.generateReport = generateReport;
             window.closeModal = closeModal;
             window.performSync = performSync;
+            window.openEditMRV = openEditMRV;
 
             document.addEventListener('DOMContentLoaded', init);
         })();
