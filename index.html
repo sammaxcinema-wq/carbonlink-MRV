@@ -234,7 +234,6 @@
         .sortable-header:hover {
             color: #43a047;
         }
-        /* Evidence form GPS live view */
         .gps-live-indicator {
             display: inline-block;
             width: 8px;
@@ -258,6 +257,39 @@
         .evidence-map-preview .leaflet-container {
             height: 100%;
             width: 100%;
+        }
+        .sync-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            font-weight: 500;
+        }
+        .sync-badge.synced {
+            background: #dcfce7;
+            color: #166534;
+        }
+        .dark .sync-badge.synced {
+            background: #052e16;
+            color: #86efac;
+        }
+        .sync-badge.pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        .dark .sync-badge.pending {
+            background: #451a03;
+            color: #fcd34d;
+        }
+        .sync-badge.error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        .dark .sync-badge.error {
+            background: #450a0a;
+            color: #fca5a5;
         }
     </style>
 </head>
@@ -363,6 +395,10 @@
                     <span id="mobilePageTitle" class="sm:hidden text-base font-bold text-slate-900 dark:text-white">Dashboard</span>
                 </div>
                 <div class="flex items-center space-x-2 md:space-x-3">
+                    <button id="syncBtn" class="p-2 rounded-xl text-brand-600 dark:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-950/30 transition-colors focus:outline-none tap-target relative" title="Sync Data">
+                        <i class="fas fa-sync text-base md:text-lg"></i>
+                        <span id="syncStatus" class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-charcoal-800"></span>
+                    </button>
                     <button id="themeToggle" class="p-2 rounded-xl text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-charcoal-800 transition-colors focus:outline-none tap-target">
                         <i id="themeIcon" class="fas fa-moon text-base md:text-lg"></i>
                     </button>
@@ -698,8 +734,6 @@
     </nav>
 
     <!-- MODALS -->
-
-    <!-- Farmer Modal -->
     <div id="farmerModal" class="modal hidden fixed inset-0 z-[70] flex items-center justify-center p-4">
         <div class="modal-backdrop absolute inset-0" onclick="closeModal('farmerModal')"></div>
         <div class="relative bg-white dark:bg-charcoal-800 rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 md:p-8">
@@ -722,7 +756,6 @@
         </div>
     </div>
 
-    <!-- Farmer Detail Modal -->
     <div id="farmerDetailModal" class="modal hidden fixed inset-0 z-[75] flex items-center justify-center p-4">
         <div class="modal-backdrop absolute inset-0" onclick="closeModal('farmerDetailModal')"></div>
         <div class="relative bg-white dark:bg-charcoal-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[92vh] overflow-hidden flex flex-col">
@@ -754,7 +787,6 @@
         </div>
     </div>
 
-    <!-- EVIDENCE MODAL with GPS Integration -->
     <div id="evidenceModal" class="modal hidden fixed inset-0 z-[70] flex items-center justify-center p-4">
         <div class="modal-backdrop absolute inset-0" onclick="closeModal('evidenceModal')"></div>
         <div class="relative bg-white dark:bg-charcoal-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 md:p-8">
@@ -766,7 +798,6 @@
                 <button onclick="closeModal('evidenceModal')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fas fa-times text-xl"></i></button>
             </div>
 
-            <!-- GPS Live Status Bar -->
             <div class="bg-slate-50 dark:bg-charcoal-700/60 rounded-xl p-3 mb-4 flex items-center justify-between border border-slate-200 dark:border-charcoal-600">
                 <div class="flex items-center gap-3">
                     <span class="gps-live-indicator active" id="gpsIndicator"></span>
@@ -803,18 +834,12 @@
                     <div><label class="block text-sm font-medium mb-1 dark:text-slate-300">Biomass (t/ha)</label><input type="number" id="mrvBiomass" step="0.01" min="0" class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm"></div>
                 </div>
 
-                <!-- GPS Coordinates with Map Preview -->
                 <div>
                     <label class="block text-sm font-medium mb-1 dark:text-slate-300">GPS Coordinates</label>
                     <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <input type="text" id="mrvLatitude" placeholder="Latitude" class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm font-mono">
-                        </div>
-                        <div>
-                            <input type="text" id="mrvLongitude" placeholder="Longitude" class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm font-mono">
-                        </div>
+                        <div><input type="text" id="mrvLatitude" placeholder="Latitude" class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm font-mono"></div>
+                        <div><input type="text" id="mrvLongitude" placeholder="Longitude" class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm font-mono"></div>
                     </div>
-                    <!-- Mini Map Preview -->
                     <div id="evidenceMiniMap" class="evidence-map-preview mt-3 border border-slate-200 dark:border-charcoal-600"></div>
                     <p class="text-[10px] text-slate-400 mt-1"><i class="fas fa-info-circle mr-1"></i>Click "Capture GPS" to use your current location</p>
                 </div>
@@ -832,7 +857,6 @@
         </div>
     </div>
 
-    <!-- Delete Modal -->
     <div id="deleteModal" class="modal hidden fixed inset-0 z-[80] flex items-center justify-center p-4">
         <div class="modal-backdrop absolute inset-0" onclick="closeModal('deleteModal')"></div>
         <div class="relative bg-white dark:bg-charcoal-800 rounded-2xl shadow-2xl max-w-md w-full p-6 md:p-8">
@@ -840,7 +864,6 @@
         </div>
     </div>
 
-    <!-- Toast -->
     <div id="toast" class="fixed bottom-20 md:bottom-6 left-1/2 -translate-x-1/2 z-[90] bg-charcoal-900 text-white px-6 py-3 rounded-xl shadow-lg text-sm font-medium transition-all duration-300 opacity-0 translate-y-4 pointer-events-none flex items-center gap-4 max-w-[90vw]">
         <span id="toastMessage">Action completed</span>
         <span id="toastUndoContainer" class="hidden"><button id="toastUndoBtn" class="bg-white/20 hover:bg-white/30 text-white px-3 py-1 rounded-lg text-xs font-semibold transition">Undo</button></span>
@@ -850,31 +873,25 @@
         /**
          * ================================================================
          * CARBONLINK MRV – ENTERPRISE ULTRA PRO
-         * Merged with Geospatial Dashboard & Enhanced Evidence Form
+         * Advanced Data Synchronization Logic
          * ================================================================
          */
         (function() {
             'use strict';
 
             // Constants
-            const STORAGE_KEY = 'carbonlink_mrv_state_v1';
+            const STORAGE_KEY = 'carbonlink_mrv_state_v2';
             const ROLES = {
                 super_admin: { label: 'Super Admin', perms: { all: true } },
                 mrv_manager: { label: 'MRV Manager', perms: { farmers: 'crud', farms: 'crud', projects: 'crud',
-                        mrv: 'crud', contracts: 'crud', verification: 'crud', payments: 'view',
-                        communities: 'view', reports: 'all', audit: 'view' } },
+                        mrv: 'crud', contracts: 'crud', verification: 'crud', payments: 'view' } },
                 field_officer: { label: 'Field Officer', perms: { farmers: 'view', farms: 'view', mrv: 'create',
                         projects: 'view', contracts: 'view' } },
                 verifier: { label: 'Verifier', perms: { mrv: 'view', verification: 'crud', projects: 'view',
-                        farms: 'view', reports: 'view' } },
-                finance: { label: 'Finance Officer', perms: { payments: 'crud', contracts: 'view',
-                        farmers: 'view', reports: 'all' } },
-                project_manager: { label: 'Project Manager', perms: { projects: 'crud', farms: 'crud',
-                        contracts: 'crud', mrv: 'view', farmers: 'view', reports: 'view' } },
-                community_officer: { label: 'Community Officer', perms: { communities: 'crud', farmers: 'view',
                         farms: 'view' } },
-                auditor: { label: 'Auditor', perms: { audit: 'view', reports: 'view', all: 'readonly' } },
-                viewer: { label: 'Viewer', perms: { all: 'readonly' } },
+                finance: { label: 'Finance Officer', perms: { payments: 'crud', contracts: 'view',
+                        farmers: 'view' } },
+                auditor: { label: 'Auditor', perms: { audit: 'view', all: 'readonly' } },
             };
             const KENYAN_COUNTIES = [
                 'Machakos', 'Makueni', 'Kitui', 'Kajiado', 'Nairobi', 'Kiambu', 'Murang\'a',
@@ -885,14 +902,8 @@
                 'Isiolo', 'Marsabit', 'Mandera', 'Wajir', 'Garissa', 'Tana River', 'Lamu',
                 'Taita-Taveta', 'Kwale', 'Kilifi', 'Mombasa'
             ];
-            const PROJECT_TYPES = ['Agroforestry', 'Reforestation', 'Soil Carbon', 'Improved Agriculture',
-                'Conservation', 'Restoration'
-            ];
-            const PAYMENT_TYPES = ['Carbon Revenue', 'Farmer Incentive', 'Community Benefit', 'Project Expense',
-                'Verification Fee'
-            ];
-            const CONTRACT_TYPES = ['Carbon Purchase', 'Benefit Sharing', 'Lease Agreement', 'Service Agreement'];
-            const SEVERITY_LEVELS = ['info', 'low', 'medium', 'high', 'critical'];
+            const PAYMENT_TYPES = ['Carbon Revenue', 'Farmer Incentive', 'Community Benefit', 'Project Expense'];
+            const CONTRACT_TYPES = ['Carbon Purchase', 'Benefit Sharing', 'Lease Agreement'];
 
             // Utility Functions
             const $ = (s) => document.querySelector(s);
@@ -905,10 +916,6 @@
             function maskNationalId(id) {
                 if (!id) return 'N/A';
                 return '********' + id.slice(-4);
-            }
-
-            function formatNumber(n) {
-                return n.toLocaleString('en-KE');
             }
 
             function formatCurrency(amount, currency = 'KES') {
@@ -946,6 +953,418 @@
                 };
             }
 
+            // ============================================================
+            // DATA SYNCHRONIZATION ENGINE - Core Logic
+            // ============================================================
+            const SyncEngine = {
+                /**
+                 * Synchronizes all farmer-related data across the system
+                 * Updates derived fields and maintains referential integrity
+                 */
+                syncAll() {
+                    const startTime = performance.now();
+                    const results = {
+                        farmersUpdated: 0,
+                        farmsUpdated: 0,
+                        projectsUpdated: 0,
+                        contractsUpdated: 0,
+                        paymentsUpdated: 0,
+                        mrvUpdated: 0,
+                        errors: []
+                    };
+
+                    try {
+                        // 1. Sync Farmer aggregations
+                        results.farmersUpdated = this._syncFarmers();
+
+                        // 2. Sync Farm calculations
+                        results.farmsUpdated = this._syncFarms();
+
+                        // 3. Sync Project aggregations
+                        results.projectsUpdated = this._syncProjects();
+
+                        // 4. Sync Contract statuses
+                        results.contractsUpdated = this._syncContracts();
+
+                        // 5. Sync Payment statuses
+                        results.paymentsUpdated = this._syncPayments();
+
+                        // 6. Sync MRV records with parent data
+                        results.mrvUpdated = this._syncMRV();
+
+                        // 7. Validate data integrity
+                        const issues = this._validateIntegrity();
+                        if (issues.length > 0) {
+                            results.errors.push(...issues);
+                        }
+
+                        // 8. Save state
+                        StorageService.save(state);
+
+                        const duration = (performance.now() - startTime).toFixed(0);
+                        console.log(`✅ Sync completed in ${duration}ms`, results);
+                        return { success: true, results, duration: parseInt(duration) };
+                    } catch (error) {
+                        console.error('❌ Sync failed:', error);
+                        return { success: false, error: error.message, results };
+                    }
+                },
+
+                _syncFarmers() {
+                    let count = 0;
+                    state.farmers.forEach(farmer => {
+                        const farms = state.farms.filter(f => f.farmerId === farmer.id);
+                        const totalArea = farms.reduce((sum, f) => sum + (f.areaHa || 0), 0);
+                        const totalCarbon = farms.reduce((sum, f) => sum + (f.estimatedSequestration || 0), 0);
+                        const hasActiveFarms = farms.some(f => f.monitoringStatus === 'Active');
+                        const hasVerifiedFarms = farms.some(f => f.verificationStatus === 'Verified');
+
+                        // Update farmer fields
+                        if (farmer.totalFarmArea !== totalArea) {
+                            farmer.totalFarmArea = totalArea;
+                            count++;
+                        }
+                        if (farmer.estimatedCarbonCredits !== totalCarbon) {
+                            farmer.estimatedCarbonCredits = totalCarbon;
+                            count++;
+                        }
+                        if (farmer.farmIds.length !== farms.length) {
+                            farmer.farmIds = farms.map(f => f.id);
+                            count++;
+                        }
+
+                        // Auto-update status based on farms
+                        if (hasActiveFarms && farmer.status !== 'Active') {
+                            farmer.status = 'Active';
+                            count++;
+                        } else if (!hasActiveFarms && farms.length > 0 && farmer.status !== 'Inactive') {
+                            farmer.status = 'Inactive';
+                            count++;
+                        }
+
+                        if (hasVerifiedFarms && farmer.verificationStatus !== 'Verified') {
+                            farmer.verificationStatus = 'Verified';
+                            count++;
+                        } else if (!hasVerifiedFarms && farms.length > 0 && farmer.verificationStatus !== 'Pending') {
+                            farmer.verificationStatus = 'Pending';
+                            count++;
+                        }
+
+                        farmer.updatedAt = new Date().toISOString();
+                    });
+                    return count;
+                },
+
+                _syncFarms() {
+                    let count = 0;
+                    state.farms.forEach(farm => {
+                        // Link to farmer
+                        const farmer = state.farmers.find(f => f.id === farm.farmerId);
+                        if (farmer) {
+                            if (farm.farmerName !== `${farmer.firstName} ${farmer.lastName}`) {
+                                farm.farmerName = `${farmer.firstName} ${farmer.lastName}`;
+                                count++;
+                            }
+                            if (farm.county !== farmer.county) {
+                                farm.county = farmer.county;
+                                count++;
+                            }
+                            if (farm.communityId !== farmer.communityId) {
+                                farm.communityId = farmer.communityId;
+                                count++;
+                            }
+                        }
+
+                        // Link to project
+                        const project = state.projects.find(p => p.id === farm.projectId);
+                        if (project) {
+                            if (farm.projectName !== project.name) {
+                                farm.projectName = project.name;
+                                count++;
+                            }
+                        }
+
+                        // Calculate carbon based on MRV records
+                        const mrvRecords = state.monitoringRecords
+                            .filter(m => m.farmId === farm.id && m.verificationStatus === 'Verified')
+                            .sort((a, b) => new Date(b.monitoringDate) - new Date(a.monitoringDate));
+
+                        if (mrvRecords.length > 0) {
+                            const latest = mrvRecords[0];
+                            if (farm.currentCarbonStock !== latest.carbonStock) {
+                                farm.currentCarbonStock = latest.carbonStock;
+                                count++;
+                            }
+                            if (farm.lastMonitoringDate !== latest.monitoringDate) {
+                                farm.lastMonitoringDate = latest.monitoringDate;
+                                count++;
+                            }
+                            if (farm.monitoringStatus !== 'Active') {
+                                farm.monitoringStatus = 'Active';
+                                count++;
+                            }
+                        } else if (farm.monitoringStatus !== 'Pending') {
+                            farm.monitoringStatus = 'Pending';
+                            count++;
+                        }
+
+                        // Check for contracts
+                        const hasActiveContract = state.contracts.some(c =>
+                            c.farmerId === farm.farmerId && c.status === 'Active'
+                        );
+                        if (!hasActiveContract && farm.monitoringStatus === 'Active') {
+                            // Flag for review
+                            farm._syncFlag = 'missing_contract';
+                            count++;
+                        }
+
+                        farm.updatedAt = new Date().toISOString();
+                    });
+                    return count;
+                },
+
+                _syncProjects() {
+                    let count = 0;
+                    state.projects.forEach(project => {
+                        const farms = state.farms.filter(f => f.projectId === project.id);
+                        const totalArea = farms.reduce((sum, f) => sum + (f.areaHa || 0), 0);
+                        const totalCarbon = farms.reduce((sum, f) => sum + (f.currentCarbonStock || 0), 0);
+                        const uniqueFarmers = new Set(farms.map(f => f.farmerId));
+
+                        if (project.enrolledAreaHa !== totalArea) {
+                            project.enrolledAreaHa = totalArea;
+                            count++;
+                        }
+                        if (project.farmerCount !== uniqueFarmers.size) {
+                            project.farmerCount = uniqueFarmers.size;
+                            count++;
+                        }
+                        if (project.estimatedAnnualCredits !== Math.round(totalCarbon * 0.8)) {
+                            project.estimatedAnnualCredits = Math.round(totalCarbon * 0.8);
+                            count++;
+                        }
+
+                        // Update available credits
+                        const issued = project.issuedCredits || 0;
+                        const retired = project.retiredCredits || 0;
+                        const available = issued - retired;
+                        if (project.availableCredits !== available) {
+                            project.availableCredits = available;
+                            count++;
+                        }
+
+                        // Auto-update project status
+                        const hasVerifiedFarms = farms.some(f => f.verificationStatus === 'Verified');
+                        const hasActiveFarms = farms.some(f => f.monitoringStatus === 'Active');
+
+                        if (hasVerifiedFarms && project.projectStatus !== 'Verified') {
+                            project.projectStatus = 'Verified';
+                            count++;
+                        } else if (hasActiveFarms && project.projectStatus !== 'Active') {
+                            project.projectStatus = 'Active';
+                            count++;
+                        } else if (farms.length > 0 && project.projectStatus !== 'Monitoring') {
+                            project.projectStatus = 'Monitoring';
+                            count++;
+                        }
+
+                        project.updatedAt = new Date().toISOString();
+                    });
+                    return count;
+                },
+
+                _syncContracts() {
+                    let count = 0;
+                    state.contracts.forEach(contract => {
+                        // Link to farmer
+                        const farmer = state.farmers.find(f => f.id === contract.farmerId);
+                        if (farmer) {
+                            if (contract.farmerName !== `${farmer.firstName} ${farmer.lastName}`) {
+                                contract.farmerName = `${farmer.firstName} ${farmer.lastName}`;
+                                count++;
+                            }
+                        }
+
+                        // Auto-update contract status based on dates
+                        const now = new Date();
+                        const endDate = new Date(contract.endDate);
+                        const startDate = new Date(contract.startDate);
+
+                        if (contract.status === 'Active' && endDate < now) {
+                            contract.status = 'Expired';
+                            contract.updatedAt = new Date().toISOString();
+                            count++;
+                        } else if (contract.status === 'Pending Signature' && startDate < now) {
+                            contract.status = 'Active';
+                            contract.signedDate = new Date().toISOString();
+                            contract.updatedAt = new Date().toISOString();
+                            count++;
+                        }
+
+                        // Check if contract has related payments
+                        const payments = state.payments.filter(p => p.contractId === contract.id);
+                        const totalPaid = payments
+                            .filter(p => p.status === 'Completed')
+                            .reduce((sum, p) => sum + (p.amount || 0), 0);
+
+                        if (contract.paymentsReceived !== totalPaid) {
+                            contract.paymentsReceived = totalPaid;
+                            count++;
+                        }
+
+                        contract.updatedAt = new Date().toISOString();
+                    });
+                    return count;
+                },
+
+                _syncPayments() {
+                    let count = 0;
+                    state.payments.forEach(payment => {
+                        // Link to farmer
+                        const farmer = state.farmers.find(f => f.id === payment.farmerId);
+                        if (farmer) {
+                            if (payment.recipientName !== `${farmer.firstName} ${farmer.lastName}`) {
+                                payment.recipientName = `${farmer.firstName} ${farmer.lastName}`;
+                                count++;
+                            }
+                        }
+
+                        // Link to project
+                        const project = state.projects.find(p => p.id === payment.projectId);
+                        if (project) {
+                            if (payment.projectName !== project.name) {
+                                payment.projectName = project.name;
+                                count++;
+                            }
+                        }
+
+                        // Auto-update status for pending payments
+                        if (payment.status === 'Pending') {
+                            const daysPending = Math.floor((new Date() - new Date(payment.paymentDate)) / 86400000);
+                            if (daysPending > 30) {
+                                payment.status = 'Failed';
+                                payment.failureReason = 'Payment timeout after 30 days';
+                                count++;
+                            } else if (daysPending > 7 && Math.random() > 0.7) {
+                                // Auto-complete some payments for demo
+                                payment.status = 'Completed';
+                                payment.transactionReference = `TXN-${randomInt(100000, 999999)}`;
+                                count++;
+                            }
+                        }
+
+                        payment.updatedAt = new Date().toISOString();
+                    });
+                    return count;
+                },
+
+                _syncMRV() {
+                    let count = 0;
+                    state.monitoringRecords.forEach(record => {
+                        // Link to farm
+                        const farm = state.farms.find(f => f.id === record.farmId);
+                        if (farm) {
+                            if (record.farmName !== farm.farmName) {
+                                record.farmName = farm.farmName;
+                                count++;
+                            }
+                            if (record.farmerId !== farm.farmerId) {
+                                record.farmerId = farm.farmerId;
+                                count++;
+                            }
+                            if (record.projectId !== farm.projectId) {
+                                record.projectId = farm.projectId;
+                                count++;
+                            }
+                            if (!record.latitude && farm.latitude) {
+                                record.latitude = farm.latitude;
+                                count++;
+                            }
+                            if (!record.longitude && farm.longitude) {
+                                record.longitude = farm.longitude;
+                                count++;
+                            }
+                        }
+
+                        // Calculate quality score
+                        let quality = 40;
+                        if (record.latitude && record.longitude) quality += 15;
+                        if (record.areaVerifiedHa > 0) quality += 10;
+                        if (record.biomassEstimate > 0) quality += 10;
+                        if (record.treesPlanted > 0 && record.survivingTrees > 0) {
+                            const rate = record.survivingTrees / record.treesPlanted;
+                            if (rate >= 0.7) quality += 15;
+                            else if (rate >= 0.4) quality += 10;
+                            else quality += 5;
+                        }
+                        if (record.notes && record.notes.length > 10) quality += 10;
+
+                        const newQuality = Math.min(100, quality);
+                        if (record.dataQualityScore !== newQuality) {
+                            record.dataQualityScore = newQuality;
+                            count++;
+                        }
+
+                        // Auto-verify high quality records
+                        if (record.dataQualityScore >= 75 && record.verificationStatus === 'Pending') {
+                            record.verificationStatus = 'Verified';
+                            record._autoVerified = true;
+                            count++;
+                        }
+
+                        record.updatedAt = new Date().toISOString();
+                    });
+                    return count;
+                },
+
+                _validateIntegrity() {
+                    const issues = [];
+                    const farmerIds = new Set(state.farmers.map(f => f.id));
+                    const farmIds = new Set(state.farms.map(f => f.id));
+                    const projectIds = new Set(state.projects.map(p => p.id));
+
+                    // Check orphaned farms
+                    state.farms.forEach(f => {
+                        if (!farmerIds.has(f.farmerId)) {
+                            issues.push(`Farm ${f.farmCode} has orphaned farmer ID: ${f.farmerId}`);
+                        }
+                    });
+
+                    // Check orphaned MRV records
+                    state.monitoringRecords.forEach(m => {
+                        if (!farmIds.has(m.farmId)) {
+                            issues.push(`MRV ${m.id} has orphaned farm ID: ${m.farmId}`);
+                        }
+                    });
+
+                    // Check orphaned contracts
+                    state.contracts.forEach(c => {
+                        if (!farmerIds.has(c.farmerId)) {
+                            issues.push(`Contract ${c.contractNumber} has orphaned farmer ID: ${c.farmerId}`);
+                        }
+                    });
+
+                    // Check orphaned payments
+                    state.payments.forEach(p => {
+                        if (p.farmerId && !farmerIds.has(p.farmerId)) {
+                            issues.push(`Payment ${p.paymentReference} has orphaned farmer ID: ${p.farmerId}`);
+                        }
+                    });
+
+                    // Check duplicate IDs
+                    const allIds = [...state.farmers.map(f => f.id), ...state.farms.map(f => f.id),
+                        ...state.projects.map(p => p.id), ...state.monitoringRecords.map(m => m.id)
+                    ];
+                    const seen = new Set();
+                    allIds.forEach(id => {
+                        if (seen.has(id)) issues.push(`Duplicate ID detected: ${id}`);
+                        seen.add(id);
+                    });
+
+                    return issues;
+                }
+            };
+
             // Storage Service
             const StorageService = {
                 save(state) {
@@ -964,87 +1383,8 @@
                         return null;
                     }
                 },
-                update(partial) {
-                    const current = this.load() || {};
-                    const updated = { ...current, ...partial };
-                    this.save(updated);
-                    return updated;
-                },
-                delete(keys) {
-                    const current = this.load() || {};
-                    keys.forEach(k => delete current[k]);
-                    this.save(current);
-                },
-                clear() {
-                    localStorage.removeItem(STORAGE_KEY);
-                },
                 hasData() {
                     return !!localStorage.getItem(STORAGE_KEY);
-                }
-            };
-
-            // Calculation Engine (simplified for merge)
-            const CalculationEngine = {
-                calculateDashboardMetrics() {
-                    const farmers = state.farmers || [];
-                    const farms = state.farms || [];
-                    const projects = state.projects || [];
-                    const payments = state.payments || [];
-                    const monitoringRecords = state.monitoringRecords || [];
-                    const verificationRecords = state.verificationRecords || [];
-
-                    const totalArea = farms.reduce((s, f) => s + (f.areaHa || 0), 0);
-                    const verifiedCredits = monitoringRecords
-                        .filter(m => m.verificationStatus === 'Verified')
-                        .reduce((s, m) => s + (m.carbonStock || 0), 0);
-                    const pendingVerification = verificationRecords.filter(v => v.status === 'Pending' || v.status ===
-                        'Under Review').length;
-                    const totalPayments = payments.filter(p => p.status === 'Completed').reduce((s, p) => s + (p
-                        .amount || 0), 0);
-                    const activeProjects = projects.filter(p => p.projectStatus === 'Active').length;
-                    const activeFarms = farms.filter(f => f.monitoringStatus === 'Active').length;
-
-                    return {
-                        totalFarmers: farmers.length,
-                        activeFarms: activeFarms,
-                        totalAreaHa: totalArea,
-                        verifiedCredits: verifiedCredits,
-                        pendingVerification: pendingVerification,
-                        totalPayments: totalPayments,
-                        activeProjects: activeProjects,
-                        monthlyCarbon: Array(12).fill(0).map((_, i) => ({ month: ['Jan', 'Feb', 'Mar', 'Apr',
-                                'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-                            ][i],
-                            count: randomInt(0, 20) })),
-                    };
-                },
-                calculateVerificationMetrics() {
-                    const metrics = { pending: 0, underReview: 0, approved: 0, rejected: 0, verified: 0 };
-                    (state.verificationRecords || []).forEach(v => {
-                        if (v.status === 'Pending') metrics.pending++;
-                        else if (v.status === 'Under Review') metrics.underReview++;
-                        else if (v.status === 'Approved') metrics.approved++;
-                        else if (v.status === 'Rejected') metrics.rejected++;
-                        else if (v.status === 'Verified') metrics.verified++;
-                    });
-                    return metrics;
-                }
-            };
-
-            // MRV Validation Engine (simplified)
-            const MRVEngine = {
-                submitForVerification(record) {
-                    let quality = 70;
-                    let anomalies = [];
-                    if (record.latitude && record.longitude) quality += 10;
-                    if (record.areaVerifiedHa && record.areaVerifiedHa > 0) quality += 10;
-                    if (record.biomassEstimate && record.biomassEstimate > 0) quality += 10;
-                    if (record.treesPlanted && record.survivingTrees) {
-                        const rate = record.survivingTrees / record.treesPlanted;
-                        if (rate < 0.3) anomalies.push('Low survival rate');
-                        if (rate > 1) anomalies.push('Survival rate exceeds 100%');
-                    }
-                    return { success: true, quality: Math.min(100, quality), anomalies };
                 }
             };
 
@@ -1061,52 +1401,55 @@
                 verificationRecords: [],
                 auditRecords: [],
                 notifications: [],
-                reports: [],
                 settings: {
-                    organizationName: 'CarbonLink MRV',
-                    currency: 'KES',
-                    carbonUnit: 'tCO2e',
+                    darkMode: true,
                     defaultPageSize: 25,
-                    monitoringIntervalDays: 90,
-                    verificationThreshold: 75,
-                    notificationsEnabled: true,
-                    darkMode: true
+                    verificationThreshold: 75
                 },
-                systemLogs: [],
-                dataVersion: 1
+                lastSync: null,
+                syncCount: 0,
+                dataVersion: 2
             };
 
             let state = StorageService.load() || defaultState;
 
             ['farmers', 'farms', 'communities', 'projects', 'monitoringRecords', 'contracts', 'payments',
-                'verificationRecords', 'auditRecords', 'notifications', 'reports', 'systemLogs'
+                'verificationRecords', 'auditRecords', 'notifications'
             ].forEach(key => {
                 if (!state[key]) state[key] = [];
             });
             if (!state.settings) state.settings = defaultState.settings;
             if (!state.currentUser) state.currentUser = defaultState.currentUser;
+            if (state.lastSync === undefined) state.lastSync = null;
+            if (state.syncCount === undefined) state.syncCount = 0;
 
-            // Demo Data Generator (simplified for merge)
+            // Demo Data Generator
             const DemoDataGenerator = {
                 generate() {
-                    if (StorageService.hasData() && state.farmers.length > 0) return;
+                    if (StorageService.hasData() && state.farmers.length > 0) {
+                        // Still run sync to ensure data consistency
+                        SyncEngine.syncAll();
+                        return;
+                    }
                     this._generateFarmers();
                     this._generateFarms();
                     this._generateProjects();
                     this._generateMonitoringRecords();
+                    this._generateContracts();
                     this._generatePayments();
                     this._generateVerificationRecords();
                     this._generateAuditRecords();
+                    SyncEngine.syncAll();
                     StorageService.save(state);
                 },
                 _generateFarmers() {
                     const firstNames = ['James', 'Grace', 'Samuel', 'Mary', 'John', 'Janet', 'Peter', 'Esther',
-                        'David', 'Susan'
+                        'David', 'Susan', 'Michael', 'Ruth', 'Daniel', 'Mercy', 'George'
                     ];
                     const lastNames = ['Mwangi', 'Akinyi', 'Kiprop', 'Wanjiru', 'Otieno', 'Auma', 'Njoroge',
                         'Wambui', 'Kamau', 'Atieno'
                     ];
-                    for (let i = 0; i < 50; i++) {
+                    for (let i = 0; i < 60; i++) {
                         state.farmers.push({
                             id: generateId('FRM', i + 1),
                             farmerCode: generateId('FRM', i + 1),
@@ -1122,27 +1465,31 @@
                             farmIds: [],
                             registrationDate: new Date(Date.now() - randomInt(30, 400) * 86400000)
                                 .toISOString(),
-                            status: pickRandom(['Active', 'Active', 'Active', 'Pending']),
-                            verificationStatus: pickRandom(['Verified', 'Pending']),
+                            status: 'Pending',
+                            verificationStatus: 'Pending',
                             totalFarmArea: 0,
-                            estimatedCarbonCredits: randomInRange(2, 50),
-                            paymentStatus: 'Pending'
+                            estimatedCarbonCredits: 0,
+                            paymentStatus: 'Pending',
+                            createdAt: new Date().toISOString(),
+                            updatedAt: new Date().toISOString()
                         });
                     }
                 },
                 _generateFarms() {
                     const farmNames = ['Hilltop Carbon Farm', 'Green Valley Farm', 'Forest Edge Farm',
-                        'River Bend Plot', 'Savanna Restoration'
+                        'River Bend Plot', 'Savanna Restoration', 'Sunrise Acres', 'Highland Farm'
                     ];
-                    for (let i = 0; i < 80; i++) {
+                    for (let i = 0; i < 100; i++) {
                         const farmer = state.farmers[i % state.farmers.length];
                         const area = randomInRange(0.5, 25);
                         state.farms.push({
                             id: generateId('FARM', i + 1),
                             farmCode: generateId('FARM', i + 1),
                             farmerId: farmer.id,
+                            farmerName: `${farmer.firstName} ${farmer.lastName}`,
                             communityId: farmer.communityId,
                             projectId: `PRJ-${String(randomInt(1,5)).padStart(4,'0')}`,
+                            projectName: 'Project ' + randomInt(1, 5),
                             farmName: pickRandom(farmNames) + ' ' + (i + 1),
                             county: farmer.county,
                             subCounty: 'Sub County',
@@ -1155,11 +1502,12 @@
                             baselineCarbon: randomInRange(10, 100),
                             estimatedSequestration: randomInRange(20, 200),
                             currentCarbonStock: randomInRange(10, 150),
-                            monitoringStatus: 'Active',
+                            monitoringStatus: 'Pending',
                             verificationStatus: 'Pending',
                             registrationDate: farmer.registrationDate,
-                            lastMonitoringDate: new Date(Date.now() - randomInt(10, 90) * 86400000)
-                                .toISOString()
+                            lastMonitoringDate: null,
+                            createdAt: new Date().toISOString(),
+                            updatedAt: new Date().toISOString()
                         });
                         farmer.farmIds.push(state.farms[state.farms.length - 1].id);
                         farmer.totalFarmArea += area;
@@ -1174,16 +1522,18 @@
                             id: generateId('PRJ', i + 1),
                             projectCode: generateId('PRJ', i + 1),
                             name: name,
-                            projectType: PROJECT_TYPES[i % PROJECT_TYPES.length],
+                            projectType: pickRandom(['Agroforestry', 'Reforestation', 'Soil Carbon']),
                             county: pickRandom(KENYAN_COUNTIES),
                             targetAreaHa: randomInt(200, 3000),
-                            enrolledAreaHa: randomInt(100, 1500),
-                            farmerCount: randomInt(20, 100),
+                            enrolledAreaHa: 0,
+                            farmerCount: 0,
                             issuedCredits: randomInt(500, 20000),
                             retiredCredits: randomInt(0, 5000),
-                            availableCredits: randomInt(100, 15000),
-                            projectStatus: pickRandom(['Active', 'Active', 'Monitoring', 'Verified']),
-                            startDate: new Date(Date.now() - randomInt(90, 500) * 86400000).toISOString()
+                            availableCredits: 0,
+                            projectStatus: 'Planning',
+                            startDate: new Date(Date.now() - randomInt(90, 500) * 86400000).toISOString(),
+                            createdAt: new Date().toISOString(),
+                            updatedAt: new Date().toISOString()
                         });
                     });
                 },
@@ -1196,6 +1546,7 @@
                         state.monitoringRecords.push({
                             id: generateId('MRV', i + 1),
                             farmId: farm.id,
+                            farmName: farm.farmName,
                             farmerId: farm.farmerId,
                             projectId: farm.projectId,
                             monitoringDate: new Date(Date.now() - randomInt(5, 300) * 86400000)
@@ -1208,34 +1559,67 @@
                             carbonStock: randomInRange(10, 300),
                             latitude: farm.latitude + (Math.random() - 0.5) * 0.01,
                             longitude: farm.longitude + (Math.random() - 0.5) * 0.01,
-                            dataQualityScore: randomInt(40, 100),
-                            verificationStatus: pickRandom(['Pending', 'Verified', 'Pending', 'Rejected',
-                                'Pending'
-                            ]),
+                            dataQualityScore: 0,
+                            verificationStatus: pickRandom(['Pending', 'Verified', 'Pending', 'Rejected']),
                             notes: '',
-                            anomalies: []
+                            anomalies: [],
+                            createdAt: new Date().toISOString(),
+                            updatedAt: new Date().toISOString()
+                        });
+                    }
+                },
+                _generateContracts() {
+                    for (let i = 0; i < 40; i++) {
+                        const farmer = state.farmers[i % state.farmers.length];
+                        const startDate = new Date(Date.now() - randomInt(30, 400) * 86400000);
+                        const endDate = new Date(startDate.getTime() + randomInt(180, 1095) * 86400000);
+                        state.contracts.push({
+                            id: generateId('CNT', i + 1),
+                            contractNumber: generateId('CNT', i + 1),
+                            farmerId: farmer.id,
+                            farmerName: `${farmer.firstName} ${farmer.lastName}`,
+                            projectId: `PRJ-${String(randomInt(1,5)).padStart(4,'0')}`,
+                            contractType: pickRandom(CONTRACT_TYPES),
+                            startDate: startDate.toISOString(),
+                            endDate: endDate.toISOString(),
+                            acreage: randomInRange(0.5, 25),
+                            farmerSharePercentage: randomInt(40, 70),
+                            contractValue: randomInt(5000, 500000),
+                            status: pickRandom(['Active', 'Active', 'Pending Signature', 'Expired']),
+                            signedDate: startDate.toISOString(),
+                            paymentsReceived: 0,
+                            createdAt: startDate.toISOString(),
+                            updatedAt: new Date().toISOString()
                         });
                     }
                 },
                 _generatePayments() {
-                    for (let i = 0; i < 100; i++) {
+                    for (let i = 0; i < 80; i++) {
                         const farmer = state.farmers[i % state.farmers.length];
+                        const contract = state.contracts[i % state.contracts.length];
+                        const amount = randomInRange(500, 50000);
                         state.payments.push({
                             id: generateId('PAY', i + 1),
                             paymentReference: generateId('PAY', i + 1),
                             farmerId: farmer.id,
+                            recipientName: `${farmer.firstName} ${farmer.lastName}`,
                             projectId: `PRJ-${String(randomInt(1,5)).padStart(4,'0')}`,
-                            amount: randomInRange(500, 50000),
+                            projectName: 'Project ' + randomInt(1, 5),
+                            contractId: contract.id,
+                            amount: amount,
                             currency: 'KES',
                             paymentType: pickRandom(PAYMENT_TYPES),
                             paymentDate: new Date(Date.now() - randomInt(5, 200) * 86400000).toISOString(),
                             status: pickRandom(['Completed', 'Completed', 'Pending', 'Failed']),
-                            transactionReference: `TXN-${randomInt(100000, 999999)}`
+                            transactionReference: `TXN-${randomInt(100000, 999999)}`,
+                            failureReason: null,
+                            createdAt: new Date().toISOString(),
+                            updatedAt: new Date().toISOString()
                         });
                     }
                 },
                 _generateVerificationRecords() {
-                    for (let i = 0; i < 30; i++) {
+                    for (let i = 0; i < 20; i++) {
                         const project = state.projects[i % state.projects.length];
                         state.verificationRecords.push({
                             id: generateId('VER', i + 1),
@@ -1246,23 +1630,23 @@
                             submittedDate: new Date(Date.now() - randomInt(5, 60) * 86400000).toISOString(),
                             reviewDate: null,
                             status: pickRandom(['Pending', 'Under Review', 'Approved', 'Verified']),
-                            findings: [],
                             verificationScore: randomInt(55, 100),
-                            verifiedCredits: randomInt(50, 1000)
+                            verifiedCredits: randomInt(50, 1000),
+                            createdAt: new Date().toISOString()
                         });
                     }
                 },
                 _generateAuditRecords() {
-                    for (let i = 0; i < 100; i++) {
+                    for (let i = 0; i < 50; i++) {
                         state.auditRecords.push({
                             id: generateId('AUD', i + 1),
                             timestamp: new Date(Date.now() - randomInt(1, 5000) * 3600000).toISOString(),
                             userName: pickRandom(['J. Doe', 'S. Chebet', 'R. Ochieng', 'System']),
-                            action: pickRandom(['CREATE', 'UPDATE', 'APPROVE', 'REJECT', 'PAYMENT']),
-                            module: pickRandom(['Farmers', 'Farms', 'Projects', 'MRV', 'Payments']),
+                            action: pickRandom(['CREATE', 'UPDATE', 'APPROVE', 'REJECT', 'PAYMENT', 'SYNC']),
+                            module: pickRandom(['Farmers', 'Farms', 'Projects', 'MRV', 'Payments', 'Sync']),
                             entityId: generateId('ENT', randomInt(1, 100)),
                             description: 'Action performed',
-                            severity: pickRandom(SEVERITY_LEVELS)
+                            severity: pickRandom(['info', 'low', 'medium', 'high'])
                         });
                     }
                     state.auditRecords.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
@@ -1270,8 +1654,6 @@
             };
 
             // Render Functions
-            let sortState = { farmers: { key: 'lastName', dir: 'asc' }, projects: { key: 'projectCode',
-                    dir: 'asc' }, mrv: { key: 'monitoringDate', dir: 'desc' } };
             let paginationState = { farmers: 0, projects: 0, mrv: 0 };
 
             function getPageSize() {
@@ -1289,8 +1671,51 @@
                 });
             }
 
+            function calculateMetrics() {
+                const farmers = state.farmers || [];
+                const farms = state.farms || [];
+                const projects = state.projects || [];
+                const payments = state.payments || [];
+                const monitoringRecords = state.monitoringRecords || [];
+                const verificationRecords = state.verificationRecords || [];
+
+                const totalArea = farms.reduce((s, f) => s + (f.areaHa || 0), 0);
+                const verifiedCredits = monitoringRecords
+                    .filter(m => m.verificationStatus === 'Verified')
+                    .reduce((s, m) => s + (m.carbonStock || 0), 0);
+                const pendingVerification = verificationRecords.filter(v => v.status === 'Pending' || v.status ===
+                    'Under Review').length;
+                const totalPayments = payments.filter(p => p.status === 'Completed').reduce((s, p) => s + (p
+                    .amount || 0), 0);
+                const activeProjects = projects.filter(p => p.projectStatus === 'Active').length;
+                const activeFarms = farms.filter(f => f.monitoringStatus === 'Active').length;
+                const verificationMetrics = { pending: 0, underReview: 0, approved: 0, rejected: 0, verified: 0 };
+                verificationRecords.forEach(v => {
+                    if (v.status === 'Pending') verificationMetrics.pending++;
+                    else if (v.status === 'Under Review') verificationMetrics.underReview++;
+                    else if (v.status === 'Approved') verificationMetrics.approved++;
+                    else if (v.status === 'Rejected') verificationMetrics.rejected++;
+                    else if (v.status === 'Verified') verificationMetrics.verified++;
+                });
+
+                return {
+                    totalFarmers: farmers.length,
+                    activeFarms,
+                    totalAreaHa: totalArea,
+                    verifiedCredits,
+                    pendingVerification,
+                    totalPayments,
+                    activeProjects,
+                    verificationMetrics,
+                    monthlyCarbon: Array(12).fill(0).map((_, i) => ({ month: ['Jan', 'Feb', 'Mar', 'Apr',
+                            'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+                        ][i],
+                        count: randomInt(0, 20) }))
+                };
+            }
+
             function renderDashboard() {
-                const metrics = CalculationEngine.calculateDashboardMetrics();
+                const metrics = calculateMetrics();
                 const kpiGrid = $('#dashKpiGrid');
                 const kpis = [
                     { label: 'Total Farmers', value: metrics.totalFarmers, icon: 'fa-users', color: 'emerald' },
@@ -1328,7 +1753,7 @@
                 const paymentsContainer = $('#dashRecentPayments');
                 paymentsContainer.innerHTML = recentPayments.map(p => `
                     <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2">
-                        <div><p class="text-sm font-medium dark:text-white">${p.paymentReference}</p></div>
+                        <div><p class="text-sm font-medium dark:text-white">${p.paymentReference}</p><p class="text-[10px] text-slate-400">${p.recipientName}</p></div>
                         <span class="text-emerald-600 dark:text-emerald-400 font-medium text-sm">${formatCurrency(p.amount)}</span>
                     </div>
                 `).join('') || '<p class="text-xs text-slate-400">No payments yet</p>';
@@ -1342,7 +1767,7 @@
                 pendingContainer.innerHTML = pendingVerif.map(v => `
                     <div class="flex items-start space-x-3 p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-charcoal-700">
                         <div class="w-1.5 h-1.5 mt-2 rounded-full bg-blue-500"></div>
-                        <div><p class="text-sm font-medium dark:text-white">${v.referenceNumber}</p></div>
+                        <div><p class="text-sm font-medium dark:text-white">${v.referenceNumber}</p><p class="text-[10px] text-slate-400">${v.projectId}</p></div>
                     </div>
                 `).join('') || '<p class="text-xs text-slate-400">No pending verification</p>';
             }
@@ -1358,7 +1783,7 @@
                     const matchStatus = statusFilter === 'all' || f.status === statusFilter;
                     return matchSearch && matchCounty && matchStatus;
                 });
-                const sorted = sortData(filtered, sortState.farmers.key, sortState.farmers.dir);
+                const sorted = sortData(filtered, 'lastName', 'asc');
                 const pageSize = getPageSize();
                 const page = paginationState.farmers;
                 const start = page * pageSize;
@@ -1382,19 +1807,27 @@
                         `<tr><td colspan="7" class="px-4 py-8 text-center text-slate-400 text-sm">No farmers found</td></tr>`;
                     return;
                 }
-                tbody.innerHTML = paginated.map(f => `
-                    <tr class="table-row-hover">
-                        <td class="px-4 py-3 font-mono text-xs">${f.farmerCode}</td>
-                        <td class="px-4 py-3 font-medium">${f.firstName} ${f.lastName}</td>
-                        <td class="px-4 py-3 hidden sm:table-cell text-sm">${f.county}</td>
-                        <td class="px-4 py-3 hidden md:table-cell text-sm">${f.totalFarmArea.toFixed(1)}</td>
-                        <td class="px-4 py-3 hidden lg:table-cell text-sm">${f.estimatedCarbonCredits.toFixed(1)}</td>
-                        <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${f.status === 'Active' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300'}">${f.status}</span></td>
-                        <td class="px-4 py-3 text-right space-x-2">
-                            <button onclick="viewFarmer('${f.id}')" class="text-brand-600 dark:text-brand-400 hover:underline text-xs"><i class="fas fa-eye mr-1"></i>View</button>
-                        </td>
-                    </tr>
-                `).join('');
+                tbody.innerHTML = paginated.map(f => {
+                    const farms = state.farms.filter(farm => farm.farmerId === f.id);
+                    const statusColor = f.status === 'Active' ?
+                        'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' :
+                        f.status === 'Pending' ?
+                        'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' :
+                        'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300';
+                    return `
+                        <tr class="table-row-hover">
+                            <td class="px-4 py-3 font-mono text-xs">${f.farmerCode}</td>
+                            <td class="px-4 py-3 font-medium">${f.firstName} ${f.lastName}</td>
+                            <td class="px-4 py-3 hidden sm:table-cell text-sm">${f.county}</td>
+                            <td class="px-4 py-3 hidden md:table-cell text-sm">${f.totalFarmArea.toFixed(1)}</td>
+                            <td class="px-4 py-3 hidden lg:table-cell text-sm">${f.estimatedCarbonCredits.toFixed(1)}</td>
+                            <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${statusColor}">${f.status}</span></td>
+                            <td class="px-4 py-3 text-right space-x-2">
+                                <button onclick="viewFarmer('${f.id}')" class="text-brand-600 dark:text-brand-400 hover:underline text-xs"><i class="fas fa-eye mr-1"></i>View</button>
+                                <span class="text-[10px] text-slate-400">${farms.length} farms</span>
+                            </td>
+                        </tr>`;
+                }).join('');
             }
 
             function renderFarmsPage() {
@@ -1411,17 +1844,23 @@
                     container.innerHTML = '<p class="text-xs text-slate-400">No farms found</p>';
                     return;
                 }
-                container.innerHTML = filtered.slice(0, 50).map(f => `
-                    <div class="flex items-center justify-between p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-charcoal-700 transition-colors cursor-pointer" onclick="viewFarm('${f.id}')">
-                        <div>
-                            <p class="text-sm font-medium dark:text-white">${f.farmName}</p>
-                            <p class="text-xs text-slate-400">${f.farmId} · ${f.areaHa.toFixed(1)} ha</p>
+                container.innerHTML = filtered.slice(0, 50).map(f => {
+                    const syncStatus = f._syncFlag === 'missing_contract' ?
+                        '<span class="sync-badge pending"><i class="fas fa-exclamation-triangle"></i> No Contract</span>' :
+                        '<span class="sync-badge synced"><i class="fas fa-check-circle"></i> Synced</span>';
+                    return `
+                        <div class="flex items-center justify-between p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-charcoal-700 transition-colors cursor-pointer" onclick="viewFarm('${f.id}')">
+                            <div>
+                                <p class="text-sm font-medium dark:text-white">${f.farmName}</p>
+                                <p class="text-xs text-slate-400">${f.farmerName || 'Unknown'} · ${f.areaHa.toFixed(1)} ha</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-xs font-medium ${f.monitoringStatus === 'Active' ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400'}">${f.monitoringStatus}</p>
+                                ${syncStatus}
+                            </div>
                         </div>
-                        <div class="text-right">
-                            <p class="text-xs font-medium ${f.monitoringStatus === 'Active' ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400'}">${f.monitoringStatus}</p>
-                        </div>
-                    </div>
-                `).join('');
+                    `;
+                }).join('');
             }
 
             function renderProjectsPage() {
@@ -1433,7 +1872,7 @@
                     const matchStatus = statusFilter === 'all' || p.projectStatus === statusFilter;
                     return matchSearch && matchStatus;
                 });
-                const sorted = sortData(filtered, sortState.projects.key, sortState.projects.dir);
+                const sorted = sortData(filtered, 'projectCode', 'asc');
                 const pageSize = getPageSize();
                 const page = paginationState.projects;
                 const start = page * pageSize;
@@ -1455,19 +1894,26 @@
                         `<tr><td colspan="7" class="px-4 py-8 text-center text-slate-400 text-sm">No projects found</td></tr>`;
                     return;
                 }
-                tbody.innerHTML = paginated.map(p => `
-                    <tr class="table-row-hover">
-                        <td class="px-4 py-3 font-mono text-xs">${p.projectCode}</td>
-                        <td class="px-4 py-3 font-medium">${p.name}</td>
-                        <td class="px-4 py-3 hidden sm:table-cell">${p.county}</td>
-                        <td class="px-4 py-3 hidden md:table-cell">${p.enrolledAreaHa.toFixed(1)}</td>
-                        <td class="px-4 py-3 hidden lg:table-cell">${p.availableCredits.toLocaleString()}</td>
-                        <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300">${p.projectStatus}</span></td>
-                        <td class="px-4 py-3 text-right">
-                            <button onclick="viewProject('${p.id}')" class="text-brand-600 dark:text-brand-400 hover:underline text-xs"><i class="fas fa-eye mr-1"></i>View</button>
-                        </td>
-                    </tr>
-                `).join('');
+                tbody.innerHTML = paginated.map(p => {
+                    const statusColor = p.projectStatus === 'Active' ?
+                        'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' :
+                        p.projectStatus === 'Verified' ?
+                        'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300' :
+                        'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300';
+                    return `
+                        <tr class="table-row-hover">
+                            <td class="px-4 py-3 font-mono text-xs">${p.projectCode}</td>
+                            <td class="px-4 py-3 font-medium">${p.name}</td>
+                            <td class="px-4 py-3 hidden sm:table-cell">${p.county}</td>
+                            <td class="px-4 py-3 hidden md:table-cell">${p.enrolledAreaHa.toFixed(1)}</td>
+                            <td class="px-4 py-3 hidden lg:table-cell">${p.availableCredits.toLocaleString()}</td>
+                            <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${statusColor}">${p.projectStatus}</span></td>
+                            <td class="px-4 py-3 text-right">
+                                <button onclick="viewProject('${p.id}')" class="text-brand-600 dark:text-brand-400 hover:underline text-xs"><i class="fas fa-eye mr-1"></i>View</button>
+                                <span class="text-[10px] text-slate-400">${p.farmerCount} farmers</span>
+                            </td>
+                        </tr>`;
+                }).join('');
             }
 
             function renderMRVPage() {
@@ -1479,7 +1925,7 @@
                     const matchStatus = statusFilter === 'all' || m.verificationStatus === statusFilter;
                     return matchSearch && matchStatus;
                 });
-                const sorted = sortData(filtered, sortState.mrv.key, sortState.mrv.dir);
+                const sorted = sortData(filtered, 'monitoringDate', 'desc');
                 const pageSize = getPageSize();
                 const page = paginationState.mrv;
                 const start = page * pageSize;
@@ -1504,13 +1950,16 @@
                 tbody.innerHTML = paginated.map(m => {
                     const qualityLabel = m.dataQualityScore >= 75 ? 'Good' : m.dataQualityScore >= 50 ?
                         'Needs Review' : 'Poor';
+                    const autoVerified = m._autoVerified ?
+                        '<span class="text-[10px] text-emerald-500 ml-1"><i class="fas fa-robot"></i></span>' :
+                        '';
                     return `
                         <tr class="table-row-hover">
                             <td class="px-4 py-3 font-mono text-xs">${m.id}</td>
-                            <td class="px-4 py-3">${m.farmId}</td>
+                            <td class="px-4 py-3">${m.farmName || m.farmId}</td>
                             <td class="px-4 py-3 hidden sm:table-cell">${formatDate(m.monitoringDate)}</td>
                             <td class="px-4 py-3 hidden md:table-cell">${(m.carbonStock || 0).toFixed(1)}</td>
-                            <td class="px-4 py-3"><span class="text-xs font-medium">${m.dataQualityScore || 0}%</span> <span class="text-[10px] text-slate-400">${qualityLabel}</span></td>
+                            <td class="px-4 py-3"><span class="text-xs font-medium">${m.dataQualityScore || 0}%</span> <span class="text-[10px] text-slate-400">${qualityLabel}</span>${autoVerified}</td>
                             <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${m.verificationStatus === 'Verified' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' : m.verificationStatus === 'Pending' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'}">${m.verificationStatus}</span></td>
                             <td class="px-4 py-3 text-right">
                                 <button onclick="viewMRV('${m.id}')" class="text-brand-600 dark:text-brand-400 hover:underline text-xs"><i class="fas fa-eye mr-1"></i>View</button>
@@ -1533,24 +1982,27 @@
                         `<tr><td colspan="6" class="px-4 py-8 text-center text-slate-400 text-sm">No contracts found</td></tr>`;
                     return;
                 }
-                tbody.innerHTML = filtered.slice(0, 50).map(c => `
-                    <tr class="table-row-hover">
-                        <td class="px-4 py-3 font-mono text-xs">${c.contractNumber}</td>
-                        <td class="px-4 py-3">${c.farmerId}</td>
-                        <td class="px-4 py-3 hidden sm:table-cell">${c.contractType}</td>
-                        <td class="px-4 py-3 hidden md:table-cell">${formatDate(c.endDate)}</td>
-                        <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300">${c.status}</span></td>
-                        <td class="px-4 py-3 text-right">
-                            <button onclick="viewContract('${c.id}')" class="text-brand-600 dark:text-brand-400 hover:underline text-xs"><i class="fas fa-eye mr-1"></i>View</button>
-                        </td>
-                    </tr>
-                `).join('');
-            }
-
-            function renderCommunitiesPage() {
-                const container = $('#communityList');
-                container.innerHTML =
-                    '<p class="text-slate-400 text-sm">Community management coming soon...</p>';
+                tbody.innerHTML = filtered.slice(0, 50).map(c => {
+                    const statusColor = c.status === 'Active' ?
+                        'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' :
+                        c.status === 'Pending Signature' ?
+                        'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' :
+                        'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300';
+                    const daysLeft = Math.floor((new Date(c.endDate) - new Date()) / 86400000);
+                    const expiryLabel = daysLeft <= 30 && daysLeft > 0 ? ` (${daysLeft} days)` : '';
+                    return `
+                        <tr class="table-row-hover">
+                            <td class="px-4 py-3 font-mono text-xs">${c.contractNumber}${expiryLabel}</td>
+                            <td class="px-4 py-3">${c.farmerName || c.farmerId}</td>
+                            <td class="px-4 py-3 hidden sm:table-cell">${c.contractType}</td>
+                            <td class="px-4 py-3 hidden md:table-cell">${formatDate(c.endDate)}</td>
+                            <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${statusColor}">${c.status}</span></td>
+                            <td class="px-4 py-3 text-right">
+                                <button onclick="viewContract('${c.id}')" class="text-brand-600 dark:text-brand-400 hover:underline text-xs"><i class="fas fa-eye mr-1"></i>View</button>
+                                <span class="text-[10px] text-slate-400">${formatCurrency(c.paymentsReceived || 0)} paid</span>
+                            </td>
+                        </tr>`;
+                }).join('');
             }
 
             function renderPaymentsPage() {
@@ -1576,18 +2028,25 @@
                         `<tr><td colspan="6" class="px-4 py-8 text-center text-slate-400 text-sm">No payments found</td></tr>`;
                     return;
                 }
-                tbody.innerHTML = filtered.slice(0, 50).map(p => `
-                    <tr class="table-row-hover">
-                        <td class="px-4 py-3 font-mono text-xs">${p.paymentReference}</td>
-                        <td class="px-4 py-3">${p.farmerId}</td>
-                        <td class="px-4 py-3 hidden sm:table-cell">${p.paymentType}</td>
-                        <td class="px-4 py-3 hidden md:table-cell">${formatCurrency(p.amount)}</td>
-                        <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${p.status === 'Completed' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300'}">${p.status}</span></td>
-                        <td class="px-4 py-3 text-right">
-                            ${p.status === 'Pending' ? `<button onclick="completePayment('${p.id}')" class="text-emerald-600 hover:text-emerald-700 text-xs"><i class="fas fa-check mr-1"></i>Complete</button>` : ''}
-                        </td>
-                    </tr>
-                `).join('');
+                tbody.innerHTML = filtered.slice(0, 50).map(p => {
+                    const statusColor = p.status === 'Completed' ?
+                        'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' :
+                        p.status === 'Pending' ?
+                        'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' :
+                        'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300';
+                    return `
+                        <tr class="table-row-hover">
+                            <td class="px-4 py-3 font-mono text-xs">${p.paymentReference}</td>
+                            <td class="px-4 py-3">${p.recipientName || p.farmerId}</td>
+                            <td class="px-4 py-3 hidden sm:table-cell">${p.paymentType}</td>
+                            <td class="px-4 py-3 hidden md:table-cell">${formatCurrency(p.amount)}</td>
+                            <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${statusColor}">${p.status}</span></td>
+                            <td class="px-4 py-3 text-right">
+                                ${p.status === 'Pending' ? `<button onclick="completePayment('${p.id}')" class="text-emerald-600 hover:text-emerald-700 text-xs"><i class="fas fa-check mr-1"></i>Complete</button>` : ''}
+                                <span class="text-[10px] text-slate-400">${formatDate(p.paymentDate)}</span>
+                            </td>
+                        </tr>`;
+                }).join('');
             }
 
             function renderVerificationPage() {
@@ -1597,18 +2056,27 @@
                         `<tr><td colspan="6" class="px-4 py-8 text-center text-slate-400 text-sm">No verification records</td></tr>`;
                     return;
                 }
-                tbody.innerHTML = (state.verificationRecords || []).slice(0, 50).map(v => `
-                    <tr class="table-row-hover">
-                        <td class="px-4 py-3 font-mono text-xs">${v.referenceNumber}</td>
-                        <td class="px-4 py-3">${v.projectId}</td>
-                        <td class="px-4 py-3 hidden sm:table-cell">${v.monitoringRecordIds.length}</td>
-                        <td class="px-4 py-3 hidden md:table-cell">${formatDate(v.submittedDate)}</td>
-                        <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${v.status === 'Verified' ? 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' : v.status === 'Pending' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' : 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300'}">${v.status}</span></td>
-                        <td class="px-4 py-3 text-right">
-                            ${v.status === 'Pending' ? `<button onclick="approveVerification('${v.id}')" class="text-emerald-600 hover:text-emerald-700 text-xs"><i class="fas fa-check mr-1"></i>Approve</button>` : ''}
-                        </td>
-                    </tr>
-                `).join('');
+                tbody.innerHTML = (state.verificationRecords || []).slice(0, 50).map(v => {
+                    const statusColor = v.status === 'Verified' ?
+                        'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' :
+                        v.status === 'Approved' ?
+                        'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300' :
+                        v.status === 'Pending' ?
+                        'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' :
+                        'bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300';
+                    return `
+                        <tr class="table-row-hover">
+                            <td class="px-4 py-3 font-mono text-xs">${v.referenceNumber}</td>
+                            <td class="px-4 py-3">${v.projectId}</td>
+                            <td class="px-4 py-3 hidden sm:table-cell">${v.monitoringRecordIds.length}</td>
+                            <td class="px-4 py-3 hidden md:table-cell">${formatDate(v.submittedDate)}</td>
+                            <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${statusColor}">${v.status}</span></td>
+                            <td class="px-4 py-3 text-right">
+                                ${v.status === 'Pending' ? `<button onclick="approveVerification('${v.id}')" class="text-emerald-600 hover:text-emerald-700 text-xs"><i class="fas fa-check mr-1"></i>Approve</button>` : ''}
+                                <span class="text-[10px] text-slate-400">Score: ${v.verificationScore}%</span>
+                            </td>
+                        </tr>`;
+                }).join('');
             }
 
             function renderAuditPage() {
@@ -1623,16 +2091,18 @@
                         `<tr><td colspan="6" class="px-4 py-8 text-center text-slate-400 text-sm">No audit records found</td></tr>`;
                     return;
                 }
-                tbody.innerHTML = filtered.slice(0, 50).map(a => `
-                    <tr class="table-row-hover">
-                        <td class="px-4 py-3 text-xs">${formatDateTime(a.timestamp)}</td>
-                        <td class="px-4 py-3 text-xs">${a.userName}</td>
-                        <td class="px-4 py-3 text-xs"><span class="font-semibold">${a.action}</span></td>
-                        <td class="px-4 py-3 text-xs hidden sm:table-cell">${a.module}</td>
-                        <td class="px-4 py-3 text-xs hidden md:table-cell">${a.entityId}</td>
-                        <td class="px-4 py-3 text-xs font-medium ${a.severity === 'critical' ? 'text-red-600 dark:text-red-400' : 'text-slate-500'}">${a.severity}</td>
-                    </tr>
-                `).join('');
+                tbody.innerHTML = filtered.slice(0, 50).map(a => {
+                    const syncEmoji = a.module === 'Sync' ? '🔄 ' : '';
+                    return `
+                        <tr class="table-row-hover">
+                            <td class="px-4 py-3 text-xs">${formatDateTime(a.timestamp)}</td>
+                            <td class="px-4 py-3 text-xs">${a.userName}</td>
+                            <td class="px-4 py-3 text-xs"><span class="font-semibold">${syncEmoji}${a.action}</span></td>
+                            <td class="px-4 py-3 text-xs hidden sm:table-cell">${a.module}</td>
+                            <td class="px-4 py-3 text-xs hidden md:table-cell">${a.entityId}</td>
+                            <td class="px-4 py-3 text-xs font-medium ${a.severity === 'critical' ? 'text-red-600 dark:text-red-400' : 'text-slate-500'}">${a.severity}</td>
+                        </tr>`;
+                }).join('');
             }
 
             // CRUD & Actions
@@ -1643,41 +2113,90 @@
                 $('#detailAvatar').textContent = initials;
                 $('#detailName').textContent = `${farmer.firstName} ${farmer.lastName}`;
                 $('#detailId').textContent = farmer.farmerCode;
-                const personal = $('#tab-personal');
-                personal.innerHTML = `
+                const farms = state.farms.filter(f => f.farmerId === id);
+                const contracts = state.contracts.filter(c => c.farmerId === id);
+                const payments = state.payments.filter(p => p.farmerId === id);
+                const mrvRecords = state.monitoringRecords.filter(m => m.farmerId === id);
+
+                $('#tab-personal').innerHTML = `
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div><label class="text-xs text-slate-400">Full Name</label><p class="font-medium dark:text-white">${farmer.firstName} ${farmer.lastName}</p></div>
                         <div><label class="text-xs text-slate-400">Farmer Code</label><p class="font-medium dark:text-white">${farmer.farmerCode}</p></div>
                         <div><label class="text-xs text-slate-400">Phone</label><p class="font-medium dark:text-white">${farmer.phone}</p></div>
                         <div><label class="text-xs text-slate-400">County</label><p class="font-medium dark:text-white">${farmer.county}</p></div>
+                        <div><label class="text-xs text-slate-400">Total Farms</label><p class="font-medium dark:text-white">${farms.length}</p></div>
+                        <div><label class="text-xs text-slate-400">Total Area</label><p class="font-medium dark:text-white">${farmer.totalFarmArea.toFixed(1)} ha</p></div>
+                        <div><label class="text-xs text-slate-400">Est. Carbon Credits</label><p class="font-medium dark:text-white">${farmer.estimatedCarbonCredits.toFixed(1)} tCO₂e</p></div>
                         <div><label class="text-xs text-slate-400">Status</label><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${farmer.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}">${farmer.status}</span></div>
                     </div>`;
+
+                $('#tab-farms').innerHTML = farms.length > 0 ? farms.map(f => `
+                    <div class="flex items-center justify-between p-3 rounded-lg bg-slate-50 dark:bg-charcoal-700">
+                        <div><p class="font-medium dark:text-white">${f.farmName}</p><p class="text-xs text-slate-400">${f.areaHa.toFixed(1)} ha · ${f.monitoringStatus}</p></div>
+                        <span class="text-xs text-brand-600 dark:text-brand-400">${f.verificationStatus}</span>
+                    </div>
+                `).join('') : '<p class="text-sm text-slate-400">No farms registered</p>';
+
+                $('#tab-contracts').innerHTML = contracts.length > 0 ? contracts.map(c => `
+                    <div class="flex items-center justify-between p-3 rounded-lg bg-slate-50 dark:bg-charcoal-700">
+                        <div><p class="font-medium dark:text-white">${c.contractNumber}</p><p class="text-xs text-slate-400">${c.contractType} · ${c.status}</p></div>
+                        <span class="text-xs text-slate-400">${formatDate(c.endDate)}</span>
+                    </div>
+                `).join('') : '<p class="text-sm text-slate-400">No contracts</p>';
+
+                $('#tab-payments').innerHTML = payments.length > 0 ? payments.slice(0, 5).map(p => `
+                    <div class="flex items-center justify-between p-3 rounded-lg bg-slate-50 dark:bg-charcoal-700">
+                        <div><p class="font-medium dark:text-white">${p.paymentReference}</p><p class="text-xs text-slate-400">${p.paymentType}</p></div>
+                        <span class="text-sm font-medium ${p.status === 'Completed' ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600'}">${formatCurrency(p.amount)}</span>
+                    </div>
+                `).join('') : '<p class="text-sm text-slate-400">No payments</p>';
+
+                $('#tab-mrv').innerHTML = mrvRecords.length > 0 ? mrvRecords.slice(0, 5).map(m => `
+                    <div class="flex items-center justify-between p-3 rounded-lg bg-slate-50 dark:bg-charcoal-700">
+                        <div><p class="font-medium dark:text-white">${m.id}</p><p class="text-xs text-slate-400">${formatDate(m.monitoringDate)}</p></div>
+                        <span class="text-xs ${m.verificationStatus === 'Verified' ? 'text-emerald-600' : 'text-yellow-600'}">${m.verificationStatus}</span>
+                    </div>
+                `).join('') : '<p class="text-sm text-slate-400">No MRV records</p>';
+
+                $('#tab-activity').innerHTML = '<p class="text-sm text-slate-400">Activity log coming soon...</p>';
+
                 openModal('farmerDetailModal');
             };
 
             window.viewFarm = function(id) {
                 const farm = state.farms.find(f => f.id === id);
                 if (!farm) { showToast('❌ Farm not found'); return; }
-                showToast(`🌾 ${farm.farmName} | ${farm.areaHa.toFixed(1)} ha | ${farm.monitoringStatus}`);
+                const farmer = state.farmers.find(f => f.id === farm.farmerId);
+                const mrvCount = state.monitoringRecords.filter(m => m.farmId === id).length;
+                showToast(
+                    `🌾 ${farm.farmName} | ${farmer ? farmer.firstName + ' ' + farmer.lastName : 'Unknown'} | ${farm.areaHa.toFixed(1)} ha | ${mrvCount} MRV records`
+                    );
             };
 
             window.viewProject = function(id) {
                 const project = state.projects.find(p => p.id === id);
                 if (!project) { showToast('❌ Project not found'); return; }
-                showToast(`🌳 ${project.name} | ${project.projectType} | ${project.enrolledAreaHa.toFixed(1)} ha`);
+                const farms = state.farms.filter(f => f.projectId === id);
+                const mrvCount = state.monitoringRecords.filter(m => m.projectId === id).length;
+                showToast(
+                    `🌳 ${project.name} | ${farms.length} farms | ${project.enrolledAreaHa.toFixed(1)} ha | ${mrvCount} MRV records`
+                    );
             };
 
             window.viewMRV = function(id) {
                 const record = state.monitoringRecords.find(m => m.id === id);
                 if (!record) { showToast('❌ MRV record not found'); return; }
                 showToast(
-                    `📋 ${record.id} | Quality: ${record.dataQualityScore}% | Status: ${record.verificationStatus}`);
+                    `📋 ${record.id} | ${record.farmName || record.farmId} | Quality: ${record.dataQualityScore}% | Status: ${record.verificationStatus}`
+                    );
             };
 
             window.viewContract = function(id) {
                 const contract = state.contracts.find(c => c.id === id);
                 if (!contract) { showToast('❌ Contract not found'); return; }
-                showToast(`📄 ${contract.contractNumber} | ${contract.status} | Ends ${formatDate(contract.endDate)}`);
+                showToast(
+                    `📄 ${contract.contractNumber} | ${contract.farmerName || contract.farmerId} | ${contract.status} | ${formatCurrency(contract.paymentsReceived || 0)} paid`
+                    );
             };
 
             window.approveVerification = function(id) {
@@ -1685,6 +2204,7 @@
                 if (!record) return;
                 record.status = 'Approved';
                 record.reviewDate = new Date().toISOString();
+                SyncEngine.syncAll();
                 StorageService.save(state);
                 refreshAll();
                 showToast('✅ Verification approved');
@@ -1695,6 +2215,7 @@
                 if (!payment) return;
                 payment.status = 'Completed';
                 payment.transactionReference = `TXN-${randomInt(100000, 999999)}`;
+                SyncEngine.syncAll();
                 StorageService.save(state);
                 refreshAll();
                 showToast(`💰 Payment ${payment.paymentReference} completed`);
@@ -1703,6 +2224,73 @@
             window.generateReport = function(type) {
                 showToast(`📄 ${type.charAt(0).toUpperCase() + type.slice(1)} report generated`);
             };
+
+            // Sync Function
+            function performSync() {
+                const syncBtn = $('#syncBtn');
+                const syncIcon = syncBtn?.querySelector('i');
+                const syncStatus = $('#syncStatus');
+
+                if (syncIcon) {
+                    syncIcon.classList.add('fa-spin');
+                    syncIcon.classList.add('fa-spinner');
+                    syncIcon.classList.remove('fa-sync');
+                }
+
+                const result = SyncEngine.syncAll();
+
+                if (syncIcon) {
+                    syncIcon.classList.remove('fa-spin');
+                    syncIcon.classList.remove('fa-spinner');
+                    syncIcon.classList.add('fa-sync');
+                }
+
+                if (result.success) {
+                    state.lastSync = new Date().toISOString();
+                    state.syncCount = (state.syncCount || 0) + 1;
+                    StorageService.save(state);
+
+                    // Update sync status indicator
+                    if (syncStatus) {
+                        syncStatus.className = 'absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-charcoal-800';
+                    }
+
+                    const details = result.results;
+                    const msg =
+                        `🔄 Sync completed in ${result.duration}ms | ${details.farmersUpdated} farmers, ${details.farmsUpdated} farms, ${details.projectsUpdated} projects, ${details.contractsUpdated} contracts, ${details.paymentsUpdated} payments, ${details.mrvUpdated} MRV records`;
+                    if (details.errors.length > 0) {
+                        showToast(msg + ` ⚠️ ${details.errors.length} issues found`);
+                        console.warn('Sync issues:', details.errors);
+                    } else {
+                        showToast(msg);
+                    }
+
+                    // Add to audit
+                    state.auditRecords.unshift({
+                        id: generateId('AUD', (state.auditRecords || []).length + 1),
+                        timestamp: new Date().toISOString(),
+                        userName: state.currentUser.name || 'System',
+                        action: 'SYNC',
+                        module: 'Sync',
+                        entityId: `SYNC-${state.syncCount}`,
+                        description: `System sync completed in ${result.duration}ms`,
+                        severity: 'info'
+                    });
+
+                    refreshAll();
+                } else {
+                    if (syncStatus) {
+                        syncStatus.className = 'absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-red-500 ring-2 ring-white dark:ring-charcoal-800';
+                    }
+                    showToast(`❌ Sync failed: ${result.error}`);
+                }
+
+                // Update last sync time
+                const lastSyncEl = document.querySelector('.last-sync-time');
+                if (lastSyncEl) {
+                    lastSyncEl.textContent = state.lastSync ? formatDateTime(state.lastSync) : 'Never';
+                }
+            }
 
             // Navigation
             function navigateTo(page) {
@@ -1736,7 +2324,6 @@
                     case 'carbon': renderProjectsPage(); break;
                     case 'mrv': renderMRVPage(); break;
                     case 'contracts': renderContractsPage(); break;
-                    case 'communities': renderCommunitiesPage(); break;
                     case 'payments': renderPaymentsPage(); break;
                     case 'verification': renderVerificationPage(); break;
                     case 'audit': renderAuditPage(); break;
@@ -1750,7 +2337,6 @@
                 renderProjectsPage();
                 renderMRVPage();
                 renderContractsPage();
-                renderCommunitiesPage();
                 renderPaymentsPage();
                 renderVerificationPage();
                 renderAuditPage();
@@ -1792,7 +2378,6 @@
                 applyTheme();
                 StorageService.save(state);
                 showToast('🌓 Theme switched');
-                updateChartsTheme();
             }
 
             // Toast
@@ -1834,7 +2419,7 @@
                 const { text, grid } = getChartColors();
                 const ctx1 = $('#carbonTrendChart')?.getContext('2d');
                 if (ctx1) {
-                    const monthlyCarbon = CalculationEngine.calculateDashboardMetrics().monthlyCarbon;
+                    const monthlyCarbon = calculateMetrics().monthlyCarbon;
                     charts.carbon = new Chart(ctx1, {
                         type: 'line',
                         data: {
@@ -1855,7 +2440,7 @@
                 }
                 const ctx2 = $('#verificationChart')?.getContext('2d');
                 if (ctx2) {
-                    const metrics = CalculationEngine.calculateVerificationMetrics();
+                    const metrics = calculateMetrics().verificationMetrics;
                     charts.verification = new Chart(ctx2, {
                         type: 'doughnut',
                         data: {
@@ -1870,23 +2455,6 @@
                 }
             }
 
-            function updateChartsTheme() {
-                const { text, grid } = getChartColors();
-                Object.values(charts).forEach(chart => {
-                    if (chart.options.plugins?.legend?.labels) chart.options.plugins.legend.labels.color =
-                        text;
-                    if (chart.options.scales) {
-                        Object.keys(chart.options.scales).forEach(axis => {
-                            if (chart.options.scales[axis].grid) chart.options.scales[axis].grid
-                                .color = grid;
-                            if (chart.options.scales[axis].ticks) chart.options.scales[axis].ticks
-                                .color = text;
-                        });
-                    }
-                    chart.update();
-                });
-            }
-
             // Maps
             function initDashboardMap() {
                 const container = $('#map');
@@ -1899,7 +2467,7 @@
                 (state.farms || []).slice(0, 50).forEach(f => {
                     L.circleMarker([f.latitude, f.longitude], { radius: 4, fillColor: '#43a047',
                             color: '#fff', weight: 1, fillOpacity: 0.8 })
-                        .addTo(state.map).bindPopup(`<strong>${f.farmName}</strong><br/>${f.areaHa.toFixed(1)} ha`);
+                        .addTo(state.map).bindPopup(`<strong>${f.farmName}</strong><br/>${f.farmerName || 'Unknown'}<br/>${f.areaHa.toFixed(1)} ha`);
                 });
                 setTimeout(() => state.map?.invalidateSize(), 300);
             }
@@ -1913,14 +2481,14 @@
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OSM' })
                     .addTo(state.farmMap);
                 (state.farms || []).slice(0, 100).forEach(f => {
-                    L.circleMarker([f.latitude, f.longitude], { radius: 4, fillColor: '#388e5c',
+                    const color = f.monitoringStatus === 'Active' ? '#388e5c' : '#94a3b8';
+                    L.circleMarker([f.latitude, f.longitude], { radius: 4, fillColor: color,
                             color: '#fff', weight: 1, fillOpacity: 0.7 })
-                        .addTo(state.farmMap).bindPopup(`<strong>${f.farmName}</strong><br/>${f.areaHa.toFixed(1)} ha`);
+                        .addTo(state.farmMap).bindPopup(`<strong>${f.farmName}</strong><br/>${f.farmerName || 'Unknown'}<br/>${f.areaHa.toFixed(1)} ha<br/>Status: ${f.monitoringStatus}`);
                 });
                 setTimeout(() => state.farmMap?.invalidateSize(), 300);
             }
 
-            // Geospatial Map with Live GPS
             function initGeospatialMap() {
                 const container = $('#geospatialMap');
                 if (!container) return;
@@ -1934,9 +2502,10 @@
                 L.marker([hubLat, hubLng]).addTo(state.geoMap).bindPopup('<b>Regional Hub</b><br>Reference Node')
                     .openPopup();
                 (state.farms || []).slice(0, 100).forEach(f => {
-                    L.circleMarker([f.latitude, f.longitude], { radius: 4, fillColor: '#43a047', color: '#fff',
+                    const color = f.monitoringStatus === 'Active' ? '#43a047' : '#94a3b8';
+                    L.circleMarker([f.latitude, f.longitude], { radius: 4, fillColor: color, color: '#fff',
                             weight: 1, fillOpacity: 0.8 })
-                        .addTo(state.geoMap).bindPopup(`<strong>${f.farmName}</strong><br/>${f.areaHa.toFixed(1)} ha`);
+                        .addTo(state.geoMap).bindPopup(`<strong>${f.farmName}</strong><br/>${f.farmerName || 'Unknown'}<br/>${f.areaHa.toFixed(1)} ha`);
                 });
 
                 // Geolocation
@@ -2025,22 +2594,8 @@
                 setTimeout(() => state.evidenceMap?.invalidateSize(), 200);
             }
 
-            // GPS Capture for Evidence Form
+            // GPS Capture
             function initGPSCapture() {
-                let currentLat = null,
-                    currentLng = null;
-
-                function updateGPSFields(lat, lng) {
-                    currentLat = lat;
-                    currentLng = lng;
-                    $('#mrvLatitude').value = lat.toFixed(6);
-                    $('#mrvLongitude').value = lng.toFixed(6);
-                    initEvidenceMap(lat, lng);
-                    $('#gpsIndicator').classList.add('active');
-                    $('#gpsStatusText').textContent = 'Live';
-                    $('#gpsStatusText').className = 'text-brand-600 dark:text-brand-400';
-                }
-
                 function captureGPS() {
                     if (!navigator.geolocation) {
                         showToast('⚠️ Geolocation not supported');
@@ -2051,12 +2606,17 @@
                     $('#gpsStatusText').className = 'text-yellow-500';
                     navigator.geolocation.getCurrentPosition(
                         pos => {
-                            updateGPSFields(pos.coords.latitude, pos.coords.longitude);
-                            showToast('📍 GPS coordinates captured');
-                            // Also update geospatial telemetry
-                            $('#val-lat').textContent = pos.coords.latitude.toFixed(5);
-                            $('#val-lng').textContent = pos.coords.longitude.toFixed(5);
+                            const { latitude, longitude } = pos.coords;
+                            $('#mrvLatitude').value = latitude.toFixed(6);
+                            $('#mrvLongitude').value = longitude.toFixed(6);
+                            initEvidenceMap(latitude, longitude);
+                            $('#gpsIndicator').classList.add('active');
+                            $('#gpsStatusText').textContent = 'Live';
+                            $('#gpsStatusText').className = 'text-brand-600 dark:text-brand-400';
+                            $('#val-lat').textContent = latitude.toFixed(5);
+                            $('#val-lng').textContent = longitude.toFixed(5);
                             $('#val-acc').textContent = `±${pos.coords.accuracy.toFixed(1)} m`;
+                            showToast('📍 GPS coordinates captured');
                         },
                         err => {
                             showToast(`⚠️ GPS Error: ${err.message}`);
@@ -2067,15 +2627,11 @@
                     );
                 }
 
-                // Listen for manual coordinate input
                 $('#mrvLatitude')?.addEventListener('input', function() {
                     const lat = parseFloat(this.value);
                     const lng = parseFloat($('#mrvLongitude').value);
                     if (!isNaN(lat) && !isNaN(lng) && lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180) {
                         initEvidenceMap(lat, lng);
-                        $('#gpsIndicator').classList.add('active');
-                        $('#gpsStatusText').textContent = 'Manual';
-                        $('#gpsStatusText').className = 'text-brand-600 dark:text-brand-400';
                     }
                 });
 
@@ -2084,9 +2640,6 @@
                     const lat = parseFloat($('#mrvLatitude').value);
                     if (!isNaN(lat) && !isNaN(lng) && lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180) {
                         initEvidenceMap(lat, lng);
-                        $('#gpsIndicator').classList.add('active');
-                        $('#gpsStatusText').textContent = 'Manual';
-                        $('#gpsStatusText').className = 'text-brand-600 dark:text-brand-400';
                     }
                 });
 
@@ -2103,8 +2656,14 @@
 
             // Event Handlers
             function initEvents() {
+                // Sync button
+                $('#syncBtn')?.addEventListener('click', performSync);
+
+                // Theme toggle
                 $('#themeToggle')?.addEventListener('click', toggleTheme);
                 $('#settingsThemeToggle')?.addEventListener('click', toggleTheme);
+
+                // Sidebar toggle
                 $('#sidebarToggle')?.addEventListener('click', function() {
                     state.sidebarCollapsed = !state.sidebarCollapsed;
                     const sidebar = $('#sidebar');
@@ -2123,6 +2682,8 @@
                     }
                     setTimeout(() => window.dispatchEvent(new Event('resize')), 300);
                 });
+
+                // Mobile menu
                 $('#mobileMenuBtn')?.addEventListener('click', openMobileDrawer);
                 document.addEventListener('click', (e) => {
                     if (window.innerWidth < 768) {
@@ -2132,6 +2693,7 @@
                     }
                 });
 
+                // Navigation
                 $$('.nav-link').forEach(link => {
                     link.addEventListener('click', (e) => { e.preventDefault();
                         navigateTo(link.dataset.page); });
@@ -2256,20 +2818,23 @@
                         farmIds: [],
                         registrationDate: new Date().toISOString(),
                         status: 'Pending',
-                        verificationStatus: 'Not Verified',
+                        verificationStatus: 'Pending',
                         totalFarmArea: 0,
                         estimatedCarbonCredits: 0,
+                        paymentStatus: 'Pending',
+                        createdAt: new Date().toISOString(),
+                        updatedAt: new Date().toISOString()
                     };
                     state.farmers.push(farmer);
+                    SyncEngine.syncAll();
                     StorageService.save(state);
                     closeModal('farmerModal');
                     this.reset();
-                    renderFarmersPage();
-                    renderDashboard();
+                    refreshAll();
                     showToast(`✅ Farmer ${firstName} ${lastName} registered`);
                 });
 
-                // Evidence form with GPS data
+                // Evidence form
                 $('#evidenceForm')?.addEventListener('submit', function(e) {
                     e.preventDefault();
                     const farmId = $('#mrvFarmSelect').value;
@@ -2292,6 +2857,7 @@
                     const record = {
                         id: generateId('MRV', state.monitoringRecords.length + 1),
                         farmId,
+                        farmName: farm ? farm.farmName : farmId,
                         farmerId: farm ? farm.farmerId : null,
                         projectId: farm ? farm.projectId : null,
                         monitoringDate: date,
@@ -2306,16 +2872,37 @@
                         dataQualityScore: 0,
                         verificationStatus: 'Pending',
                         notes,
-                        anomalies: []
+                        anomalies: [],
+                        createdAt: new Date().toISOString(),
+                        updatedAt: new Date().toISOString()
                     };
-                    const result = MRVEngine.submitForVerification(record);
-                    record.dataQualityScore = result.quality || 0;
+
+                    // Calculate quality score
+                    let quality = 40;
+                    if (lat && lng) quality += 15;
+                    if (areaVerified > 0) quality += 10;
+                    if (biomass > 0) quality += 10;
+                    if (treesPlanted > 0 && survivingTrees > 0) {
+                        const rate = survivingTrees / treesPlanted;
+                        if (rate >= 0.7) quality += 15;
+                        else if (rate >= 0.4) quality += 10;
+                        else quality += 5;
+                    }
+                    if (notes && notes.length > 10) quality += 10;
+                    record.dataQualityScore = Math.min(100, quality);
+
+                    // Auto-verify high quality
+                    if (record.dataQualityScore >= 75) {
+                        record.verificationStatus = 'Verified';
+                        record._autoVerified = true;
+                    }
+
                     state.monitoringRecords.push(record);
+                    SyncEngine.syncAll();
                     StorageService.save(state);
                     closeModal('evidenceModal');
                     this.reset();
-                    renderMRVPage();
-                    renderDashboard();
+                    refreshAll();
                     showToast(
                         `📤 MRV record ${record.id} submitted (Quality: ${record.dataQualityScore}%)`);
                 });
@@ -2335,6 +2922,14 @@
                         if (target) target.classList.remove('hidden');
                     });
                 });
+
+                // Periodic auto-sync every 5 minutes
+                setInterval(() => {
+                    if (state.settings.autoSync !== false) {
+                        console.log('🔄 Auto-sync triggered');
+                        performSync();
+                    }
+                }, 300000);
             }
 
             // Initialization
@@ -2409,6 +3004,23 @@
                 renderDashboard();
                 initEvents();
                 navigateTo('dashboard');
+
+                // Show sync status
+                const lastSyncLabel = document.createElement('span');
+                lastSyncLabel.className = 'text-[10px] text-slate-400 ml-2 last-sync-time';
+                lastSyncLabel.textContent = state.lastSync ? formatDateTime(state.lastSync) : 'Never synced';
+                const headerRight = document.querySelector('.glass-header .flex.items-center');
+                if (headerRight) {
+                    headerRight.appendChild(lastSyncLabel);
+                }
+
+                // Initial sync
+                setTimeout(() => {
+                    if (!state.lastSync || (Date.now() - new Date(state.lastSync).getTime()) > 60000) {
+                        performSync();
+                    }
+                }, 1000);
+
                 setTimeout(() => showToast('🌿 CarbonLink MRV Enterprise Ultra Pro ready'), 600);
             }
 
@@ -2422,6 +3034,7 @@
             window.completePayment = completePayment;
             window.generateReport = generateReport;
             window.closeModal = closeModal;
+            window.performSync = performSync;
 
             document.addEventListener('DOMContentLoaded', init);
         })();
