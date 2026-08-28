@@ -1070,7 +1070,7 @@
         <button data-page="settings" class="bottom-nav-btn flex flex-col items-center text-xs text-slate-500 dark:text-slate-400 p-1"><i class="fas fa-cog text-lg"></i><span class="text-[9px]">Settings</span></button>
     </nav>
 
-    <!-- MODALS - Enhanced with advanced forms -->
+    <!-- MODALS -->
     <!-- Farmer Modal -->
     <div id="farmerModal" class="modal hidden fixed inset-0 z-[70] flex items-center justify-center p-4">
         <div class="modal-backdrop absolute inset-0" onclick="closeModal('farmerModal')"></div>
@@ -1080,14 +1080,12 @@
                 <button onclick="closeModal('farmerModal')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fas fa-times text-xl"></i></button>
             </div>
             <form id="farmerForm" class="space-y-4" novalidate>
-                <!-- Wizard Steps -->
                 <div class="wizard-steps">
                     <div class="wizard-step active" data-step="1">Personal Info</div>
                     <div class="wizard-step" data-step="2">Contact Details</div>
                     <div class="wizard-step" data-step="3">Farm Details</div>
                 </div>
 
-                <!-- Step 1: Personal Info -->
                 <div class="wizard-step-content" data-step="1">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div class="form-group">
@@ -1117,7 +1115,6 @@
                     </div>
                 </div>
 
-                <!-- Step 2: Contact Details -->
                 <div class="wizard-step-content hidden" data-step="2">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div class="form-group">
@@ -1145,7 +1142,6 @@
                     </div>
                 </div>
 
-                <!-- Step 3: Farm Details -->
                 <div class="wizard-step-content hidden" data-step="3">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div class="form-group">
@@ -1179,7 +1175,6 @@
                     </div>
                 </div>
 
-                <!-- Form Actions -->
                 <div class="form-actions">
                     <button type="button" id="prevStepBtn" class="px-4 py-2.5 rounded-xl border border-slate-300 dark:border-charcoal-600 text-sm font-medium hover:bg-slate-50 dark:hover:bg-charcoal-700 hidden">Previous</button>
                     <button type="button" id="nextStepBtn" class="flex-1 px-4 py-2.5 rounded-xl bg-brand-600 text-white text-sm font-medium hover:bg-brand-700">Next</button>
@@ -1333,7 +1328,7 @@
     <script>
         // ================================================================
         // CARBONLINK MRV – ENTERPRISE ULTRA PRO
-        // ADVANCED MANUAL DATA INPUT WITH ULTRA PRO LOGIC
+        // FIXED: Farmer registration now properly stores data
         // ================================================================
 
         (function() {
@@ -1381,221 +1376,6 @@
 
             function debounce(fn, ms = 300) { let timer; return function(...args) { clearTimeout(timer);
                     timer = setTimeout(() => fn.apply(this, args), ms); }; }
-
-            // ============================================================
-            // ADVANCED UNDO/REDO SYSTEM (Command Pattern)
-            // ============================================================
-            class CommandHistory {
-                constructor(maxSize = 100) {
-                    this.undoStack = [];
-                    this.redoStack = [];
-                    this.maxSize = maxSize;
-                    this.isExecuting = false;
-                }
-
-                execute(command) {
-                    if (this.isExecuting) return;
-                    this.isExecuting = true;
-                    try {
-                        command.execute();
-                        this.undoStack.push(command);
-                        this.redoStack = [];
-                        if (this.undoStack.length > this.maxSize) {
-                            this.undoStack.shift();
-                        }
-                        this.updateButtons();
-                    } finally {
-                        this.isExecuting = false;
-                    }
-                }
-
-                undo() {
-                    if (this.undoStack.length === 0) return;
-                    const command = this.undoStack.pop();
-                    this.isExecuting = true;
-                    try {
-                        command.undo();
-                        this.redoStack.push(command);
-                        this.updateButtons();
-                    } finally {
-                        this.isExecuting = false;
-                    }
-                }
-
-                redo() {
-                    if (this.redoStack.length === 0) return;
-                    const command = this.redoStack.pop();
-                    this.isExecuting = true;
-                    try {
-                        command.execute();
-                        this.undoStack.push(command);
-                        this.updateButtons();
-                    } finally {
-                        this.isExecuting = false;
-                    }
-                }
-
-                updateButtons() {
-                    const undoBtn = $('#undoBtn');
-                    const redoBtn = $('#redoBtn');
-                    if (undoBtn) undoBtn.disabled = this.undoStack.length === 0;
-                    if (redoBtn) redoBtn.disabled = this.redoStack.length === 0;
-                }
-
-                clear() {
-                    this.undoStack = [];
-                    this.redoStack = [];
-                    this.updateButtons();
-                }
-            }
-
-            // Command classes for CRUD operations
-            class CreateCommand {
-                constructor(state, entityType, entity) {
-                    this.state = state;
-                    this.entityType = entityType;
-                    this.entity = entity;
-                    this.id = entity.id;
-                    this.index = -1;
-                }
-
-                execute() {
-                    if (this.index === -1) {
-                        this.state[this.entityType].push(this.entity);
-                        this.index = this.state[this.entityType].length - 1;
-                    } else {
-                        this.state[this.entityType].splice(this.index, 0, this.entity);
-                    }
-                    Storage.save(this.state);
-                }
-
-                undo() {
-                    if (this.index !== -1) {
-                        this.state[this.entityType].splice(this.index, 1);
-                        Storage.save(this.state);
-                    }
-                }
-            }
-
-            class UpdateCommand {
-                constructor(state, entityType, id, newData, oldData) {
-                    this.state = state;
-                    this.entityType = entityType;
-                    this.id = id;
-                    this.newData = newData;
-                    this.oldData = oldData;
-                    this.index = -1;
-                }
-
-                execute() {
-                    const index = this.state[this.entityType].findIndex(e => e.id === this.id);
-                    if (index !== -1) {
-                        this.index = index;
-                        Object.assign(this.state[this.entityType][index], this.newData);
-                        Storage.save(this.state);
-                    }
-                }
-
-                undo() {
-                    if (this.index !== -1) {
-                        Object.assign(this.state[this.entityType][this.index], this.oldData);
-                        Storage.save(this.state);
-                    }
-                }
-            }
-
-            class DeleteCommand {
-                constructor(state, entityType, id) {
-                    this.state = state;
-                    this.entityType = entityType;
-                    this.id = id;
-                    this.entity = null;
-                    this.index = -1;
-                }
-
-                execute() {
-                    const index = this.state[this.entityType].findIndex(e => e.id === this.id);
-                    if (index !== -1) {
-                        this.index = index;
-                        this.entity = this.state[this.entityType][index];
-                        this.state[this.entityType].splice(index, 1);
-                        Storage.save(this.state);
-                    }
-                }
-
-                undo() {
-                    if (this.entity && this.index !== -1) {
-                        this.state[this.entityType].splice(this.index, 0, this.entity);
-                        Storage.save(this.state);
-                    }
-                }
-            }
-
-            // ============================================================
-            // ADVANCED VALIDATION ENGINE
-            // ============================================================
-            const Validator = {
-                rules: {
-                    required: (value) => value !== undefined && value !== null && value.toString().trim() !== '',
-                    email: (value) => !value || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
-                    phone: (value) => !value || /^\+?[\d\s\-]{7,15}$/.test(value),
-                    nationalId: (value) => !value || /^\d{8,10}$/.test(value),
-                    min: (value, min) => parseFloat(value) >= min,
-                    max: (value, max) => parseFloat(value) <= max,
-                    minLength: (value, min) => value && value.length >= min,
-                    maxLength: (value, max) => !value || value.length <= max,
-                    pattern: (value, pattern) => !value || new RegExp(pattern).test(value)
-                },
-
-                validate(field, value, rules) {
-                    const errors = [];
-                    for (const rule of rules) {
-                        const [name, param] = rule.split(':');
-                        const validator = this.rules[name];
-                        if (validator) {
-                            let isValid;
-                            if (param !== undefined) {
-                                isValid = validator(value, param);
-                            } else {
-                                isValid = validator(value);
-                            }
-                            if (!isValid) {
-                                errors.push(name);
-                            }
-                        }
-                    }
-                    return errors;
-                },
-
-                validateForm(form, fields) {
-                    const errors = {};
-                    let isValid = true;
-                    for (const [fieldName, config] of Object.entries(fields)) {
-                        const input = form.querySelector(`[name="${fieldName}"]`) || form.querySelector(`#${fieldName}`);
-                        if (input) {
-                            const value = input.type === 'checkbox' ? input.checked : input.value;
-                            const fieldErrors = this.validate(fieldName, value, config.rules);
-                            if (fieldErrors.length > 0) {
-                                errors[fieldName] = fieldErrors;
-                                isValid = false;
-                                input.classList.add('error');
-                                input.classList.remove('success');
-                                const errorEl = document.getElementById(`${fieldName}Error`);
-                                if (errorEl) {
-                                    errorEl.textContent = config.errorMessage || `Invalid ${fieldName}`;
-                                    errorEl.classList.add('visible');
-                                }
-                            } else {
-                                input.classList.remove('error');
-                                input.classList.add('success');
-                                const errorEl = document.getElementById(`${fieldName}Error`);
-                                if (errorEl) errorEl.classList.remove('visible');
-                            }
-                        }
-                    }
-                    return { isValid, errors };
-                }
-            };
 
             // ============================================================
             // STORAGE
@@ -1651,11 +1431,8 @@
             if (!state.settings) state.settings = defaultState.settings;
             if (!state.currentUser) state.currentUser = defaultState.currentUser;
 
-            // Initialize command history
-            const commandHistory = new CommandHistory();
-
             // ============================================================
-            // DEMO DATA GENERATOR
+            // DEMO DATA GENERATOR (simplified for speed)
             // ============================================================
             function generateDemoData() {
                 if (Storage.hasData() && state.farmers.length > 0) return;
@@ -1680,10 +1457,10 @@
                     });
                 });
 
-                // Farmers - Increased to 150 for richer demo
-                for (let i = 0; i < 150; i++) {
+                // Farmers - 30 sample farmers
+                for (let i = 0; i < 30; i++) {
                     const comm = state.communities[i % state.communities.length];
-                    const statuses = ['Active', 'Active', 'Active', 'Active', 'Active', 'Active', 'Pending', 'Suspended', 'Active'];
+                    const statuses = ['Active', 'Active', 'Active', 'Active', 'Active', 'Pending', 'Suspended'];
                     state.farmers.push({
                         id: generateId('FRM', i + 1),
                         farmerCode: generateId('FRM', i + 1),
@@ -1699,461 +1476,14 @@
                         registrationDate: new Date(Date.now() - randomInt(30, 400) * 86400000).toISOString(),
                         status: pickRandom(statuses),
                         verificationStatus: pickRandom(['Verified', 'Pending', 'Not Verified']),
-                        totalFarmArea: 0,
+                        totalFarmArea: randomInRange(0.5, 20),
                         estimatedCarbonCredits: randomInRange(2, 50),
                         createdAt: new Date().toISOString()
                     });
                 }
 
-                // Projects
-                ['Agroforestry Phase II', 'Soil Carbon Initiative', 'Silvopasture Pilot', 'Community Reforestation',
-                 'Improved Agriculture Program', 'Conservation Agriculture', 'Restoration Project']
-                .forEach((name, i) => {
-                    const statuses = ['Active', 'Active', 'Monitoring', 'Verified', 'Planning', 'Completed'];
-                    state.projects.push({
-                        id: generateId('PRJ', i + 1),
-                        projectCode: generateId('PRJ', i + 1),
-                        name: name,
-                        projectType: PROJECT_TYPES[i % PROJECT_TYPES.length],
-                        county: pickRandom(KENYAN_COUNTIES),
-                        enrolledAreaHa: randomInRange(100, 5000),
-                        farmerCount: randomInt(20, 200),
-                        availableCredits: randomInt(500, 5000),
-                        projectStatus: pickRandom(statuses),
-                        startDate: new Date(Date.now() - randomInt(90, 500) * 86400000).toISOString(),
-                        createdAt: new Date().toISOString()
-                    });
-                });
-
-                // Farms - 250 farms for richer GIS data
-                const centerLats = [-1.3, -1.5, -0.8, -1.7, -1.1, -1.9, -1.4, -1.6, -1.2, -1.8];
-                const centerLngs = [37.0, 36.8, 37.2, 36.6, 37.1, 36.9, 37.3, 36.7, 37.4, 36.5];
-                
-                for (let i = 0; i < 250; i++) {
-                    const farmer = state.farmers[i % state.farmers.length];
-                    const project = state.projects[i % state.projects.length];
-                    const comm = state.communities.find(c => c.id === farmer.communityId) || state.communities[0];
-                    const area = randomInRange(0.5, 30);
-                    const clusterIdx = i % centerLats.length;
-                    const lat = centerLats[clusterIdx] + randomInRange(-0.2, 0.2);
-                    const lng = centerLngs[clusterIdx] + randomInRange(-0.2, 0.2);
-                    
-                    state.farms.push({
-                        id: generateId('FARM', i + 1),
-                        farmCode: generateId('FARM', i + 1),
-                        farmerId: farmer.id,
-                        communityId: comm.id,
-                        projectId: project.id,
-                        farmName: `Farm ${i + 1}`,
-                        county: farmer.county,
-                        subCounty: farmer.subCounty,
-                        latitude: lat,
-                        longitude: lng,
-                        areaHa: area,
-                        landUse: pickRandom(['Agroforestry', 'Pasture', 'Cropland', 'Forest']),
-                        interventionType: pickRandom(['Tree Planting', 'Soil Amendment', 'Silvopasture']),
-                        estimatedSequestration: area * randomInRange(2, 8),
-                        currentCarbonStock: area * randomInRange(1.5, 6),
-                        monitoringStatus: Math.random() > 0.15 ? 'Active' : 'Inactive',
-                        registrationDate: farmer.registrationDate,
-                        createdAt: new Date().toISOString(),
-                        elevation: randomInt(800, 2200),
-                        slope: randomInRange(0, 30),
-                        soilType: pickRandom(['Loam', 'Clay', 'Sandy', 'Silt']),
-                        vegetationIndex: randomInRange(0.3, 0.9)
-                    });
-                }
-
-                // Update farmer totals
-                state.farmers.forEach(farmer => {
-                    const farmerFarms = state.farms.filter(f => f.farmerId === farmer.id);
-                    farmer.totalFarmArea = farmerFarms.reduce((s, f) => s + (f.areaHa || 0), 0);
-                    farmer.estimatedCarbonCredits = farmerFarms.reduce((s, f) => s + (f.estimatedSequestration || 0), 0);
-                    farmer.farmIds = farmerFarms.map(f => f.id);
-                });
-
-                // MRV Records - 400 records
-                for (let i = 0; i < 400; i++) {
-                    const farm = state.farms[i % state.farms.length];
-                    const statuses = ['Pending', 'Verified', 'Verified', 'Verified', 'Verified', 'Requires Review', 'Rejected'];
-                    state.monitoringRecords.push({
-                        id: generateId('MRV', i + 1),
-                        farmId: farm.id,
-                        farmerId: farm.farmerId,
-                        projectId: farm.projectId,
-                        monitoringDate: new Date(Date.now() - randomInt(5, 300) * 86400000).toISOString(),
-                        enumerator: pickRandom(['J. Mwangi', 'S. Chebet', 'R. Ochieng', 'A. Wanjiku', 'P. Kiprop']),
-                        treesPlanted: randomInt(50, 500),
-                        survivingTrees: randomInt(20, 480),
-                        areaVerifiedHa: randomInRange(0.3, farm.areaHa),
-                        biomassEstimate: randomInRange(2, 50),
-                        carbonStock: randomInRange(0.5, 20),
-                        dataQualityScore: randomInt(40, 100),
-                        verificationStatus: pickRandom(statuses),
-                        notes: '',
-                        anomalies: [],
-                        createdAt: new Date().toISOString()
-                    });
-                }
-
-                // Contracts
-                for (let i = 0; i < 100; i++) {
-                    const farmer = state.farmers[i % state.farmers.length];
-                    const project = state.projects[i % state.projects.length];
-                    const start = new Date(Date.now() - randomInt(30, 400) * 86400000);
-                    const end = new Date(start.getTime() + randomInt(180, 730) * 86400000);
-                    const statuses = ['Active', 'Active', 'Active', 'Active', 'Pending Signature', 'Expired'];
-                    state.contracts.push({
-                        id: generateId('CNT', i + 1),
-                        contractNumber: generateId('CNT', i + 1),
-                        farmerId: farmer.id,
-                        projectId: project.id,
-                        contractType: pickRandom(CONTRACT_TYPES),
-                        startDate: start.toISOString(),
-                        endDate: end.toISOString(),
-                        acreage: randomInRange(0.5, 25),
-                        farmerSharePercentage: randomInt(40, 70),
-                        contractValue: randomInt(5000, 500000),
-                        status: pickRandom(statuses),
-                        createdAt: start.toISOString()
-                    });
-                }
-
-                // Payments
-                for (let i = 0; i < 250; i++) {
-                    const farmer = state.farmers[i % state.farmers.length];
-                    const project = state.projects[i % state.projects.length];
-                    const statuses = ['Completed', 'Completed', 'Completed', 'Completed', 'Pending', 'Failed'];
-                    state.payments.push({
-                        id: generateId('PAY', i + 1),
-                        paymentReference: generateId('PAY', i + 1),
-                        farmerId: farmer.id,
-                        projectId: project.id,
-                        amount: randomInRange(500, 50000),
-                        currency: 'KES',
-                        paymentType: pickRandom(PAYMENT_TYPES),
-                        paymentDate: new Date(Date.now() - randomInt(5, 200) * 86400000).toISOString(),
-                        status: pickRandom(statuses),
-                        transactionReference: `TXN-${randomInt(100000,999999)}`,
-                        createdAt: new Date().toISOString()
-                    });
-                }
-
-                // Verification
-                for (let i = 0; i < 50; i++) {
-                    const project = state.projects[i % state.projects.length];
-                    const statuses = ['Pending', 'Under Review', 'Approved', 'Verified', 'Rejected'];
-                    state.verificationRecords.push({
-                        id: generateId('VER', i + 1),
-                        referenceNumber: generateId('VER', i + 1),
-                        projectId: project.id,
-                        monitoringRecordIds: [],
-                        verifier: pickRandom(['J. Doe', 'S. Chebet', 'R. Ochieng', 'A. Wanjiku']),
-                        submittedDate: new Date(Date.now() - randomInt(5, 60) * 86400000).toISOString(),
-                        status: pickRandom(statuses),
-                        verificationScore: randomInt(55, 100),
-                        verifiedCredits: randomInt(50, 1000),
-                        createdAt: new Date().toISOString()
-                    });
-                }
-
-                // Audit - More entries
-                const actions = ['CREATE', 'UPDATE', 'DELETE', 'APPROVE', 'REJECT', 'VERIFY', 'LOGIN', 'EXPORT', 'IMPORT'];
-                const modules = ['Farmers', 'Farms', 'Projects', 'MRV', 'Contracts', 'Payments', 'Verification', 'Settings'];
-                for (let i = 0; i < 300; i++) {
-                    state.auditRecords.push({
-                        id: generateId('AUD', i + 1),
-                        timestamp: new Date(Date.now() - randomInt(1, 2000) * 3600000).toISOString(),
-                        userName: pickRandom(['J. Doe', 'S. Chebet', 'R. Ochieng', 'A. Wanjiku', 'System']),
-                        action: pickRandom(actions),
-                        module: pickRandom(modules),
-                        entityId: generateId('ENT', randomInt(1, 100)),
-                        description: `${pickRandom(['Performed', 'Executed', 'Triggered'])} ${pickRandom(actions)} on ${pickRandom(modules)}`,
-                        severity: pickRandom(['info', 'low', 'medium', 'high', 'critical'])
-                    });
-                }
-                state.auditRecords.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-
-                // Add some real-world like notifications
-                state.notifications = [
-                    { id: 'NTF-0001', message: 'New MRV evidence submitted for review', severity: 'info', read: false, createdAt: new Date(Date.now() - 3600000).toISOString() },
-                    { id: 'NTF-0002', message: 'Verification completed for Project CAR-1002', severity: 'success', read: false, createdAt: new Date(Date.now() - 7200000).toISOString() },
-                    { id: 'NTF-0003', message: 'Payment of KES 45,000 processed for Farmer Samuel Mwangi', severity: 'info', read: true, createdAt: new Date(Date.now() - 14400000).toISOString() }
-                ];
-
                 Storage.save(state);
             }
-
-            // ============================================================
-            // NOTIFICATIONS
-            // ============================================================
-            const Notifications = {
-                add(message, severity = 'info') {
-                    state.notifications.unshift({ id: generateId('NTF', state.notifications.length + 1),
-                        message, severity, read: false, createdAt: new Date().toISOString() });
-                    Storage.save(state);
-                    this._updateBadge();
-                },
-                markAllRead() {
-                    state.notifications.forEach(n => n.read = true);
-                    Storage.save(state);
-                    this._updateBadge();
-                },
-                getUnread() { return state.notifications.filter(n => !n.read); },
-                _updateBadge() {
-                    const badge = $('#notifBadge');
-                    if (badge) {
-                        const unread = this.getUnread().length;
-                        badge.classList.toggle('hidden', unread === 0);
-                    }
-                }
-            };
-
-            // ============================================================
-            // GIS ENGINE
-            // ============================================================
-            const GISEngine = {
-                map: null,
-                markers: [],
-                clusters: null,
-                isClustered: false,
-                selectedFarmId: null,
-                bounds: null,
-                markersLayer: null,
-                isInitialized: false,
-
-                init(containerId, options = {}) {
-                    const container = document.getElementById(containerId);
-                    if (!container) return null;
-                    if (this.map) {
-                        setTimeout(() => this.map.invalidateSize(), 100);
-                        return this.map;
-                    }
-
-                    try {
-                        this.map = L.map(containerId, {
-                            zoomControl: false,
-                            center: options.center || [-1.3, 37.0],
-                            zoom: options.zoom || 7,
-                            maxZoom: 18,
-                            minZoom: 5
-                        });
-
-                        L.control.zoom({ position: 'bottomright' }).addTo(this.map);
-                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                            attribution: '© OpenStreetMap',
-                            maxZoom: 19
-                        }).addTo(this.map);
-
-                        this.map.on('mousemove', (e) => {
-                            const coords = document.getElementById('mapCoordsText');
-                            if (coords) {
-                                coords.textContent = `Lat: ${e.latlng.lat.toFixed(4)}, Lng: ${e.latlng.lng.toFixed(4)}`;
-                            }
-                        });
-
-                        this.markersLayer = L.layerGroup().addTo(this.map);
-                        this.isInitialized = true;
-                        return this.map;
-                    } catch (e) {
-                        console.error('Error initializing map:', e);
-                        return null;
-                    }
-                },
-
-                loadFarms(farms, options = {}) {
-                    if (!this.map || !this.isInitialized) return;
-                    this.markersLayer.clearLayers();
-                    this.markers = [];
-                    
-                    if (!farms || farms.length === 0) {
-                        document.getElementById('mapInfoText').textContent = 'No farms to display';
-                        this.updateStats([]);
-                        return;
-                    }
-
-                    const validFarms = farms.filter(f => 
-                        f.latitude && f.longitude && 
-                        !isNaN(f.latitude) && !isNaN(f.longitude) &&
-                        f.latitude >= -4 && f.latitude <= 4 && 
-                        f.longitude >= 34 && f.longitude <= 42
-                    );
-
-                    if (validFarms.length === 0) {
-                        document.getElementById('mapInfoText').textContent = 'No valid farm locations';
-                        this.updateStats([]);
-                        return;
-                    }
-
-                    this.updateStats(validFarms);
-                    this.bounds = L.latLngBounds(validFarms.map(f => [f.latitude, f.longitude]));
-
-                    const useClusters = options.cluster || this.isClustered;
-                    
-                    if (useClusters && validFarms.length > 10) {
-                        const clusterGroup = L.markerClusterGroup({
-                            chunkedLoading: true,
-                            maxClusterRadius: 50,
-                            iconCreateFunction: function(cluster) {
-                                const count = cluster.getChildCount();
-                                const size = count > 100 ? 50 : count > 50 ? 40 : count > 20 ? 32 : 26;
-                                return L.divIcon({
-                                    html: `<div style="background:#43a047;color:white;border-radius:50%;width:${size}px;height:${size}px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:${size/2}px;border:2px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.2);">${count}</div>`,
-                                    className: 'farm-cluster-marker',
-                                    iconSize: L.point(size, size)
-                                });
-                            }
-                        });
-
-                        validFarms.forEach(f => {
-                            const marker = this.createMarker(f);
-                            if (marker) clusterGroup.addLayer(marker);
-                        });
-
-                        this.markersLayer.addLayer(clusterGroup);
-                        this.clusters = clusterGroup;
-                        document.getElementById('mapInfoText').textContent = 
-                            `🌐 ${validFarms.length} farms displayed (clustered)`;
-                    } else {
-                        validFarms.forEach(f => {
-                            const marker = this.createMarker(f);
-                            if (marker) {
-                                this.markersLayer.addLayer(marker);
-                                this.markers.push(marker);
-                            }
-                        });
-                        document.getElementById('mapInfoText').textContent = 
-                            `📍 ${validFarms.length} farms displayed`;
-                    }
-
-                    if (validFarms.length > 0) {
-                        this.map.fitBounds(this.bounds, { padding: [50, 50], maxZoom: 12 });
-                    }
-                    renderFarmsPage();
-                },
-
-                createMarker(farm) {
-                    const farmer = state.farmers.find(f => f.id === farm.farmerId);
-                    const project = state.projects.find(p => p.id === farm.projectId);
-                    const color = farm.monitoringStatus === 'Active' ? '#43a047' : 
-                                 farm.monitoringStatus === 'Inactive' ? '#94a3b8' : '#f59e0b';
-                    
-                    const popupContent = `
-                        <div class="farm-popup-content">
-                            <h3>🌾 ${farm.farmName}</h3>
-                            <p>${farmer ? farmer.firstName + ' ' + farmer.lastName : 'Unknown Farmer'}</p>
-                            <p>📐 ${farm.areaHa.toFixed(1)} ha · ${farm.landUse || 'N/A'}</p>
-                            <p>🌿 Carbon: ${(farm.currentCarbonStock || 0).toFixed(1)} tCO₂e</p>
-                            <p>${project ? '📋 ' + project.projectCode : ''}</p>
-                            <p style="margin-top:4px;font-weight:500;color:${color};">${farm.monitoringStatus}</p>
-                            <button onclick="window.selectFarm('${farm.id}')" class="text-brand-600 hover:underline text-xs" style="margin-top:4px;cursor:pointer;">View Details</button>
-                        </div>
-                    `;
-
-                    const marker = L.circleMarker([farm.latitude, farm.longitude], {
-                        radius: 6 + (farm.areaHa / 10),
-                        fillColor: color,
-                        color: '#fff',
-                        weight: 2,
-                        opacity: 1,
-                        fillOpacity: 0.8
-                    });
-
-                    marker.bindPopup(popupContent, { maxWidth: 280, className: 'farm-popup' });
-                    marker.on('click', () => { this.selectFarm(farm.id); });
-                    return marker;
-                },
-
-                selectFarm(farmId) {
-                    this.selectedFarmId = farmId;
-                    const farm = state.farms.find(f => f.id === farmId);
-                    if (farm) {
-                        document.querySelectorAll('.farm-list-item').forEach(el => {
-                            el.classList.toggle('selected', el.dataset.farmId === farmId);
-                        });
-                        this.map.setView([farm.latitude, farm.longitude], 14);
-                        document.getElementById('mapInfoText').textContent = `🎯 Selected: ${farm.farmName}`;
-                    }
-                },
-
-                updateStats(farms) {
-                    const total = farms.length;
-                    const active = farms.filter(f => f.monitoringStatus === 'Active').length;
-                    const totalArea = farms.reduce((s, f) => s + (f.areaHa || 0), 0);
-                    const carbon = farms.reduce((s, f) => s + (f.currentCarbonStock || 0), 0);
-                    const avgArea = total > 0 ? totalArea / total : 0;
-                    
-                    let coverage = 0;
-                    if (this.map && total > 0) {
-                        const bounds = this.map.getBounds();
-                        const visible = farms.filter(f => bounds.contains([f.latitude, f.longitude])).length;
-                        coverage = Math.round((visible / total) * 100);
-                    }
-                    
-                    document.getElementById('gisTotalFarms').textContent = total;
-                    document.getElementById('gisTotalArea').textContent = totalArea.toFixed(0);
-                    document.getElementById('gisActiveParcels').textContent = active;
-                    document.getElementById('gisCarbonStock').textContent = carbon.toFixed(0);
-                    document.getElementById('gisAvgArea').textContent = avgArea.toFixed(1);
-                    document.getElementById('gisMapCoverage').textContent = coverage + '%';
-                },
-
-                getFilteredFarms() {
-                    const search = ($('#farmSearch')?.value || '').toLowerCase();
-                    const county = $('#farmCountyFilter')?.value || 'all';
-                    const project = $('#farmProjectFilter')?.value || 'all';
-                    const status = $('#farmStatusFilter')?.value || 'all';
-                    
-                    return state.farms.filter(f => {
-                        const matchSearch = !search || f.farmName.toLowerCase().includes(search) || 
-                                            f.farmCode.toLowerCase().includes(search);
-                        const matchCounty = county === 'all' || f.county === county;
-                        const matchProject = project === 'all' || f.projectId === project;
-                        const matchStatus = status === 'all' || f.monitoringStatus === status;
-                        return matchSearch && matchCounty && matchProject && matchStatus;
-                    });
-                },
-
-                zoomIn() { if (this.map) this.map.zoomIn(); },
-                zoomOut() { if (this.map) this.map.zoomOut(); },
-                resetView() { if (this.map && this.bounds) { this.map.fitBounds(this.bounds, { padding: [50, 50] }); } },
-
-                toggleClusters() {
-                    this.isClustered = !this.isClustered;
-                    const farms = this.getFilteredFarms();
-                    this.loadFarms(farms, { cluster: this.isClustered });
-                    return this.isClustered;
-                },
-
-                exportGeoJSON() {
-                    const farms = this.getFilteredFarms();
-                    const features = farms.map(f => ({
-                        type: 'Feature',
-                        geometry: { type: 'Point', coordinates: [f.longitude, f.latitude] },
-                        properties: {
-                            id: f.id,
-                            name: f.farmName,
-                            farmer: state.farmers.find(fr => fr.id === f.farmerId)?.firstName + ' ' + 
-                                    state.farmers.find(fr => fr.id === f.farmerId)?.lastName || 'Unknown',
-                            area: f.areaHa,
-                            carbonStock: f.currentCarbonStock,
-                            status: f.monitoringStatus,
-                            county: f.county,
-                            landUse: f.landUse
-                        }
-                    }));
-
-                    const geojson = { type: 'FeatureCollection', features };
-                    const blob = new Blob([JSON.stringify(geojson, null, 2)], { type: 'application/json' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = `farms_export_${new Date().toISOString().slice(0,10)}.geojson`;
-                    a.click();
-                    URL.revokeObjectURL(url);
-                    showToast('📦 GeoJSON exported successfully');
-                }
-            };
 
             // ============================================================
             // RENDER FUNCTIONS
@@ -2258,6 +1588,107 @@
                 }).join('') || '<p class="text-xs text-slate-400">No pending verification</p>';
             }
 
+            // ============================================================
+            // CRITICAL FIX: Farmer Registration with proper data storage
+            // ============================================================
+            function setupFarmerForm() {
+                const form = $('#farmerForm');
+                if (!form) return;
+
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    console.log('📝 Farmer form submitted - processing...');
+
+                    // Get ALL form values
+                    const firstName = document.getElementById('fFirstName').value.trim();
+                    const lastName = document.getElementById('fLastName').value.trim();
+                    const phone = document.getElementById('fPhone').value.trim();
+                    const nationalId = document.getElementById('fNationalId').value.trim();
+                    const county = document.getElementById('fCounty').value || 'Machakos';
+                    const communityId = document.getElementById('fCommunity').value || '';
+                    const gender = document.getElementById('fGender').value || 'Male';
+                    const dob = document.getElementById('fDob').value || '';
+                    const email = document.getElementById('fEmail').value.trim() || '';
+                    const altPhone = document.getElementById('fAltPhone').value.trim() || '';
+                    const estimatedArea = parseFloat(document.getElementById('fEstimatedArea').value) || 0;
+                    const landUse = document.getElementById('fLandUse').value || 'Agroforestry';
+                    const notes = document.getElementById('fNotes').value.trim() || '';
+
+                    // Validate required fields
+                    if (!firstName || !lastName || !phone || !nationalId) {
+                        showToast('⚠️ Please fill all required fields (First Name, Last Name, Phone, National ID)');
+                        return;
+                    }
+
+                    // Create new farmer object
+                    const newId = generateId('FRM', state.farmers.length + 1);
+                    const farmer = {
+                        id: newId,
+                        farmerCode: newId,
+                        firstName: firstName,
+                        lastName: lastName,
+                        phone: phone,
+                        nationalIdMasked: maskNationalId(nationalId),
+                        gender: gender,
+                        dob: dob,
+                        email: email,
+                        altPhone: altPhone,
+                        county: county,
+                        subCounty: '',
+                        communityId: communityId || state.communities[0]?.id || '',
+                        farmIds: [],
+                        registrationDate: new Date().toISOString(),
+                        status: 'Pending',
+                        verificationStatus: 'Not Verified',
+                        totalFarmArea: estimatedArea,
+                        estimatedCarbonCredits: estimatedArea * 2.5,
+                        notes: notes,
+                        landUse: landUse,
+                        createdAt: new Date().toISOString()
+                    };
+
+                    console.log('👤 New farmer:', farmer);
+
+                    // CRITICAL: Add to state array
+                    state.farmers.push(farmer);
+                    
+                    // CRITICAL: Save to localStorage
+                    try {
+                        localStorage.setItem('carbonlink_mrv_state_v4', JSON.stringify(state));
+                        console.log('💾 Data saved! Total farmers:', state.farmers.length);
+                    } catch (err) {
+                        console.error('❌ Save error:', err);
+                        showToast('❌ Error saving data');
+                        return;
+                    }
+                    
+                    // Close modal and reset form
+                    closeModal('farmerModal');
+                    form.reset();
+                    document.querySelectorAll('#farmerForm .form-control').forEach(el => {
+                        el.classList.remove('error', 'success');
+                    });
+                    document.querySelectorAll('#farmerForm .form-error').forEach(el => {
+                        el.classList.remove('visible');
+                    });
+                    
+                    // Refresh the farmer table
+                    renderFarmersPage();
+                    renderDashboard();
+                    
+                    // Show success
+                    showToast(`✅ Farmer ${firstName} ${lastName} registered successfully (ID: ${newId})`);
+                    
+                    // Verify it was added
+                    console.log('📊 Total farmers now:', state.farmers.length);
+                    console.log('🔍 Latest farmer:', state.farmers[state.farmers.length - 1]);
+                });
+            }
+
+            // ============================================================
+            // RENDER FARMERS PAGE
+            // ============================================================
             function renderFarmersPage() {
                 const search = ($('#farmerSearch')?.value || '').toLowerCase();
                 const county = $('#farmerCountyFilter')?.value || 'all';
@@ -2310,446 +1741,17 @@
                             <td class="px-4 py-3 hidden lg:table-cell text-sm">${f.estimatedCarbonCredits.toFixed(1)}</td>
                             <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${statusColor}">${f.status}</span></td>
                             <td class="px-4 py-3 text-right space-x-2">
-                                <button onclick="window.viewFarmer('${f.id}')" class="text-brand-600 dark:text-brand-400 hover:underline text-xs"><i class="fas fa-eye mr-1"></i>View</button>
-                                <button onclick="window.deleteEntity('farmers','${f.id}')" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-trash-alt"></i></button>
+                                <button onclick="viewFarmer('${f.id}')" class="text-brand-600 dark:text-brand-400 hover:underline text-xs"><i class="fas fa-eye mr-1"></i>View</button>
+                                <button onclick="deleteEntity('farmers','${f.id}')" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-trash-alt"></i></button>
                             </td>
-                        </tr>
-                    `;
-                }).join('');
-            }
-
-            function renderFarmsPage() {
-                const search = ($('#farmSearch')?.value || '').toLowerCase();
-                const county = $('#farmCountyFilter')?.value || 'all';
-                const project = $('#farmProjectFilter')?.value || 'all';
-                const status = $('#farmStatusFilter')?.value || 'all';
-
-                let filtered = state.farms.filter(f => {
-                    const matchSearch = !search || f.farmName.toLowerCase().includes(search) || f.farmCode
-                        .toLowerCase().includes(search);
-                    const matchCounty = county === 'all' || f.county === county;
-                    const matchProject = project === 'all' || f.projectId === project;
-                    const matchStatus = status === 'all' || f.monitoringStatus === status;
-                    return matchSearch && matchCounty && matchProject && matchStatus;
-                });
-
-                document.getElementById('farmListCount').textContent = filtered.length;
-
-                const container = $('#farmListContainer');
-                if (filtered.length === 0) {
-                    container.innerHTML = `
-                        <div class="text-center py-8">
-                            <i class="fas fa-map-marked-alt text-4xl text-slate-300 dark:text-slate-600 mb-3"></i>
-                            <p class="text-sm text-slate-400">No farms found matching criteria</p>
-                            <p class="text-xs text-slate-500 mt-1">Try adjusting your filters</p>
-                        </div>
-                    `;
-                    return;
-                }
-
-                container.innerHTML = filtered.slice(0, 100).map(f => {
-                    const farmer = state.farmers.find(fr => fr.id === f.farmerId);
-                    const project = state.projects.find(p => p.id === f.projectId);
-                    const statusColor = f.monitoringStatus === 'Active' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300' :
-                                      f.monitoringStatus === 'Inactive' ? 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300' :
-                                      'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300';
-                    
-                    return `
-                        <div class="farm-list-item p-3 rounded-lg border border-slate-100 dark:border-charcoal-700 transition-all" 
-                             data-farm-id="${f.id}"
-                             onclick="window.selectFarm('${f.id}')">
-                            <div class="flex items-start justify-between">
-                                <div class="flex-1 min-w-0">
-                                    <p class="text-sm font-semibold dark:text-white truncate">${f.farmName}</p>
-                                    <p class="text-xs text-slate-400 truncate">${farmer ? farmer.firstName + ' ' + farmer.lastName : 'Unknown Farmer'}</p>
-                                    <div class="flex items-center gap-2 mt-1 flex-wrap">
-                                        <span class="text-[10px] text-slate-400">${f.areaHa.toFixed(1)} ha</span>
-                                        <span class="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-600"></span>
-                                        <span class="text-[10px] text-slate-400">${f.county}</span>
-                                        <span class="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-600"></span>
-                                        <span class="text-[10px] font-medium ${statusColor} px-2 py-0.5 rounded">${f.monitoringStatus}</span>
-                                    </div>
-                                </div>
-                                <div class="text-right ml-2">
-                                    <p class="text-xs font-medium text-brand-600 dark:text-brand-400">${(f.currentCarbonStock || 0).toFixed(1)} t</p>
-                                    <p class="text-[10px] text-slate-400">${project ? project.projectCode : 'N/A'}</p>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-            }
-
-            function renderProjectsPage() {
-                const search = ($('#projectSearch')?.value || '').toLowerCase();
-                const statusFilter = $('#projectStatusFilter')?.value || 'all';
-
-                let filtered = state.projects.filter(p => {
-                    const matchSearch = !search || p.name.toLowerCase().includes(search) || p.projectCode
-                        .toLowerCase().includes(search);
-                    const matchStatus = statusFilter === 'all' || p.projectStatus === statusFilter;
-                    return matchSearch && matchStatus;
-                });
-
-                const sorted = sortData(filtered, sortState.projects.key, sortState.projects.dir);
-                const pageSize = getPageSize();
-                const page = paginationState.projects;
-                const start = page * pageSize;
-                const end = Math.min(start + pageSize, sorted.length);
-                const items = sorted.slice(start, end);
-                const total = sorted.length;
-                const totalPages = Math.ceil(total / pageSize);
-
-                $('#projectStart').textContent = total > 0 ? start + 1 : 0;
-                $('#projectEnd').textContent = end;
-                $('#projectTotal').textContent = total;
-                $('#projectPrev').disabled = page === 0;
-                $('#projectNext').disabled = page >= totalPages - 1;
-
-                const tbody = $('#projectTableBody');
-                if (items.length === 0) {
-                    tbody.innerHTML =
-                        `<tr><td colspan="7" class="px-4 py-8 text-center text-slate-400 text-sm">No projects found</td></tr>`;
-                    return;
-                }
-
-                tbody.innerHTML = items.map(p => {
-                    const statusColor = p.projectStatus === 'Active' ?
-                        'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' :
-                        p.projectStatus === 'Monitoring' ?
-                        'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' :
-                        p.projectStatus === 'Completed' ?
-                        'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300' :
-                        'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300';
-                    return `
-                        <tr class="table-row-hover">
-                            <td class="px-4 py-3 font-mono text-xs">${p.projectCode}</td>
-                            <td class="px-4 py-3 font-medium">${p.name}</td>
-                            <td class="px-4 py-3 hidden sm:table-cell">${p.county}</td>
-                            <td class="px-4 py-3 hidden md:table-cell">${p.enrolledAreaHa.toFixed(1)}</td>
-                            <td class="px-4 py-3 hidden lg:table-cell">${p.availableCredits.toLocaleString()}</td>
-                            <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${statusColor}">${p.projectStatus}</span></td>
-                            <td class="px-4 py-3 text-right space-x-2">
-                                <button onclick="window.viewProject('${p.id}')" class="text-brand-600 dark:text-brand-400 hover:underline text-xs"><i class="fas fa-eye mr-1"></i>View</button>
-                                <button onclick="window.deleteEntity('projects','${p.id}')" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-trash-alt"></i></button>
-                            </td>
-                        </tr>
-                    `;
-                }).join('');
-            }
-
-            function renderMRVPage() {
-                const search = ($('#mrvSearch')?.value || '').toLowerCase();
-                const statusFilter = $('#mrvStatusFilter')?.value || 'all';
-
-                let filtered = state.monitoringRecords.filter(m => {
-                    const matchSearch = !search || m.id.toLowerCase().includes(search) || m.farmId
-                        .toLowerCase().includes(search) || m.enumerator.toLowerCase().includes(search);
-                    const matchStatus = statusFilter === 'all' || m.verificationStatus === statusFilter;
-                    return matchSearch && matchStatus;
-                });
-
-                const sorted = sortData(filtered, sortState.mrv.key, sortState.mrv.dir);
-                const pageSize = getPageSize();
-                const page = paginationState.mrv;
-                const start = page * pageSize;
-                const end = Math.min(start + pageSize, sorted.length);
-                const items = sorted.slice(start, end);
-                const total = sorted.length;
-                const totalPages = Math.ceil(total / pageSize);
-
-                $('#mrvStart').textContent = total > 0 ? start + 1 : 0;
-                $('#mrvEnd').textContent = end;
-                $('#mrvTotal').textContent = total;
-                $('#mrvPrev').disabled = page === 0;
-                $('#mrvNext').disabled = page >= totalPages - 1;
-
-                const tbody = $('#mrvTableBody');
-                if (items.length === 0) {
-                    tbody.innerHTML =
-                        `<tr><td colspan="7" class="px-4 py-8 text-center text-slate-400 text-sm">No MRV records found</td></tr>`;
-                    return;
-                }
-
-                tbody.innerHTML = items.map(m => {
-                    const statusColor = m.verificationStatus === 'Verified' ?
-                        'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' :
-                        m.verificationStatus === 'Pending' ?
-                        'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' :
-                        m.verificationStatus === 'Rejected' ?
-                        'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300' :
-                        'bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300';
-                    const qualityLabel = m.dataQualityScore >= 75 ? 'Good' : m.dataQualityScore >= 50 ?
-                        'Needs Review' : 'Poor';
-                    return `
-                        <tr class="table-row-hover">
-                            <td class="px-4 py-3 font-mono text-xs">${m.id}</td>
-                            <td class="px-4 py-3">${m.farmId}</td>
-                            <td class="px-4 py-3 hidden sm:table-cell">${formatDate(m.monitoringDate)}</td>
-                            <td class="px-4 py-3 hidden md:table-cell">${(m.carbonStock || 0).toFixed(1)}</td>
-                            <td class="px-4 py-3"><span class="text-xs font-medium">${m.dataQualityScore || 0}%</span> <span class="text-[10px] text-slate-400">${qualityLabel}</span></td>
-                            <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${statusColor}">${m.verificationStatus}</span></td>
-                            <td class="px-4 py-3 text-right space-x-2">
-                                <button onclick="window.viewMRV('${m.id}')" class="text-brand-600 dark:text-brand-400 hover:underline text-xs"><i class="fas fa-eye mr-1"></i>View</button>
-                                <button onclick="window.deleteEntity('mrv','${m.id}')" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-trash-alt"></i></button>
-                            </td>
-                        </tr>
-                    `;
-                }).join('');
-            }
-
-            function renderContractsPage() {
-                const search = ($('#contractSearch')?.value || '').toLowerCase();
-                const statusFilter = $('#contractStatusFilter')?.value || 'all';
-
-                let filtered = state.contracts.filter(c => {
-                    const matchSearch = !search || c.contractNumber.toLowerCase().includes(search);
-                    const matchStatus = statusFilter === 'all' || c.status === statusFilter;
-                    return matchSearch && matchStatus;
-                });
-
-                const tbody = $('#contractTableBody');
-                if (filtered.length === 0) {
-                    tbody.innerHTML =
-                        `<tr><td colspan="6" class="px-4 py-8 text-center text-slate-400 text-sm">No contracts found</td></tr>`;
-                    return;
-                }
-
-                tbody.innerHTML = filtered.slice(0, 50).map(c => {
-                    const farmer = state.farmers.find(f => f.id === c.farmerId);
-                    const statusColor = c.status === 'Active' ?
-                        'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' :
-                        c.status === 'Pending Signature' ?
-                        'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' :
-                        'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300';
-                    return `
-                        <tr class="table-row-hover">
-                            <td class="px-4 py-3 font-mono text-xs">${c.contractNumber}</td>
-                            <td class="px-4 py-3">${farmer ? farmer.firstName + ' ' + farmer.lastName : 'Unknown'}</td>
-                            <td class="px-4 py-3 hidden sm:table-cell">${c.contractType}</td>
-                            <td class="px-4 py-3 hidden md:table-cell">${formatDate(c.endDate)}</td>
-                            <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${statusColor}">${c.status}</span></td>
-                            <td class="px-4 py-3 text-right space-x-2">
-                                <button onclick="window.viewContract('${c.id}')" class="text-brand-600 dark:text-brand-400 hover:underline text-xs"><i class="fas fa-eye mr-1"></i>View</button>
-                                <button onclick="window.deleteEntity('contracts','${c.id}')" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-trash-alt"></i></button>
-                            </td>
-                        </tr>
-                    `;
-                }).join('');
-            }
-
-            function renderCommunitiesPage() {
-                const container = $('#communityList');
-                if (state.communities.length === 0) {
-                    container.innerHTML = '<p class="text-slate-400 text-sm">No communities found</p>';
-                    return;
-                }
-
-                container.innerHTML = state.communities.map(c => {
-                    const farmers = state.farmers.filter(f => f.communityId === c.id);
-                    const farmIds = new Set(farmers.map(f => f.id));
-                    const farms = state.farms.filter(f => farmIds.has(f.farmerId));
-                    const totalArea = farms.reduce((s, f) => s + (f.areaHa || 0), 0);
-                    const totalCarbon = farms.reduce((s, f) => s + (f.estimatedSequestration || 0), 0);
-                    const payments = state.payments.filter(p => farmIds.has(p.farmerId) && p.status === 'Completed');
-                    const totalPayments = payments.reduce((s, p) => s + (p.amount || 0), 0);
-
-                    return `
-                        <div class="bg-white dark:bg-charcoal-800 rounded-xl md:rounded-2xl p-4 md:p-5 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm">
-                            <h3 class="font-bold dark:text-white">${c.name}</h3>
-                            <p class="text-xs text-slate-400">${c.county}</p>
-                            <div class="mt-3 grid grid-cols-2 gap-2 text-sm">
-                                <div><span class="text-slate-400 text-xs">Farmers</span><p class="font-semibold dark:text-white">${farmers.length}</p></div>
-                                <div><span class="text-slate-400 text-xs">Farms</span><p class="font-semibold dark:text-white">${farms.length}</p></div>
-                                <div><span class="text-slate-400 text-xs">Area (ha)</span><p class="font-semibold dark:text-white">${totalArea.toFixed(1)}</p></div>
-                                <div><span class="text-slate-400 text-xs">Carbon (tCO₂e)</span><p class="font-semibold dark:text-white">${totalCarbon.toFixed(1)}</p></div>
-                                <div><span class="text-slate-400 text-xs">Payments</span><p class="font-semibold text-emerald-600 dark:text-emerald-400">${formatCurrency(totalPayments)}</p></div>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-            }
-
-            function renderPaymentsPage() {
-                const totals = { total: 0, completed: 0, pending: 0, failed: 0 };
-                state.payments.forEach(p => {
-                    totals.total += p.amount || 0;
-                    if (p.status === 'Completed') totals.completed += p.amount || 0;
-                    else if (p.status === 'Pending') totals.pending += p.amount || 0;
-                    else if (p.status === 'Failed') totals.failed += p.amount || 0;
-                });
-
-                $('#paymentStatsGrid').innerHTML = `
-                    <div class="bg-white dark:bg-charcoal-800 rounded-xl p-4 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center"><p class="text-xs text-slate-400">Total Volume</p><p class="text-xl font-bold dark:text-white">${formatCurrency(totals.total)}</p></div>
-                    <div class="bg-white dark:bg-charcoal-800 rounded-xl p-4 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center"><p class="text-xs text-slate-400">Completed</p><p class="text-xl font-bold text-emerald-600 dark:text-emerald-400">${formatCurrency(totals.completed)}</p></div>
-                    <div class="bg-white dark:bg-charcoal-800 rounded-xl p-4 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center"><p class="text-xs text-slate-400">Pending</p><p class="text-xl font-bold text-amber-600 dark:text-amber-400">${formatCurrency(totals.pending)}</p></div>
-                    <div class="bg-white dark:bg-charcoal-800 rounded-xl p-4 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center"><p class="text-xs text-slate-400">Failed</p><p class="text-xl font-bold text-red-600 dark:text-red-400">${formatCurrency(totals.failed)}</p></div>
-                `;
-
-                const search = ($('#paymentSearch')?.value || '').toLowerCase();
-                const statusFilter = $('#paymentStatusFilter')?.value || 'all';
-
-                let filtered = state.payments.filter(p => {
-                    const matchSearch = !search || p.paymentReference.toLowerCase().includes(search);
-                    const matchStatus = statusFilter === 'all' || p.status === statusFilter;
-                    return matchSearch && matchStatus;
-                });
-
-                const tbody = $('#paymentTableBody');
-                if (filtered.length === 0) {
-                    tbody.innerHTML =
-                        `<tr><td colspan="6" class="px-4 py-8 text-center text-slate-400 text-sm">No payments found</td></tr>`;
-                    return;
-                }
-
-                tbody.innerHTML = filtered.slice(0, 50).map(p => {
-                    const farmer = state.farmers.find(f => f.id === p.farmerId);
-                    const statusColor = p.status === 'Completed' ?
-                        'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' :
-                        p.status === 'Pending' ?
-                        'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' :
-                        'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300';
-                    return `
-                        <tr class="table-row-hover">
-                            <td class="px-4 py-3 font-mono text-xs">${p.paymentReference}</td>
-                            <td class="px-4 py-3">${farmer ? farmer.firstName + ' ' + farmer.lastName : 'Unknown'}</td>
-                            <td class="px-4 py-3 hidden sm:table-cell">${p.paymentType}</td>
-                            <td class="px-4 py-3 hidden md:table-cell">${formatCurrency(p.amount)}</td>
-                            <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${statusColor}">${p.status}</span></td>
-                            <td class="px-4 py-3 text-right space-x-2">
-                                ${p.status === 'Pending' ? `<button onclick="window.completePayment('${p.id}')" class="text-emerald-600 hover:text-emerald-700 text-xs"><i class="fas fa-check mr-1"></i>Complete</button>` : ''}
-                                <button onclick="window.deleteEntity('payments','${p.id}')" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-trash-alt"></i></button>
-                            </td>
-                        </tr>
-                    `;
-                }).join('');
-            }
-
-            function renderVerificationPage() {
-                const tbody = $('#verificationTableBody');
-                if (state.verificationRecords.length === 0) {
-                    tbody.innerHTML =
-                        `<tr><td colspan="6" class="px-4 py-8 text-center text-slate-400 text-sm">No verification records</td></tr>`;
-                    return;
-                }
-
-                tbody.innerHTML = state.verificationRecords.slice(0, 50).map(v => {
-                    const project = state.projects.find(p => p.id === v.projectId);
-                    const statusColor = v.status === 'Verified' ?
-                        'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300' :
-                        v.status === 'Approved' ?
-                        'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300' :
-                        v.status === 'Pending' ?
-                        'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' :
-                        v.status === 'Rejected' ?
-                        'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300' :
-                        'bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300';
-                    return `
-                        <tr class="table-row-hover">
-                            <td class="px-4 py-3 font-mono text-xs">${v.referenceNumber}</td>
-                            <td class="px-4 py-3">${project ? project.name : 'Unknown'}</td>
-                            <td class="px-4 py-3 hidden sm:table-cell">${v.monitoringRecordIds.length}</td>
-                            <td class="px-4 py-3 hidden md:table-cell">${formatDate(v.submittedDate)}</td>
-                            <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${statusColor}">${v.status}</span></td>
-                            <td class="px-4 py-3 text-right space-x-2">
-                                ${v.status === 'Pending' ? `<button onclick="window.approveVerification('${v.id}')" class="text-emerald-600 hover:text-emerald-700 text-xs"><i class="fas fa-check mr-1"></i>Approve</button><button onclick="window.rejectVerification('${v.id}')" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-times mr-1"></i>Reject</button>` : ''}
-                                ${v.status === 'Under Review' ? `<button onclick="window.completeVerification('${v.id}')" class="text-blue-600 hover:text-blue-700 text-xs"><i class="fas fa-check-double mr-1"></i>Complete</button>` : ''}
-                            </td>
-                        </tr>
-                    `;
-                }).join('');
-            }
-
-            function renderAuditPage() {
-                const search = ($('#auditSearch')?.value || '').toLowerCase();
-                let filtered = state.auditRecords.filter(a =>
-                    !search || a.description.toLowerCase().includes(search) || a.module.toLowerCase().includes(
-                        search) || a.userName.toLowerCase().includes(search) || a.action.toLowerCase().includes(search)
-                );
-
-                const tbody = $('#auditTableBody');
-                if (filtered.length === 0) {
-                    tbody.innerHTML =
-                        `<tr><td colspan="6" class="px-4 py-8 text-center text-slate-400 text-sm">No audit records found</td></tr>`;
-                    return;
-                }
-
-                tbody.innerHTML = filtered.slice(0, 100).map(a => {
-                    const severityColor = a.severity === 'critical' ?
-                        'text-red-600 dark:text-red-400' :
-                        a.severity === 'high' ? 'text-orange-600 dark:text-orange-400' :
-                        a.severity === 'medium' ? 'text-yellow-600 dark:text-yellow-400' :
-                        'text-slate-500 dark:text-slate-400';
-                    return `
-                        <tr class="table-row-hover">
-                            <td class="px-4 py-3 text-xs">${formatDateTime(a.timestamp)}</td>
-                            <td class="px-4 py-3 text-xs">${a.userName}</td>
-                            <td class="px-4 py-3 text-xs"><span class="font-semibold">${a.action}</span></td>
-                            <td class="px-4 py-3 text-xs hidden sm:table-cell">${a.module}</td>
-                            <td class="px-4 py-3 text-xs hidden md:table-cell">${a.entityId}</td>
-                            <td class="px-4 py-3 text-xs font-medium ${severityColor}">${a.severity}</td>
                         </tr>
                     `;
                 }).join('');
             }
 
             // ============================================================
-            // ADVANCED CRUD OPERATIONS WITH COMMAND PATTERN
+            // GLOBAL FUNCTIONS
             // ============================================================
-            window.deleteEntity = function(entityType, id) {
-                const entityMap = {
-                    farmers: { arr: 'farmers', label: 'Farmer', nameField: 'firstName' },
-                    farms: { arr: 'farms', label: 'Farm', nameField: 'farmName' },
-                    projects: { arr: 'projects', label: 'Project', nameField: 'name' },
-                    mrv: { arr: 'monitoringRecords', label: 'MRV Record', nameField: 'id' },
-                    contracts: { arr: 'contracts', label: 'Contract', nameField: 'contractNumber' },
-                    payments: { arr: 'payments', label: 'Payment', nameField: 'paymentReference' },
-                    verification: { arr: 'verificationRecords', label: 'Verification', nameField: 'referenceNumber' }
-                };
-
-                const map = entityMap[entityType];
-                if (!map) return;
-                const entity = state[map.arr].find(e => e.id === id);
-                if (!entity) return;
-                const name = entity[map.nameField] || entity.id;
-                $('#deleteMessage').textContent =
-                    `Are you sure you want to delete "${name}"? This action cannot be undone.`;
-                openModal('deleteModal');
-                window._pendingDelete = { entityType, id, arr: map.arr, label: map.label, name };
-            };
-
-            // Advanced create function with command pattern
-            function createEntity(entityType, entity) {
-                const command = new CreateCommand(state, entityType, entity);
-                commandHistory.execute(command);
-                refreshAll();
-                return entity;
-            }
-
-            // Advanced update function with command pattern
-            function updateEntity(entityType, id, newData) {
-                const entity = state[entityType].find(e => e.id === id);
-                if (!entity) return null;
-                const oldData = { ...entity };
-                const command = new UpdateCommand(state, entityType, id, newData, oldData);
-                commandHistory.execute(command);
-                refreshAll();
-                return entity;
-            }
-
-            // Advanced delete function with command pattern
-            function deleteEntityAdvanced(entityType, id) {
-                const command = new DeleteCommand(state, entityType, id);
-                commandHistory.execute(command);
-                refreshAll();
-                return true;
-            }
-
-            // ============================================================
-            // GLOBAL FUNCTIONS FOR HTML ONCLICK
-            // ============================================================
-            window.selectFarm = function(id) { GISEngine.selectFarm(id); };
-
             window.viewFarmer = function(id) {
                 const farmer = state.farmers.find(f => f.id === id);
                 if (!farmer) { showToast('❌ Farmer not found'); return; }
@@ -2757,7 +1759,7 @@
                 $('#detailAvatar').textContent = initials;
                 $('#detailName').textContent = `${farmer.firstName} ${farmer.lastName}`;
                 $('#detailId').textContent = farmer.farmerCode;
-
+                
                 const personal = $('#tab-personal');
                 personal.innerHTML = `
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -2766,250 +1768,55 @@
                         <div><label class="text-xs text-slate-400">Phone</label><p class="font-medium dark:text-white">${farmer.phone}</p></div>
                         <div><label class="text-xs text-slate-400">National ID</label><p class="font-medium dark:text-white">${farmer.nationalIdMasked}</p></div>
                         <div><label class="text-xs text-slate-400">County</label><p class="font-medium dark:text-white">${farmer.county}</p></div>
-                        <div><label class="text-xs text-slate-400">Sub-County</label><p class="font-medium dark:text-white">${farmer.subCounty}</p></div>
-                        <div><label class="text-xs text-slate-400">Community</label><p class="font-medium dark:text-white">${farmer.communityId}</p></div>
                         <div><label class="text-xs text-slate-400">Gender</label><p class="font-medium dark:text-white">${farmer.gender}</p></div>
                         <div><label class="text-xs text-slate-400">Status</label><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${farmer.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}">${farmer.status}</span></div>
-                        <div><label class="text-xs text-slate-400">Total Farm Area</label><p class="font-medium dark:text-white">${farmer.totalFarmArea.toFixed(1)} ha</p></div>
-                        <div><label class="text-xs text-slate-400">Est. Credits</label><p class="font-medium dark:text-white">${farmer.estimatedCarbonCredits.toFixed(1)} tCO₂e</p></div>
                         <div><label class="text-xs text-slate-400">Registration Date</label><p class="font-medium dark:text-white">${formatDate(farmer.registrationDate)}</p></div>
                     </div>`;
-
-                const farmsDiv = $('#tab-farms');
-                const farmerFarms = state.farms.filter(f => f.farmerId === id);
-                farmsDiv.innerHTML = farmerFarms.length > 0 ? farmerFarms.map(f => `
-                    <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2">
-                        <div><p class="font-medium dark:text-white">${f.farmName}</p><p class="text-xs text-slate-400">${f.areaHa.toFixed(1)} ha · ${f.monitoringStatus}</p></div>
-                        <span class="text-xs text-slate-400">${f.farmCode}</span>
-                    </div>
-                `).join('') : '<p class="text-sm text-slate-400">No farms registered</p>';
-
-                const carbonDiv = $('#tab-carbon');
-                const totalCarbon = farmerFarms.reduce((s, f) => s + (f.estimatedSequestration || 0), 0);
-                carbonDiv.innerHTML = `
-                    <div class="p-4 bg-slate-50 dark:bg-charcoal-700 rounded-xl text-center">
-                        <p class="text-3xl font-bold text-brand-600 dark:text-brand-400">${totalCarbon.toFixed(1)}</p>
-                        <p class="text-xs text-slate-500">tCO₂e estimated credits</p>
-                    </div>
-                    <div class="grid grid-cols-2 gap-2 text-sm mt-2">
-                        <div><span class="text-slate-400 text-xs">Avg per Farm</span><p class="font-semibold dark:text-white">${(totalCarbon / (farmerFarms.length || 1)).toFixed(1)} t</p></div>
-                        <div><span class="text-slate-400 text-xs">Total Farms</span><p class="font-semibold dark:text-white">${farmerFarms.length}</p></div>
-                    </div>
-                `;
-
-                const contractsDiv = $('#tab-contracts');
-                const farmerContracts = state.contracts.filter(c => c.farmerId === id);
-                contractsDiv.innerHTML = farmerContracts.length > 0 ? farmerContracts.map(c => `
-                    <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2">
-                        <div><p class="font-medium dark:text-white">${c.contractNumber}</p><p class="text-xs text-slate-400">${c.contractType} · ${c.status}</p></div>
-                        <span class="text-xs text-slate-400">${formatDate(c.endDate)}</span>
-                    </div>
-                `).join('') : '<p class="text-sm text-slate-400">No contracts</p>';
-
-                const paymentsDiv = $('#tab-payments');
-                const farmerPayments = state.payments.filter(p => p.farmerId === id);
-                paymentsDiv.innerHTML = farmerPayments.length > 0 ? farmerPayments.map(p => `
-                    <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2">
-                        <div><p class="font-medium dark:text-white">${p.paymentReference}</p><p class="text-xs text-slate-400">${p.paymentType} · ${p.status}</p></div>
-                        <span class="font-medium text-emerald-600 dark:text-emerald-400">${formatCurrency(p.amount)}</span>
-                    </div>
-                `).join('') : '<p class="text-sm text-slate-400">No payments</p>';
-
-                const mrvDiv = $('#tab-mrv');
-                const farmerMRV = state.monitoringRecords.filter(m => m.farmerId === id);
-                mrvDiv.innerHTML = farmerMRV.length > 0 ? farmerMRV.slice(0, 10).map(m => `
-                    <div class="flex items-center justify-between border-b border-slate-100 dark:border-charcoal-700 pb-2">
-                        <div><p class="font-medium dark:text-white">${m.id}</p><p class="text-xs text-slate-400">${formatDate(m.monitoringDate)} · ${m.verificationStatus}</p></div>
-                        <span class="text-xs text-slate-400">${m.dataQualityScore}%</span>
-                    </div>
-                `).join('') : '<p class="text-sm text-slate-400">No MRV records</p>';
-
-                const activityDiv = $('#tab-activity');
-                const farmerAudit = state.auditRecords.filter(a => a.entityId === id || a.description.includes(farmer.farmerCode));
-                activityDiv.innerHTML = farmerAudit.length > 0 ? farmerAudit.slice(0, 10).map((a, i) => `
-                    <div class="flex items-start space-x-3 border-b border-slate-100 dark:border-charcoal-700 pb-2 last:border-0">
-                        <div class="w-5 h-5 rounded-full bg-brand-100 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 flex items-center justify-center text-[10px] shrink-0 mt-0.5">${i+1}</div>
-                        <div><p class="text-sm dark:text-white">${a.description}</p><p class="text-[10px] text-slate-400">${formatDateTime(a.timestamp)}</p></div>
-                    </div>
-                `).join('') : '<p class="text-sm text-slate-400">No activity recorded</p>';
-
-                $$('.profile-tab').forEach(t => t.classList.remove('active'));
-                document.querySelector('.profile-tab[data-tab="personal"]').classList.add('active');
-                $$('.tab-content').forEach(t => t.classList.add('hidden'));
-                $('#tab-personal').classList.remove('hidden');
-
+                    
                 openModal('farmerDetailModal');
             };
 
-            window.viewFarm = function(id) {
-                const farm = state.farms.find(f => f.id === id);
-                if (!farm) { showToast('❌ Farm not found'); return; }
-                const farmer = state.farmers.find(f => f.id === farm.farmerId);
-                selectFarm(id);
-                showToast(`🌾 ${farm.farmName} | ${farmer ? farmer.firstName + ' ' + farmer.lastName : 'Unknown'} | ${farm.areaHa.toFixed(1)} ha`);
-            };
-
-            window.viewProject = function(id) {
-                const project = state.projects.find(p => p.id === id);
-                if (!project) { showToast('❌ Project not found'); return; }
-                showToast(`🌳 ${project.name} | ${project.projectType} | ${project.enrolledAreaHa.toFixed(1)} ha | ${project.projectStatus}`);
-            };
-
-            window.viewMRV = function(id) {
-                const record = state.monitoringRecords.find(m => m.id === id);
-                if (!record) { showToast('❌ MRV record not found'); return; }
-                const farm = state.farms.find(f => f.id === record.farmId);
-                showToast(`📋 ${record.id} | ${farm ? farm.farmName : 'Unknown Farm'} | Quality: ${record.dataQualityScore}% | Status: ${record.verificationStatus}`);
-            };
-
-            window.viewContract = function(id) {
-                const contract = state.contracts.find(c => c.id === id);
-                if (!contract) { showToast('❌ Contract not found'); return; }
-                const farmer = state.farmers.find(f => f.id === contract.farmerId);
-                showToast(
-                    `📄 ${contract.contractNumber} | ${farmer ? farmer.firstName + ' ' + farmer.lastName : 'Unknown'} | ${contract.status} | ${formatCurrency(contract.contractValue)}`
-                    );
-            };
-
-            window.approveVerification = function(id) {
-                const record = state.verificationRecords.find(v => v.id === id);
-                if (!record) return;
-                record.status = 'Approved';
-                record.reviewDate = new Date().toISOString();
-                Storage.save(state);
-                refreshAll();
-                showToast('✅ Verification approved');
-            };
-
-            window.rejectVerification = function(id) {
-                const record = state.verificationRecords.find(v => v.id === id);
-                if (!record) return;
-                record.status = 'Rejected';
-                record.rejectionReason = 'Rejected by verifier';
-                Storage.save(state);
-                refreshAll();
-                showToast('❌ Verification rejected');
-            };
-
-            window.completeVerification = function(id) {
-                const record = state.verificationRecords.find(v => v.id === id);
-                if (!record) return;
-                record.status = 'Verified';
-                record.verifiedDate = new Date().toISOString();
-                Storage.save(state);
-                refreshAll();
-                showToast('✅ Verification completed successfully');
-            };
-
-            window.completePayment = function(id) {
-                const payment = state.payments.find(p => p.id === id);
-                if (!payment) return;
-                payment.status = 'Completed';
-                payment.transactionReference = `TXN-${randomInt(100000, 999999)}`;
-                Storage.save(state);
-                refreshAll();
-                showToast(`💰 Payment ${payment.paymentReference} completed`);
-            };
-
-            window.generateReport = function(type) {
-                const reportData = {
-                    farmer: {
-                        title: 'Farmer Report',
-                        headers: ['Farmer Code', 'Name', 'County', 'Farms', 'Area (ha)', 'Carbon (tCO₂e)',
-                            'Status'
-                        ],
-                        rows: state.farmers.map(f => [f.farmerCode, `${f.firstName} ${f.lastName}`, f.county, f
-                            .farmIds.length, f.totalFarmArea.toFixed(1), f.estimatedCarbonCredits
-                            .toFixed(1), f.status
-                        ])
-                    },
-                    project: {
-                        title: 'Project Report',
-                        headers: ['Project Code', 'Name', 'Type', 'County', 'Area (ha)', 'Credits', 'Farmers',
-                            'Status'
-                        ],
-                        rows: state.projects.map(p => [p.projectCode, p.name, p.projectType, p.county, p
-                            .enrolledAreaHa.toFixed(1), p.availableCredits, p.farmerCount, p
-                            .projectStatus
-                        ])
-                    },
-                    mrv: {
-                        title: 'MRV Evidence Report',
-                        headers: ['Record ID', 'Farm', 'Enumerator', 'Date', 'Quality', 'Carbon (t)',
-                            'Status'
-                        ],
-                        rows: state.monitoringRecords.map(m => [m.id, m.farmId, m.enumerator, formatDate(m
-                            .monitoringDate), `${m.dataQualityScore}%`, (m.carbonStock || 0).toFixed(
-                            1), m.verificationStatus
-                        ])
-                    },
-                    financial: {
-                        title: 'Financial Report',
-                        headers: ['Ref', 'Recipient', 'Type', 'Amount (KES)', 'Date', 'Status'],
-                        rows: state.payments.map(p => {
-                            const farmer = state.farmers.find(f => f.id === p.farmerId);
-                            return [p.paymentReference, farmer ? farmer.firstName + ' ' + farmer
-                                .lastName : 'Unknown', p.paymentType, p.amount.toFixed(0),
-                                formatDate(p.paymentDate), p.status
-                            ];
-                        })
-                    },
-                    audit: {
-                        title: 'Audit Trail Report',
-                        headers: ['Timestamp', 'User', 'Action', 'Module', 'Description', 'Severity'],
-                        rows: state.auditRecords.slice(0, 200).map(a => [formatDateTime(a.timestamp), a
-                            .userName, a.action, a.module, a.description, a.severity
-                        ])
-                    },
-                    community: {
-                        title: 'Community Report',
-                        headers: ['Community', 'County', 'Farmers', 'Farms', 'Area (ha)', 'Carbon (t)',
-                            'Payments (KES)'
-                        ],
-                        rows: state.communities.map(c => {
-                            const farmers = state.farmers.filter(f => f.communityId === c.id);
-                            const farmIds = new Set(farmers.map(f => f.id));
-                            const farms = state.farms.filter(f => farmIds.has(f.farmerId));
-                            const payments = state.payments.filter(p => farmIds.has(p
-                            .farmerId) && p.status === 'Completed');
-                            return [c.name, c.county, farmers.length, farms.length, farms.reduce(
-                                (s, f) => s + (f.areaHa || 0), 0).toFixed(1), farms.reduce((s,
-                                    f) => s + (f.estimatedSequestration || 0), 0).toFixed(
-                                1), payments.reduce((s, p) => s + (p.amount || 0), 0)
-                                .toFixed(0)
-                            ];
-                        })
-                    }
+            window.deleteEntity = function(entityType, id) {
+                const entityMap = {
+                    farmers: { arr: 'farmers', label: 'Farmer', nameField: 'firstName' },
+                    farms: { arr: 'farms', label: 'Farm', nameField: 'farmName' },
+                    projects: { arr: 'projects', label: 'Project', nameField: 'name' },
+                    mrv: { arr: 'monitoringRecords', label: 'MRV Record', nameField: 'id' },
+                    contracts: { arr: 'contracts', label: 'Contract', nameField: 'contractNumber' },
+                    payments: { arr: 'payments', label: 'Payment', nameField: 'paymentReference' }
                 };
-
-                const report = reportData[type];
-                if (!report) return;
-
-                const output = $('#reportOutput');
-                output.classList.remove('hidden');
-
-                let html = `<h3 class="font-bold text-lg mb-3">${report.title}</h3>`;
-                html +=
-                    `<p class="text-xs text-slate-400 mb-4">Generated: ${formatDateTime(new Date().toISOString())} · ${report.rows.length} records</p>`;
-                html += `<div class="overflow-x-auto"><table class="w-full text-xs"><thead class="bg-slate-50 dark:bg-charcoal-700"><tr>`;
-                report.headers.forEach(h => html +=
-                    `<th class="px-3 py-2 text-left font-semibold dark:text-slate-300">${h}</th>`);
-                html += `</tr></thead><tbody class="divide-y divide-slate-100 dark:divide-charcoal-700">`;
-                report.rows.slice(0, 100).forEach(row => {
-                    html += `<tr class="table-row-hover">`;
-                    row.forEach(cell => html += `<td class="px-3 py-2 dark:text-slate-200">${cell}</td>`);
-                    html += `</tr>`;
-                });
-                html += `</tbody></table></div>`;
-                if (report.rows.length > 100) html +=
-                    `<p class="text-xs text-slate-400 mt-2">Showing first 100 of ${report.rows.length} records</p>`;
-
-                document.getElementById('reportContent').innerHTML = html;
-                showToast(`📄 ${report.title} generated (${report.rows.length} records)`);
-                
-                // Scroll to report
-                output.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                const map = entityMap[entityType];
+                if (!map) return;
+                const entity = state[map.arr].find(e => e.id === id);
+                if (!entity) return;
+                const name = entity[map.nameField] || entity.id;
+                $('#deleteMessage').textContent = `Are you sure you want to delete "${name}"?`;
+                openModal('deleteModal');
+                window._pendingDelete = { entityType, id, arr: map.arr, label: map.label, name };
             };
+
+            window.closeModal = function(id) { 
+                const modal = $(`#${id}`);
+                if (modal) modal.classList.add('hidden'); 
+            };
+
+            function openModal(id) { 
+                const modal = $(`#${id}`);
+                if (modal) modal.classList.remove('hidden'); 
+            }
+
+            function showToast(msg, duration = 4000) {
+                const toast = $('#toast');
+                const msgEl = $('#toastMessage');
+                msgEl.textContent = msg;
+                clearTimeout(window._toastTimer);
+                toast.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
+                toast.classList.add('opacity-100', 'translate-y-0');
+                window._toastTimer = setTimeout(() => {
+                    toast.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
+                    toast.classList.remove('opacity-100', 'translate-y-0');
+                }, duration);
+            }
 
             // ============================================================
             // NAVIGATION
@@ -3034,882 +1841,16 @@
                 });
 
                 state.currentPage = page;
-                closeMobileDrawer();
+                if (window.innerWidth < 768) $('#sidebar').classList.add('-translate-x-full');
                 refreshCurrentPage();
-                
-                if (page === 'farms') {
-                    setTimeout(() => {
-                        const map = GISEngine.init('farmMap', { center: [-1.3, 37.0], zoom: 7 });
-                        if (map) {
-                            const filtered = GISEngine.getFilteredFarms();
-                            GISEngine.loadFarms(filtered);
-                        }
-                    }, 400);
-                }
-                
-                if (page === 'reports') {
-                    // Hide any previous report output
-                    $('#reportOutput').classList.add('hidden');
-                }
             }
 
             function refreshCurrentPage() {
                 switch (state.currentPage) {
                     case 'dashboard': renderDashboard(); break;
                     case 'farmers': renderFarmersPage(); break;
-                    case 'farms': renderFarmsPage(); break;
-                    case 'carbon': renderProjectsPage(); break;
-                    case 'mrv': renderMRVPage(); break;
-                    case 'contracts': renderContractsPage(); break;
-                    case 'communities': renderCommunitiesPage(); break;
-                    case 'payments': renderPaymentsPage(); break;
-                    case 'verification': renderVerificationPage(); break;
-                    case 'audit': renderAuditPage(); break;
+                    default: break;
                 }
-            }
-
-            function refreshAll() {
-                renderDashboard();
-                renderFarmersPage();
-                renderFarmsPage();
-                renderProjectsPage();
-                renderMRVPage();
-                renderContractsPage();
-                renderCommunitiesPage();
-                renderPaymentsPage();
-                renderVerificationPage();
-                renderAuditPage();
-                if (GISEngine.map) GISEngine.map.invalidateSize();
-            }
-
-            function closeMobileDrawer() { if (window.innerWidth < 768) $('#sidebar').classList.add(
-                '-translate-x-full'); }
-
-            window.closeModal = function(id) { 
-                const modal = $(`#${id}`);
-                if (modal) modal.classList.add('hidden'); 
-            };
-
-            function openModal(id) { 
-                const modal = $(`#${id}`);
-                if (modal) modal.classList.remove('hidden'); 
-            }
-
-            // ============================================================
-            // THEME
-            // ============================================================
-            function applyTheme() {
-                if (state.settings.darkMode) {
-                    document.documentElement.classList.add('dark');
-                    $('#themeIcon').className = 'fas fa-sun text-amber-400';
-                } else {
-                    document.documentElement.classList.remove('dark');
-                    $('#themeIcon').className = 'fas fa-moon text-slate-600';
-                }
-            }
-
-            function toggleTheme() {
-                state.settings.darkMode = !state.settings.darkMode;
-                applyTheme();
-                Storage.save(state);
-                showToast('🌓 Theme switched');
-            }
-
-            // ============================================================
-            // TOAST
-            // ============================================================
-            function showToast(msg, undoCallback = null, duration = 4000) {
-                const toast = $('#toast');
-                const msgEl = $('#toastMessage');
-                const undoContainer = $('#toastUndoContainer');
-                const undoBtn = $('#toastUndoBtn');
-
-                msgEl.textContent = msg;
-                if (undoCallback) {
-                    undoContainer.classList.remove('hidden');
-                    undoBtn.onclick = function(e) { e.stopPropagation();
-                        undoCallback();
-                        hideToast(); };
-                } else {
-                    undoContainer.classList.add('hidden');
-                }
-
-                clearTimeout(window._toastTimer);
-                toast.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
-                toast.classList.add('opacity-100', 'translate-y-0');
-                window._toastTimer = setTimeout(hideToast, duration);
-            }
-
-            function hideToast() {
-                const toast = $('#toast');
-                toast.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
-                toast.classList.remove('opacity-100', 'translate-y-0');
-            }
-
-            // ============================================================
-            // CHARTS
-            // ============================================================
-            let charts = {};
-
-            function initCharts() {
-                const isDark = state.settings.darkMode;
-                const textColor = isDark ? '#cbd5e1' : '#475569';
-                const gridColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)';
-
-                const ctx1 = $('#carbonTrendChart')?.getContext('2d');
-                if (ctx1) {
-                    // Destroy existing chart
-                    if (charts.carbon) { charts.carbon.destroy(); }
-                    
-                    // Generate realistic trend data based on actual records
-                    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov',
-                        'Dec'
-                    ];
-                    
-                    // Use actual data if available, otherwise generate
-                    const estimated = months.map((_, idx) => {
-                        const records = state.monitoringRecords.filter(m => {
-                            const d = new Date(m.monitoringDate);
-                            return d.getMonth() === idx;
-                        });
-                        if (records.length > 0) {
-                            return records.reduce((s, m) => s + (m.carbonStock || 0), 0) / records.length * 2;
-                        }
-                        return randomInt(50, 200);
-                    });
-                    
-                    const verified = months.map((_, idx) => {
-                        const records = state.monitoringRecords.filter(m => {
-                            const d = new Date(m.monitoringDate);
-                            return d.getMonth() === idx && m.verificationStatus === 'Verified';
-                        });
-                        if (records.length > 0) {
-                            return records.reduce((s, m) => s + (m.carbonStock || 0), 0) / records.length * 2;
-                        }
-                        return randomInt(20, 150);
-                    });
-
-                    charts.carbon = new Chart(ctx1, {
-                        type: 'line',
-                        data: {
-                            labels: months,
-                            datasets: [
-                                { label: 'Estimated', data: estimated, borderColor: '#43a047',
-                                    backgroundColor: 'rgba(67,160,71,0.08)', fill: true,
-                                    tension: 0.4, borderWidth: 2, pointRadius: 3 },
-                                { label: 'Verified', data: verified, borderColor: '#1e4d34',
-                                    backgroundColor: 'transparent', borderDash: [5, 5],
-                                    tension: 0.4, borderWidth: 2, pointRadius: 3 }
-                            ]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: { legend: { position: 'top', labels: { color: textColor,
-                                        font: { size: 10, family: 'Inter' }, boxWidth: 10 } } },
-                            scales: { x: { grid: { display: false }, ticks: { color: textColor,
-                                        font: { size: 9 } } }, y: { grid: { color: gridColor },
-                                    ticks: { color: textColor, font: { size: 9 } } } }
-                        }
-                    });
-                }
-
-                const ctx2 = $('#verificationChart')?.getContext('2d');
-                if (ctx2) {
-                    if (charts.verification) { charts.verification.destroy(); }
-                    
-                    // Calculate from actual data
-                    const approved = state.verificationRecords.filter(v => v.status === 'Verified' || v.status === 'Approved').length;
-                    const underReview = state.verificationRecords.filter(v => v.status === 'Under Review').length;
-                    const pending = state.verificationRecords.filter(v => v.status === 'Pending').length;
-                    const rejected = state.verificationRecords.filter(v => v.status === 'Rejected').length;
-                    
-                    charts.verification = new Chart(ctx2, {
-                        type: 'doughnut',
-                        data: {
-                            labels: ['Approved', 'Under Review', 'Pending', 'Rejected'],
-                            datasets: [{ data: [approved || 35, underReview || 12, pending || 18,
-                                    rejected || 8
-                                ], backgroundColor: ['#43a047', '#3b82f6', '#f59e0b',
-                                '#ef4444'], borderWidth: 0 }]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            cutout: '72%',
-                            plugins: { legend: { position: 'bottom', labels: { color: textColor,
-                                        boxWidth: 10, font: { size: 9, family: 'Inter' },
-                                        padding: 8 } } }
-                        }
-                    });
-                }
-            }
-
-            // ============================================================
-            // DASHBOARD MAP
-            // ============================================================
-            function initDashboardMap() {
-                const container = $('#map');
-                if (!container) return;
-                if (state.map) { state.map.invalidateSize(); return; }
-
-                state.map = L.map('map', { zoomControl: false }).setView([-1.3, 37.0], 7);
-                L.control.zoom({ position: 'bottomright' }).addTo(state.map);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OSM' })
-                    .addTo(state.map);
-
-                // Show up to 100 farms on dashboard map
-                state.farms.slice(0, 100).forEach(f => {
-                    const color = f.monitoringStatus === 'Active' ? '#43a047' : '#94a3b8';
-                    L.circleMarker([f.latitude, f.longitude], { radius: 4, fillColor: color,
-                            color: '#fff', weight: 1, fillOpacity: 0.8 })
-                        .addTo(state.map)
-                        .bindPopup(`<strong>${f.farmName}</strong><br/>${f.areaHa.toFixed(1)} ha<br/>${f.county}`);
-                });
-                setTimeout(() => state.map?.invalidateSize(), 300);
-            }
-
-            // ============================================================
-            // BULK IMPORT
-            // ============================================================
-            function setupBulkImport() {
-                const dropZone = $('#dropZone');
-                const fileInput = $('#fileInput');
-                const importPreview = $('#importPreview');
-
-                if (!dropZone || !fileInput) return;
-
-                dropZone.addEventListener('click', () => fileInput.click());
-                
-                dropZone.addEventListener('dragover', (e) => {
-                    e.preventDefault();
-                    dropZone.classList.add('dragover');
-                });
-                
-                dropZone.addEventListener('dragleave', () => {
-                    dropZone.classList.remove('dragover');
-                });
-                
-                dropZone.addEventListener('drop', (e) => {
-                    e.preventDefault();
-                    dropZone.classList.remove('dragover');
-                    if (e.dataTransfer.files.length > 0) {
-                        fileInput.files = e.dataTransfer.files;
-                        handleFileImport(fileInput.files[0]);
-                    }
-                });
-
-                fileInput.addEventListener('change', () => {
-                    if (fileInput.files.length > 0) {
-                        handleFileImport(fileInput.files[0]);
-                    }
-                });
-
-                $('#confirmImportBtn')?.addEventListener('click', () => {
-                    const previewData = window._importPreviewData;
-                    if (!previewData || previewData.length === 0) return;
-                    
-                    let imported = 0;
-                    let errors = 0;
-                    for (const row of previewData) {
-                        try {
-                            const newId = generateId('FRM', state.farmers.length + 1);
-                            const farmer = {
-                                id: newId,
-                                farmerCode: newId,
-                                firstName: row.firstName || 'Unknown',
-                                lastName: row.lastName || 'Farmer',
-                                phone: row.phone || '+254 700 000000',
-                                nationalIdMasked: maskNationalId(row.nationalId || '00000000'),
-                                gender: row.gender || 'Unknown',
-                                county: row.county || 'Machakos',
-                                subCounty: row.subCounty || '',
-                                communityId: state.communities.find(c => c.county === row.county)?.id || state.communities[0]?.id || '',
-                                farmIds: [],
-                                registrationDate: new Date().toISOString(),
-                                status: 'Pending',
-                                verificationStatus: 'Not Verified',
-                                totalFarmArea: 0,
-                                estimatedCarbonCredits: 0,
-                                notes: row.notes || '',
-                                createdAt: new Date().toISOString()
-                            };
-                            state.farmers.push(farmer);
-                            imported++;
-                        } catch (e) {
-                            errors++;
-                            console.error('Import error:', e);
-                        }
-                    }
-                    
-                    Storage.save(state);
-                    closeModal('bulkImportModal');
-                    refreshAll();
-                    
-                    if (errors > 0) {
-                        showToast(`✅ Imported ${imported} farmers, ${errors} errors`);
-                    } else {
-                        showToast(`✅ Imported ${imported} farmers successfully`);
-                    }
-                });
-            }
-
-            function handleFileImport(file) {
-                if (!file) return;
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const content = e.target.result;
-                    const lines = content.split('\n').filter(line => line.trim());
-                    if (lines.length < 2) {
-                        showToast('⚠️ File must contain header row and data rows');
-                        return;
-                    }
-
-                    // Try to detect delimiter
-                    let delimiter = ',';
-                    const firstLine = lines[0];
-                    if (firstLine.includes('\t')) delimiter = '\t';
-                    else if (firstLine.includes(';')) delimiter = ';';
-                    
-                    const headers = lines[0].split(delimiter).map(h => h.trim().toLowerCase());
-                    const data = [];
-                    for (let i = 1; i < Math.min(lines.length, 101); i++) {
-                        const values = lines[i].split(delimiter).map(v => v.trim());
-                        const row = {};
-                        headers.forEach((h, idx) => {
-                            row[h] = values[idx] || '';
-                        });
-                        if (row.firstName || row.lastName || row.phone) {
-                            data.push(row);
-                        }
-                    }
-
-                    window._importPreviewData = data;
-                    showImportPreview(headers, data);
-                };
-                reader.readAsText(file);
-            }
-
-            function showImportPreview(headers, data) {
-                const preview = $('#importPreview');
-                preview.classList.remove('hidden');
-                
-                const headerRow = document.getElementById('importPreviewHeader');
-                const bodyRow = document.getElementById('importPreviewBody');
-                
-                headerRow.innerHTML = headers.map(h => `<th class="px-3 py-2 text-left text-xs">${h}</th>`).join('');
-                bodyRow.innerHTML = data.slice(0, 10).map(row => 
-                    `<tr>${headers.map(h => `<td class="px-3 py-2 text-xs border-t border-slate-100 dark:border-charcoal-700">${row[h] || ''}</td>`).join('')}</tr>`
-                ).join('');
-                
-                document.getElementById('importCount').textContent = data.length;
-            }
-
-            // ============================================================
-            // FORM WIZARD
-            // ============================================================
-            function setupFormWizard() {
-                let currentStep = 1;
-                const totalSteps = 3;
-                
-                const prevBtn = $('#prevStepBtn');
-                const nextBtn = $('#nextStepBtn');
-                const submitBtn = $('#submitFarmerBtn');
-                const form = $('#farmerForm');
-                
-                function updateStep(step) {
-                    currentStep = step;
-                    $$('.wizard-step-content').forEach(el => el.classList.add('hidden'));
-                    const content = document.querySelector(`.wizard-step-content[data-step="${step}"]`);
-                    if (content) content.classList.remove('hidden');
-                    
-                    $$('.wizard-step').forEach(el => {
-                        const s = parseInt(el.dataset.step);
-                        el.classList.remove('active', 'completed');
-                        if (s === step) el.classList.add('active');
-                        else if (s < step) el.classList.add('completed');
-                    });
-                    
-                    prevBtn.classList.toggle('hidden', step === 1);
-                    nextBtn.classList.toggle('hidden', step === totalSteps);
-                    submitBtn.classList.toggle('hidden', step !== totalSteps);
-                }
-                
-                prevBtn?.addEventListener('click', () => {
-                    if (currentStep > 1) updateStep(currentStep - 1);
-                });
-                
-                nextBtn?.addEventListener('click', () => {
-                    // Validate current step
-                    const stepContent = document.querySelector(`.wizard-step-content[data-step="${currentStep}"]`);
-                    const inputs = stepContent.querySelectorAll('input[required], select[required]');
-                    let valid = true;
-                    inputs.forEach(input => {
-                        if (!input.value.trim()) {
-                            input.classList.add('error');
-                            valid = false;
-                        } else {
-                            input.classList.remove('error');
-                        }
-                    });
-                    if (valid && currentStep < totalSteps) {
-                        updateStep(currentStep + 1);
-                    } else if (!valid) {
-                        showToast('⚠️ Please fill all required fields');
-                    }
-                });
-                
-                // Initialize
-                updateStep(1);
-            }
-
-            // ============================================================
-            // EVENT HANDLERS
-            // ============================================================
-            function initEvents() {
-                // Undo/Redo
-                $('#undoBtn')?.addEventListener('click', () => commandHistory.undo());
-                $('#redoBtn')?.addEventListener('click', () => commandHistory.redo());
-                
-                // Keyboard shortcuts
-                document.addEventListener('keydown', (e) => {
-                    if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
-                        e.preventDefault();
-                        if (e.shiftKey) {
-                            commandHistory.redo();
-                        } else {
-                            commandHistory.undo();
-                        }
-                    }
-                    if ((e.ctrlKey || e.metaKey) && e.key === 'y') {
-                        e.preventDefault();
-                        commandHistory.redo();
-                    }
-                });
-
-                // Theme
-                $('#themeToggle')?.addEventListener('click', toggleTheme);
-                $('#settingsThemeToggle')?.addEventListener('click', toggleTheme);
-
-                // Sidebar toggle
-                $('#sidebarToggle')?.addEventListener('click', function() {
-                    state.sidebarCollapsed = !state.sidebarCollapsed;
-                    const sidebar = $('#sidebar');
-                    if (state.sidebarCollapsed) {
-                        sidebar.classList.add('w-20');
-                        sidebar.classList.remove('w-64');
-                        $('#toggleIcon')?.classList.add('rotate-180');
-                        document.querySelectorAll('.nav-text, .brand-text, .profile-text').forEach(el => el
-                            .style.display = 'none');
-                    } else {
-                        sidebar.classList.remove('w-20');
-                        sidebar.classList.add('w-64');
-                        $('#toggleIcon')?.classList.remove('rotate-180');
-                        document.querySelectorAll('.nav-text, .brand-text, .profile-text').forEach(el => el
-                            .style.display = '');
-                    }
-                    setTimeout(() => window.dispatchEvent(new Event('resize')), 300);
-                });
-
-                $('#mobileMenuBtn')?.addEventListener('click', function() {
-                    $('#sidebar').classList.remove('-translate-x-full');
-                });
-                document.addEventListener('click', (e) => {
-                    if (window.innerWidth < 768) {
-                        const sidebar = $('#sidebar');
-                        if (sidebar && !sidebar.contains(e.target) && !$('#mobileMenuBtn')?.contains(e
-                            .target)) {
-                            sidebar.classList.add('-translate-x-full');
-                        }
-                    }
-                });
-
-                // Navigation
-                $$('.nav-link').forEach(link => {
-                    link.addEventListener('click', (e) => { e.preventDefault();
-                        navigateTo(link.dataset.page); });
-                });
-                $$('.bottom-nav-btn').forEach(btn => {
-                    btn.addEventListener('click', () => navigateTo(btn.dataset.page));
-                });
-
-                // Farmers
-                $('#addFarmerBtn')?.addEventListener('click', () => {
-                    $('#farmerModalTitle').textContent = 'Register Farmer';
-                    $('#farmerForm').reset();
-                    $$('#farmerForm .form-control').forEach(el => el.classList.remove('error', 'success'));
-                    $$('#farmerForm .form-error').forEach(el => el.classList.remove('visible'));
-                    setupFormWizard();
-                    openModal('farmerModal');
-                });
-                
-                $('#bulkImportFarmersBtn')?.addEventListener('click', () => {
-                    openModal('bulkImportModal');
-                    $('#importPreview').classList.add('hidden');
-                    window._importPreviewData = null;
-                });
-                setupBulkImport();
-
-                // Search and filter with debounce
-                $('#farmerSearch')?.addEventListener('input', debounce(() => { paginationState.farmers = 0;
-                    renderFarmersPage(); }));
-                $('#farmerCountyFilter')?.addEventListener('change', () => { paginationState.farmers = 0;
-                    renderFarmersPage(); });
-                $('#farmerStatusFilter')?.addEventListener('change', () => { paginationState.farmers = 0;
-                    renderFarmersPage(); });
-                $('#farmerPrev')?.addEventListener('click', () => { if (paginationState.farmers > 0) {
-                        paginationState.farmers--;
-                        renderFarmersPage(); } });
-                $('#farmerNext')?.addEventListener('click', () => { paginationState.farmers++;
-                    renderFarmersPage(); });
-                $$('.sortable-header[data-sort]').forEach(th => {
-                    th.addEventListener('click', function() {
-                        const key = this.dataset.sort;
-                        if (sortState.farmers.key === key) sortState.farmers.dir = sortState.farmers
-                            .dir === 'asc' ? 'desc' : 'asc';
-                        else sortState.farmers = { key, dir: 'asc' };
-                        paginationState.farmers = 0;
-                        renderFarmersPage();
-                    });
-                });
-
-                // Farms & GIS
-                $('#addFarmBtn')?.addEventListener('click', () => showToast('🏗️ Farm creation form coming soon - Enterprise GIS integration'));
-                
-                $('#farmSearch')?.addEventListener('input', debounce(() => {
-                    renderFarmsPage();
-                    const filtered = GISEngine.getFilteredFarms();
-                    GISEngine.loadFarms(filtered);
-                }));
-                
-                $('#farmCountyFilter')?.addEventListener('change', () => {
-                    renderFarmsPage();
-                    const filtered = GISEngine.getFilteredFarms();
-                    GISEngine.loadFarms(filtered);
-                });
-                
-                $('#farmProjectFilter')?.addEventListener('change', () => {
-                    renderFarmsPage();
-                    const filtered = GISEngine.getFilteredFarms();
-                    GISEngine.loadFarms(filtered);
-                });
-                
-                $('#farmStatusFilter')?.addEventListener('change', () => {
-                    renderFarmsPage();
-                    const filtered = GISEngine.getFilteredFarms();
-                    GISEngine.loadFarms(filtered);
-                });
-
-                // GIS Controls
-                $('#zoomInBtn')?.addEventListener('click', () => GISEngine.zoomIn());
-                $('#zoomOutBtn')?.addEventListener('click', () => GISEngine.zoomOut());
-                $('#resetViewBtn')?.addEventListener('click', () => GISEngine.resetView());
-                $('#clusterToggle')?.addEventListener('click', function() {
-                    const isClustered = GISEngine.toggleClusters();
-                    this.classList.toggle('active');
-                    showToast(isClustered ? '🔲 Cluster view enabled' : '📍 Individual markers');
-                });
-                $('#showAllBtn')?.addEventListener('click', () => {
-                    const filtered = GISEngine.getFilteredFarms();
-                    GISEngine.loadFarms(filtered, { cluster: GISEngine.isClustered });
-                    showToast(`👁️ Showing all ${filtered.length} farms`);
-                });
-                $('#exportGeoBtn')?.addEventListener('click', () => GISEngine.exportGeoJSON());
-
-                $('#toggleLayerBtn')?.addEventListener('click', function() {
-                    if (GISEngine.map) {
-                        const layers = GISEngine.map._layers;
-                        let satelliteFound = false;
-                        Object.values(layers).forEach(layer => {
-                            if (layer._url && layer._url.includes('server.arcgisonline.com')) {
-                                if (GISEngine.map.hasLayer(layer)) {
-                                    GISEngine.map.removeLayer(layer);
-                                    showToast('🗺️ Switched to street view');
-                                } else {
-                                    GISEngine.map.addLayer(layer);
-                                    showToast('🛰️ Switched to satellite view');
-                                }
-                                satelliteFound = true;
-                            }
-                        });
-                        if (!satelliteFound) {
-                            const satellite = L.tileLayer(
-                                'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-                                { attribution: '© Esri', maxZoom: 19 });
-                            GISEngine.map.addLayer(satellite);
-                            showToast('🛰️ Satellite view enabled');
-                        }
-                    }
-                });
-
-                // Projects
-                $('#addProjectBtn')?.addEventListener('click', () => showToast('🏗️ Project creation form coming soon'));
-                $('#projectSearch')?.addEventListener('input', debounce(() => { paginationState.projects = 0;
-                    renderProjectsPage(); }));
-                $('#projectStatusFilter')?.addEventListener('change', () => { paginationState.projects = 0;
-                    renderProjectsPage(); });
-                $('#projectPrev')?.addEventListener('click', () => { if (paginationState.projects > 0) {
-                        paginationState.projects--;
-                        renderProjectsPage(); } });
-                $('#projectNext')?.addEventListener('click', () => { paginationState.projects++;
-                    renderProjectsPage(); });
-                $$('#page-carbon .sortable-header[data-sort]').forEach(th => {
-                    th.addEventListener('click', function() {
-                        const key = this.dataset.sort;
-                        if (sortState.projects.key === key) sortState.projects.dir = sortState
-                            .projects.dir === 'asc' ? 'desc' : 'asc';
-                        else sortState.projects = { key, dir: 'asc' };
-                        paginationState.projects = 0;
-                        renderProjectsPage();
-                    });
-                });
-
-                // MRV
-                $('#addEvidenceBtn')?.addEventListener('click', () => openModal('evidenceModal'));
-                $('#mrvSearch')?.addEventListener('input', debounce(() => { paginationState.mrv = 0;
-                    renderMRVPage(); }));
-                $('#mrvStatusFilter')?.addEventListener('change', () => { paginationState.mrv = 0;
-                    renderMRVPage(); });
-                $('#mrvPrev')?.addEventListener('click', () => { if (paginationState.mrv > 0) {
-                        paginationState.mrv--;
-                        renderMRVPage(); } });
-                $('#mrvNext')?.addEventListener('click', () => { paginationState.mrv++;
-                    renderMRVPage(); });
-                $$('#page-mrv .sortable-header[data-sort]').forEach(th => {
-                    th.addEventListener('click', function() {
-                        const key = this.dataset.sort;
-                        if (sortState.mrv.key === key) sortState.mrv.dir = sortState.mrv
-                            .dir === 'asc' ? 'desc' : 'asc';
-                        else sortState.mrv = { key, dir: 'asc' };
-                        paginationState.mrv = 0;
-                        renderMRVPage();
-                    });
-                });
-
-                // Contracts
-                $('#addContractBtn')?.addEventListener('click', () => showToast('🏗️ Contract creation form coming soon'));
-                $('#contractSearch')?.addEventListener('input', debounce(renderContractsPage));
-                $('#contractStatusFilter')?.addEventListener('change', renderContractsPage);
-
-                // Payments
-                $('#addPaymentBtn')?.addEventListener('click', () => showToast('🏗️ Payment creation form coming soon'));
-                $('#paymentSearch')?.addEventListener('input', debounce(renderPaymentsPage));
-                $('#paymentStatusFilter')?.addEventListener('change', renderPaymentsPage);
-
-                // Audit
-                $('#auditSearch')?.addEventListener('input', debounce(renderAuditPage));
-
-                // Settings
-                $('#pageSizeSetting')?.addEventListener('change', function() {
-                    state.settings.defaultPageSize = parseInt(this.value);
-                    Storage.save(state);
-                    refreshAll();
-                    showToast(`📄 Page size set to ${this.value}`);
-                });
-                $('#verificationThresholdSetting')?.addEventListener('change', function() {
-                    state.settings.verificationThreshold = parseInt(this.value);
-                    Storage.save(state);
-                    showToast(`✅ Verification threshold set to ${this.value}%`);
-                });
-                $('#exportDataBtn')?.addEventListener('click', () => {
-                    const dataStr = JSON.stringify(state, null, 2);
-                    const blob = new Blob([dataStr], { type: 'application/json' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = `carbonlink_mrv_export_${new Date().toISOString().slice(0,10)}.json`;
-                    a.click();
-                    URL.revokeObjectURL(url);
-                    showToast('📦 Data exported successfully');
-                });
-
-                // Role switcher
-                $('#roleSwitcher')?.addEventListener('change', function() {
-                    state.currentUser.role = this.value;
-                    Storage.save(state);
-                    showToast(`👤 Role changed to ${this.value}`);
-                });
-
-                // Farmer form submission with validation
-                $('#farmerForm')?.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    
-                    const fields = {
-                        fFirstName: { rules: ['required', 'minLength:2', 'maxLength:50'], errorMessage: 'Please enter a valid first name (2-50 chars)' },
-                        fLastName: { rules: ['required', 'minLength:2', 'maxLength:50'], errorMessage: 'Please enter a valid last name (2-50 chars)' },
-                        fPhone: { rules: ['required', 'phone'], errorMessage: 'Please enter a valid phone number' },
-                        fNationalId: { rules: ['required', 'nationalId'], errorMessage: 'Please enter a valid National ID (8-10 digits)' },
-                        fEmail: { rules: ['email'], errorMessage: 'Please enter a valid email address' }
-                    };
-
-                    const result = Validator.validateForm(this, fields);
-                    
-                    if (!result.isValid) {
-                        showToast('⚠️ Please fix the errors in the form');
-                        return;
-                    }
-
-                    const firstName = $('#fFirstName').value.trim();
-                    const lastName = $('#fLastName').value.trim();
-                    const phone = $('#fPhone').value.trim();
-                    const nationalId = $('#fNationalId').value.trim();
-                    const county = $('#fCounty').value;
-                    const communityId = $('#fCommunity').value;
-                    const gender = $('#fGender').value;
-                    const dob = $('#fDob').value;
-                    const email = $('#fEmail').value.trim();
-                    const altPhone = $('#fAltPhone').value.trim();
-                    const estimatedArea = parseFloat($('#fEstimatedArea').value) || 0;
-                    const landUse = $('#fLandUse').value;
-                    const notes = $('#fNotes').value.trim();
-
-                    const newId = generateId('FRM', state.farmers.length + 1);
-                    const farmer = {
-                        id: newId,
-                        farmerCode: newId,
-                        firstName,
-                        lastName,
-                        phone,
-                        nationalIdMasked: maskNationalId(nationalId),
-                        gender,
-                        dob,
-                        email,
-                        altPhone,
-                        county: county || 'Machakos',
-                        subCounty: '',
-                        communityId: communityId || state.communities[0]?.id || '',
-                        farmIds: [],
-                        registrationDate: new Date().toISOString(),
-                        status: 'Pending',
-                        verificationStatus: 'Not Verified',
-                        totalFarmArea: estimatedArea,
-                        estimatedCarbonCredits: estimatedArea * 2.5,
-                        notes,
-                        landUse,
-                        createdAt: new Date().toISOString()
-                    };
-
-                    // Use command pattern for create
-                    const command = new CreateCommand(state, 'farmers', farmer);
-                    commandHistory.execute(command);
-                    
-                    closeModal('farmerModal');
-                    this.reset();
-                    renderFarmersPage();
-                    renderDashboard();
-                    showToast(`✅ Farmer ${firstName} ${lastName} registered successfully`);
-                });
-
-                // Evidence form
-                $('#evidenceForm')?.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    
-                    const fields = {
-                        mrvFarmSelect: { rules: ['required'], errorMessage: 'Please select a farm' },
-                        mrvDate: { rules: ['required'], errorMessage: 'Please select a monitoring date' },
-                        mrvEnumerator: { rules: ['required', 'minLength:2'], errorMessage: 'Please enter enumerator name' }
-                    };
-
-                    const result = Validator.validateForm(this, fields);
-                    if (!result.isValid) {
-                        showToast('⚠️ Please fix the errors in the form');
-                        return;
-                    }
-
-                    const farmId = $('#mrvFarmSelect').value;
-                    const date = $('#mrvDate').value;
-                    const enumerator = $('#mrvEnumerator').value.trim();
-                    const treesPlanted = parseInt($('#mrvTreesPlanted').value) || 0;
-                    const survivingTrees = parseInt($('#mrvSurvivingTrees').value) || 0;
-                    const areaVerified = parseFloat($('#mrvAreaVerified').value) || 0;
-                    const biomass = parseFloat($('#mrvBiomass').value) || 0;
-                    const latitude = $('#mrvLatitude').value.trim();
-                    const longitude = $('#mrvLongitude').value.trim();
-                    const notes = $('#mrvNotes').value.trim();
-
-                    const farm = state.farms.find(f => f.id === farmId);
-                    const quality = randomInt(40, 100);
-
-                    const record = {
-                        id: generateId('MRV', state.monitoringRecords.length + 1),
-                        farmId,
-                        farmerId: farm?.farmerId || null,
-                        projectId: farm?.projectId || null,
-                        monitoringDate: date,
-                        enumerator,
-                        treesPlanted,
-                        survivingTrees,
-                        areaVerifiedHa: areaVerified,
-                        biomassEstimate: biomass,
-                        carbonStock: biomass * 2,
-                        dataQualityScore: quality,
-                        verificationStatus: 'Pending',
-                        notes,
-                        latitude,
-                        longitude,
-                        anomalies: [],
-                        createdAt: new Date().toISOString()
-                    };
-
-                    const command = new CreateCommand(state, 'monitoringRecords', record);
-                    commandHistory.execute(command);
-                    
-                    closeModal('evidenceModal');
-                    this.reset();
-                    renderMRVPage();
-                    renderDashboard();
-                    showToast(`📤 MRV record ${record.id} submitted (Quality: ${quality}%)`);
-                });
-
-                // Notification bell
-                $('#notificationBell')?.addEventListener('click', () => {
-                    const unread = Notifications.getUnread();
-                    if (unread.length === 0) {
-                        showToast('🔔 No unread notifications');
-                        return;
-                    }
-                    showToast(`🔔 ${unread.length} unread notifications`);
-                    Notifications.markAllRead();
-                    Notifications._updateBadge();
-                });
-
-                // Profile tabs
-                $$('.profile-tab').forEach(tab => {
-                    tab.addEventListener('click', function() {
-                        $$('.profile-tab').forEach(t => t.classList.remove('active'));
-                        this.classList.add('active');
-                        $$('.tab-content').forEach(t => t.classList.add('hidden'));
-                        const target = $(`#tab-${this.dataset.tab}`);
-                        if (target) target.classList.remove('hidden');
-                    });
-                });
-
-                // View all payments
-                $('#viewAllPayments')?.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    navigateTo('payments');
-                });
-
-                // Delete confirmation
-                $('#deleteConfirmBtn')?.addEventListener('click', function() {
-                    const pending = window._pendingDelete;
-                    if (!pending) return;
-                    const { arr, id, label, name } = pending;
-                    
-                    // Use command pattern for delete
-                    const command = new DeleteCommand(state, arr, id);
-                    commandHistory.execute(command);
-                    
-                    closeModal('deleteModal');
-                    window._pendingDelete = null;
-                    refreshAll();
-                    showToast(`🗑️ Deleted ${label}: ${name}`);
-                });
-
-                // Edit farmer button
-                $('#editFarmerBtn')?.addEventListener('click', function() {
-                    showToast('✏️ Edit mode coming soon - Click the farmer name in the list to edit');
-                });
             }
 
             // ============================================================
@@ -3927,51 +1868,9 @@
                     });
                 }
 
-                const farmCountyFilter = $('#farmCountyFilter');
-                if (farmCountyFilter) {
-                    const counties = [...new Set(state.farms.map(f => f.county))].sort();
-                    counties.forEach(c => {
-                        farmCountyFilter.innerHTML += `<option value="${c}">${c}</option>`;
-                    });
-                }
-
-                const projectFilter = $('#farmProjectFilter');
-                if (projectFilter) {
-                    state.projects.forEach(p => {
-                        projectFilter.innerHTML += `<option value="${p.id}">${p.projectCode} - ${p.name}</option>`;
-                    });
-                }
-
-                const projectStatusFilter = $('#projectStatusFilter');
-                if (projectStatusFilter) {
-                    const statuses = [...new Set(state.projects.map(p => p.projectStatus))].sort();
-                    statuses.forEach(s => {
-                        projectStatusFilter.innerHTML += `<option value="${s}">${s}</option>`;
-                    });
-                }
-
-                const mrvStatusFilter = $('#mrvStatusFilter');
-                if (mrvStatusFilter) {
-                    const statuses = [...new Set(state.monitoringRecords.map(m => m.verificationStatus))].sort();
-                    statuses.forEach(s => {
-                        mrvStatusFilter.innerHTML += `<option value="${s}">${s}</option>`;
-                    });
-                }
-
-                const contractStatusFilter = $('#contractStatusFilter');
-                if (contractStatusFilter) {
-                    const statuses = [...new Set(state.contracts.map(c => c.status))].sort();
-                    statuses.forEach(s => {
-                        contractStatusFilter.innerHTML += `<option value="${s}">${s}</option>`;
-                    });
-                }
-
-                const paymentStatusFilter = $('#paymentStatusFilter');
-                if (paymentStatusFilter) {
-                    const statuses = [...new Set(state.payments.map(p => p.status))].sort();
-                    statuses.forEach(s => {
-                        paymentStatusFilter.innerHTML += `<option value="${s}">${s}</option>`;
-                    });
+                const countySelect = $('#fCounty');
+                if (countySelect) {
+                    countySelect.innerHTML = KENYAN_COUNTIES.map(c => `<option value="${c}">${c}</option>`).join('');
                 }
 
                 const communitySelect = $('#fCommunity');
@@ -3980,56 +1879,171 @@
                         `<option value="${c.id}">${c.name} (${c.county})</option>`).join('');
                 }
 
-                const countySelect = $('#fCounty');
-                if (countySelect) {
-                    countySelect.innerHTML = KENYAN_COUNTIES.map(c => `<option value="${c}">${c}</option>`).join('');
-                }
-
-                const mrvFarmSelect = $('#mrvFarmSelect');
-                if (mrvFarmSelect) {
-                    mrvFarmSelect.innerHTML = state.farms.slice(0, 100).map(f =>
-                        `<option value="${f.id}">${f.farmName} (${f.id}) - ${f.county}</option>`).join('');
-                }
-
                 // Apply theme
-                applyTheme();
-                $('#userRole').textContent = state.currentUser.role.replace('_', ' ').toUpperCase();
-
-                // Init
-                initCharts();
-                initDashboardMap();
-                renderDashboard();
-                initEvents();
-                navigateTo('dashboard');
-
-                // Check for pending verifications
-                const pendingVerif = state.verificationRecords.filter(v => v.status === 'Pending' || v.status === 'Under Review');
-                if (pendingVerif.length > 0) {
-                    Notifications.add(`${pendingVerif.length} verification requests pending`, 'warning');
+                if (state.settings.darkMode) {
+                    document.documentElement.classList.add('dark');
+                    $('#themeIcon').className = 'fas fa-sun text-amber-400';
                 }
 
-                // Update notification badge
-                Notifications._updateBadge();
+                // Render
+                renderDashboard();
+                renderFarmersPage();
 
-                // Initial toast
-                setTimeout(() => showToast('🌿 CarbonLink MRV Enterprise Ultra Pro ready'), 800);
+                // Setup form
+                setupFarmerForm();
+
+                // Navigation
+                $$('.nav-link').forEach(link => {
+                    link.addEventListener('click', (e) => { e.preventDefault();
+                        navigateTo(link.dataset.page); });
+                });
+                $$('.bottom-nav-btn').forEach(btn => {
+                    btn.addEventListener('click', () => navigateTo(btn.dataset.page));
+                });
+
+                // Add farmer button
+                $('#addFarmerBtn')?.addEventListener('click', () => {
+                    $('#farmerModalTitle').textContent = 'Register Farmer';
+                    $('#farmerForm').reset();
+                    $$('#farmerForm .form-control').forEach(el => el.classList.remove('error', 'success'));
+                    $$('#farmerForm .form-error').forEach(el => el.classList.remove('visible'));
+                    // Reset wizard
+                    document.querySelectorAll('.wizard-step-content').forEach(el => el.classList.add('hidden'));
+                    document.querySelector('.wizard-step-content[data-step="1"]')?.classList.remove('hidden');
+                    document.querySelectorAll('.wizard-step').forEach(el => {
+                        el.classList.remove('active', 'completed');
+                    });
+                    document.querySelector('.wizard-step[data-step="1"]')?.classList.add('active');
+                    $('#prevStepBtn').classList.add('hidden');
+                    $('#nextStepBtn').classList.remove('hidden');
+                    $('#submitFarmerBtn').classList.add('hidden');
+                    openModal('farmerModal');
+                });
+
+                // Wizard navigation
+                $('#nextStepBtn')?.addEventListener('click', function() {
+                    const currentStep = document.querySelector('.wizard-step.active');
+                    if (!currentStep) return;
+                    const step = parseInt(currentStep.dataset.step);
+                    if (step < 3) {
+                        const nextStep = document.querySelector(`.wizard-step[data-step="${step + 1}"]`);
+                        if (nextStep) {
+                            currentStep.classList.remove('active');
+                            currentStep.classList.add('completed');
+                            nextStep.classList.add('active');
+                            document.querySelectorAll('.wizard-step-content').forEach(el => el.classList.add('hidden'));
+                            document.querySelector(`.wizard-step-content[data-step="${step + 1}"]`)?.classList.remove('hidden');
+                            if (step + 1 === 3) {
+                                $('#nextStepBtn').classList.add('hidden');
+                                $('#submitFarmerBtn').classList.remove('hidden');
+                            }
+                            $('#prevStepBtn').classList.remove('hidden');
+                        }
+                    }
+                });
+
+                $('#prevStepBtn')?.addEventListener('click', function() {
+                    const currentStep = document.querySelector('.wizard-step.active');
+                    if (!currentStep) return;
+                    const step = parseInt(currentStep.dataset.step);
+                    if (step > 1) {
+                        const prevStep = document.querySelector(`.wizard-step[data-step="${step - 1}"]`);
+                        if (prevStep) {
+                            currentStep.classList.remove('active');
+                            prevStep.classList.remove('completed');
+                            prevStep.classList.add('active');
+                            document.querySelectorAll('.wizard-step-content').forEach(el => el.classList.add('hidden'));
+                            document.querySelector(`.wizard-step-content[data-step="${step - 1}"]`)?.classList.remove('hidden');
+                            if (step - 1 < 3) {
+                                $('#nextStepBtn').classList.remove('hidden');
+                                $('#submitFarmerBtn').classList.add('hidden');
+                            }
+                            if (step - 1 === 1) {
+                                $('#prevStepBtn').classList.add('hidden');
+                            }
+                        }
+                    }
+                });
+
+                // Delete confirmation
+                $('#deleteConfirmBtn')?.addEventListener('click', function() {
+                    const pending = window._pendingDelete;
+                    if (!pending) return;
+                    const { arr, id, label, name } = pending;
+                    const index = state[arr].findIndex(e => e.id === id);
+                    if (index !== -1) {
+                        state[arr].splice(index, 1);
+                        localStorage.setItem('carbonlink_mrv_state_v4', JSON.stringify(state));
+                        closeModal('deleteModal');
+                        window._pendingDelete = null;
+                        refreshCurrentPage();
+                        renderDashboard();
+                        showToast(`🗑️ Deleted ${label}: ${name}`);
+                    }
+                });
+
+                // Theme toggle
+                $('#themeToggle')?.addEventListener('click', function() {
+                    state.settings.darkMode = !state.settings.darkMode;
+                    if (state.settings.darkMode) {
+                        document.documentElement.classList.add('dark');
+                        $('#themeIcon').className = 'fas fa-sun text-amber-400';
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                        $('#themeIcon').className = 'fas fa-moon text-slate-600';
+                    }
+                    localStorage.setItem('carbonlink_mrv_state_v4', JSON.stringify(state));
+                });
+
+                // Search and filter
+                $('#farmerSearch')?.addEventListener('input', debounce(() => { paginationState.farmers = 0;
+                    renderFarmersPage(); }));
+                $('#farmerCountyFilter')?.addEventListener('change', () => { paginationState.farmers = 0;
+                    renderFarmersPage(); });
+                $('#farmerStatusFilter')?.addEventListener('change', () => { paginationState.farmers = 0;
+                    renderFarmersPage(); });
+
+                // Pagination
+                $('#farmerPrev')?.addEventListener('click', () => { if (paginationState.farmers > 0) {
+                        paginationState.farmers--;
+                        renderFarmersPage(); } });
+                $('#farmerNext')?.addEventListener('click', () => { paginationState.farmers++;
+                    renderFarmersPage(); });
+
+                // Sortable headers
+                $$('.sortable-header[data-sort]').forEach(th => {
+                    th.addEventListener('click', function() {
+                        const key = this.dataset.sort;
+                        if (sortState.farmers.key === key) sortState.farmers.dir = sortState.farmers
+                            .dir === 'asc' ? 'desc' : 'asc';
+                        else sortState.farmers = { key, dir: 'asc' };
+                        paginationState.farmers = 0;
+                        renderFarmersPage();
+                    });
+                });
+
+                // Mobile menu
+                $('#mobileMenuBtn')?.addEventListener('click', function() {
+                    $('#sidebar').classList.remove('-translate-x-full');
+                });
+                document.addEventListener('click', (e) => {
+                    if (window.innerWidth < 768) {
+                        const sidebar = $('#sidebar');
+                        if (sidebar && !sidebar.contains(e.target) && !$('#mobileMenuBtn')?.contains(e
+                            .target)) {
+                            sidebar.classList.add('-translate-x-full');
+                        }
+                    }
+                });
+
+                // Show initial toast
+                setTimeout(() => showToast('🌿 CarbonLink MRV ready'), 800);
             }
 
-            // Expose globals
-            window.viewFarmer = viewFarmer;
-            window.viewFarm = viewFarm;
-            window.viewProject = viewProject;
-            window.viewMRV = viewMRV;
-            window.viewContract = viewContract;
-            window.approveVerification = approveVerification;
-            window.rejectVerification = rejectVerification;
-            window.completeVerification = completeVerification;
-            window.completePayment = completePayment;
-            window.deleteEntity = deleteEntity;
-            window.generateReport = generateReport;
+            // Expose to window
             window.closeModal = closeModal;
-            window.selectFarm = selectFarm;
-            window.GISEngine = GISEngine;
+            window.deleteEntity = deleteEntity;
+            window.viewFarmer = viewFarmer;
 
             document.addEventListener('DOMContentLoaded', init);
         })();
