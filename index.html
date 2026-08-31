@@ -869,6 +869,58 @@
         </div>
     </div>
 
+    <!-- PAYMENT MODAL -->
+    <div id="paymentModal" class="modal hidden fixed inset-0 z-[70] flex items-center justify-center p-4">
+        <div class="modal-backdrop absolute inset-0" onclick="closeModal('paymentModal')"></div>
+        <div class="relative bg-white dark:bg-charcoal-800 rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 md:p-8">
+            <div class="flex items-center justify-between mb-5">
+                <div><h2 class="text-xl font-bold dark:text-white">New Payment</h2><p class="text-xs text-slate-400">Record a benefit sharing disbursement</p></div>
+                <button onclick="closeModal('paymentModal')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <form id="paymentForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1 dark:text-slate-300">Recipient (Farmer) *</label>
+                    <select id="pFarmerId" required class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm"></select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1 dark:text-slate-300">Payment Type *</label>
+                    <select id="pPaymentType" required class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm">
+                        <option value="Carbon Revenue">Carbon Revenue</option>
+                        <option value="Farmer Incentive">Farmer Incentive</option>
+                        <option value="Community Benefit">Community Benefit</option>
+                        <option value="Project Expense">Project Expense</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1 dark:text-slate-300">Amount (KES) *</label>
+                    <input type="number" id="pAmount" min="1" step="0.01" required class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm" placeholder="Enter amount">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1 dark:text-slate-300">Payment Date</label>
+                    <input type="date" id="pPaymentDate" class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1 dark:text-slate-300">Project</label>
+                    <select id="pProjectId" class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm">
+                        <option value="">None</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1 dark:text-slate-300">Status</label>
+                    <select id="pStatus" class="w-full rounded-xl border border-slate-300 dark:border-charcoal-600 bg-white dark:bg-charcoal-700 px-4 py-2.5 text-sm">
+                        <option value="Completed">Completed</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Failed">Failed</option>
+                    </select>
+                </div>
+                <div class="flex gap-3 pt-2">
+                    <button type="button" onclick="closeModal('paymentModal')" class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 dark:border-charcoal-600 text-sm font-medium hover:bg-slate-50 dark:hover:bg-charcoal-700">Cancel</button>
+                    <button type="submit" class="flex-1 px-4 py-2.5 rounded-xl bg-brand-600 text-white text-sm font-medium hover:bg-brand-700">Record Payment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div id="evidenceModal" class="modal hidden fixed inset-0 z-[70] flex items-center justify-center p-4">
         <div class="modal-backdrop absolute inset-0" onclick="closeModal('evidenceModal')"></div>
         <div class="relative bg-white dark:bg-charcoal-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 md:p-8">
@@ -943,7 +995,7 @@
         /**
          * ================================================================
          * CARBONLINK MRV – ENTERPRISE ULTRA PRO
-         * Realistic Farmer Detail Dashboard with Manual Data Entry Logic
+         * Complete Payment System with Manual Data Entry
          * ================================================================
          */
         (function() {
@@ -1589,6 +1641,7 @@
                             <div class="text-center py-8 text-slate-400">
                                 <i class="fas fa-coins text-3xl mb-2 opacity-30"></i>
                                 <p class="text-sm">No payments for this farmer</p>
+                                <button onclick="openPaymentModal('${farmer.id}')" class="mt-2 text-brand-600 hover:text-brand-700 text-sm font-medium">Record Payment</button>
                             </div>
                         `;
                         return;
@@ -1612,8 +1665,8 @@
                                         <p class="text-xs text-slate-400">${p.paymentType} · ${formatDate(p.paymentDate)}</p>
                                     </div>
                                     <div class="text-right">
-                                        <span class="font-medium ${p.status === 'Completed' ? 'text-emerald-600 dark:text-emerald-400' : 'text-yellow-600'}">${formatCurrency(p.amount)}</span>
-                                        <p class="text-xs ${p.status === 'Completed' ? 'text-emerald-600 dark:text-emerald-400' : 'text-yellow-600'}">${p.status}</p>
+                                        <span class="font-medium ${p.status === 'Completed' ? 'text-emerald-600 dark:text-emerald-400' : p.status === 'Pending' ? 'text-yellow-600' : 'text-red-600'}">${formatCurrency(p.amount)}</span>
+                                        <p class="text-xs ${p.status === 'Completed' ? 'text-emerald-600 dark:text-emerald-400' : p.status === 'Pending' ? 'text-yellow-600' : 'text-red-600'}">${p.status}</p>
                                     </div>
                                 </div>
                             `).join('')}
@@ -1846,6 +1899,112 @@
                     // Refresh the farmer list
                     renderFarmersPage();
                 }
+            };
+
+            // ============================================================
+            // PAYMENT SYSTEM - Manual Entry & Updates
+            // ============================================================
+            
+            // Open payment modal with optional pre-selected farmer
+            function openPaymentModal(farmerId) {
+                // Populate farmer dropdown
+                const farmerSelect = $('#pFarmerId');
+                farmerSelect.innerHTML = state.farmers.map(f => 
+                    `<option value="${f.id}" ${f.id === farmerId ? 'selected' : ''}>${f.firstName} ${f.lastName} (${f.farmerCode})</option>`
+                ).join('');
+                
+                // Populate project dropdown
+                const projectSelect = $('#pProjectId');
+                projectSelect.innerHTML = '<option value="">None</option>' + 
+                    state.projects.map(p => 
+                        `<option value="${p.id}">${p.projectCode} - ${p.name}</option>`
+                    ).join('');
+                
+                // Set default date
+                $('#pPaymentDate').value = new Date().toISOString().split('T')[0];
+                
+                openModal('paymentModal');
+            }
+            
+            // Complete a pending payment
+            window.completePayment = function(id) {
+                const payment = state.payments.find(p => p.id === id);
+                if (!payment) {
+                    showToast('❌ Payment not found');
+                    return;
+                }
+                
+                if (payment.status === 'Completed') {
+                    showToast('ℹ️ Payment already completed');
+                    return;
+                }
+                
+                // Update payment status
+                payment.status = 'Completed';
+                payment.transactionReference = `TXN-${randomInt(100000, 999999)}`;
+                payment.updatedAt = new Date().toISOString();
+                
+                // Add to audit
+                state.auditRecords.unshift({
+                    id: generateId('AUD', (state.auditRecords || []).length + 1),
+                    timestamp: new Date().toISOString(),
+                    userName: state.currentUser.name || 'System',
+                    action: 'PAYMENT_COMPLETE',
+                    module: 'Payments',
+                    entityId: payment.id,
+                    description: `Payment ${payment.paymentReference} completed for ${payment.recipientName}`,
+                    severity: 'low'
+                });
+                
+                StorageService.save(state);
+                refreshAll();
+                showToast(`✅ Payment ${payment.paymentReference} completed successfully`);
+            };
+            
+            // Delete a payment (with undo)
+            let deletedPayment = null;
+            
+            window.deletePayment = function(id) {
+                const payment = state.payments.find(p => p.id === id);
+                if (!payment) {
+                    showToast('❌ Payment not found');
+                    return;
+                }
+                
+                // Store for undo
+                deletedPayment = { ...payment };
+                
+                // Remove from state
+                const index = state.payments.findIndex(p => p.id === id);
+                if (index !== -1) {
+                    state.payments.splice(index, 1);
+                }
+                
+                // Add to audit
+                state.auditRecords.unshift({
+                    id: generateId('AUD', (state.auditRecords || []).length + 1),
+                    timestamp: new Date().toISOString(),
+                    userName: state.currentUser.name || 'System',
+                    action: 'DELETE',
+                    module: 'Payments',
+                    entityId: payment.id,
+                    description: `Deleted payment ${payment.paymentReference} for ${payment.recipientName}`,
+                    severity: 'medium'
+                });
+                
+                StorageService.save(state);
+                refreshAll();
+                
+                // Show toast with undo option
+                showToast(`🗑️ Payment ${payment.paymentReference} deleted`, () => {
+                    if (deletedPayment) {
+                        state.payments.push(deletedPayment);
+                        StorageService.save(state);
+                        refreshAll();
+                        showToast(`↩️ Payment ${deletedPayment.paymentReference} restored`);
+                        deletedPayment = null;
+                    }
+                });
             };
 
             // ============================================================
@@ -2198,7 +2357,8 @@
                 const search = ($('#paymentSearch')?.value || '').toLowerCase();
                 const statusFilter = $('#paymentStatusFilter')?.value || 'all';
                 let filtered = (state.payments || []).filter(p => {
-                    const matchSearch = !search || p.paymentReference.toLowerCase().includes(search);
+                    const matchSearch = !search || p.paymentReference.toLowerCase().includes(search) || p
+                        .recipientName.toLowerCase().includes(search);
                     const matchStatus = statusFilter === 'all' || p.status === statusFilter;
                     return matchSearch && matchStatus;
                 });
@@ -2211,6 +2371,7 @@
                     <div class="bg-white dark:bg-charcoal-800 rounded-xl p-4 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center"><p class="text-xs text-slate-400">Total Volume</p><p class="text-xl font-bold dark:text-white">${formatCurrency(totals.total)}</p></div>
                     <div class="bg-white dark:bg-charcoal-800 rounded-xl p-4 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center"><p class="text-xs text-slate-400">Completed</p><p class="text-xl font-bold text-emerald-600 dark:text-emerald-400">${formatCurrency(totals.completed)}</p></div>
                     <div class="bg-white dark:bg-charcoal-800 rounded-xl p-4 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center"><p class="text-xs text-slate-400">Pending</p><p class="text-xl font-bold text-amber-600 dark:text-amber-400">${formatCurrency(totals.pending)}</p></div>
+                    <div class="bg-white dark:bg-charcoal-800 rounded-xl p-4 border border-slate-200/80 dark:border-charcoal-700/80 shadow-sm text-center"><p class="text-xs text-slate-400">Total Payments</p><p class="text-xl font-bold dark:text-white">${state.payments.length}</p></div>
                 `;
                 if (filtered.length === 0) {
                     tbody.innerHTML =
@@ -2230,8 +2391,9 @@
                             <td class="px-4 py-3 hidden sm:table-cell">${p.paymentType}</td>
                             <td class="px-4 py-3 hidden md:table-cell">${formatCurrency(p.amount)}</td>
                             <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs ${statusColor}">${p.status}</span></td>
-                            <td class="px-4 py-3 text-right">
+                            <td class="px-4 py-3 text-right space-x-2">
                                 ${p.status === 'Pending' ? `<button onclick="completePayment('${p.id}')" class="text-emerald-600 hover:text-emerald-700 text-xs"><i class="fas fa-check mr-1"></i>Complete</button>` : ''}
+                                <button onclick="deletePayment('${p.id}')" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-trash mr-1"></i>Delete</button>
                             </td>
                         </tr>`;
                 }).join('');
@@ -2341,22 +2503,16 @@
                 showToast('✅ Verification approved');
             };
 
-            window.completePayment = function(id) {
-                const payment = state.payments.find(p => p.id === id);
-                if (!payment) return;
-                payment.status = 'Completed';
-                payment.transactionReference = `TXN-${randomInt(100000, 999999)}`;
-                StorageService.save(state);
-                refreshAll();
-                showToast(`💰 Payment ${payment.paymentReference} completed`);
-            };
-
+            window.completePayment = completePayment;
+            window.deletePayment = deletePayment;
+            
             window.generateReport = function(type) {
                 showToast(`📄 ${type.charAt(0).toUpperCase() + type.slice(1)} report generated`);
             };
 
             // Expose FarmerDetailEditor
             window.FarmerDetailEditor = FarmerDetailEditor;
+            window.openPaymentModal = openPaymentModal;
 
             // ============================================================
             // NAVIGATION & RENDER HELPERS
@@ -2785,14 +2941,77 @@
                     renderMRVPage(); });
 
                 // Contract page
-                $('#addContractBtn')?.addEventListener('click', () => showToast('🏗️ Contract creation form coming soon'));
                 $('#contractSearch')?.addEventListener('input', debounce(renderContractsPage));
                 $('#contractStatusFilter')?.addEventListener('change', renderContractsPage);
 
-                // Payment page
-                $('#addPaymentBtn')?.addEventListener('click', () => showToast('🏗️ Payment creation form coming soon'));
+                // Payment page - FIXED
+                $('#addPaymentBtn')?.addEventListener('click', () => openPaymentModal(null));
                 $('#paymentSearch')?.addEventListener('input', debounce(renderPaymentsPage));
                 $('#paymentStatusFilter')?.addEventListener('change', renderPaymentsPage);
+
+                // Payment Form Submit
+                $('#paymentForm')?.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const farmerId = $('#pFarmerId').value;
+                    const paymentType = $('#pPaymentType').value;
+                    const amount = parseFloat($('#pAmount').value);
+                    const paymentDate = $('#pPaymentDate').value || new Date().toISOString().split('T')[0];
+                    const projectId = $('#pProjectId').value || null;
+                    const status = $('#pStatus').value;
+
+                    if (!farmerId || !paymentType || !amount || amount <= 0) {
+                        showToast('⚠️ Please fill all required fields with valid values');
+                        return;
+                    }
+
+                    const farmer = state.farmers.find(f => f.id === farmerId);
+                    if (!farmer) {
+                        showToast('❌ Farmer not found');
+                        return;
+                    }
+
+                    const project = projectId ? state.projects.find(p => p.id === projectId) : null;
+                    
+                    // Create new payment
+                    const payment = {
+                        id: generateId('PAY', state.payments.length + 1),
+                        paymentReference: generateId('PAY', state.payments.length + 1),
+                        farmerId: farmer.id,
+                        recipientName: `${farmer.firstName} ${farmer.lastName}`,
+                        projectId: projectId,
+                        projectName: project ? project.name : 'N/A',
+                        contractId: null,
+                        amount: amount,
+                        currency: 'KES',
+                        paymentType: paymentType,
+                        paymentDate: paymentDate,
+                        status: status,
+                        transactionReference: status === 'Completed' ? `TXN-${randomInt(100000, 999999)}` : null,
+                        failureReason: status === 'Failed' ? 'Manual entry' : null,
+                        createdAt: new Date().toISOString(),
+                        updatedAt: new Date().toISOString()
+                    };
+
+                    state.payments.push(payment);
+                    
+                    // Add to audit
+                    state.auditRecords.unshift({
+                        id: generateId('AUD', (state.auditRecords || []).length + 1),
+                        timestamp: new Date().toISOString(),
+                        userName: state.currentUser.name || 'System',
+                        action: 'CREATE',
+                        module: 'Payments',
+                        entityId: payment.id,
+                        description: `Created payment ${payment.paymentReference} for ${payment.recipientName} (${formatCurrency(payment.amount)})`,
+                        severity: 'low'
+                    });
+
+                    StorageService.save(state);
+                    closeModal('paymentModal');
+                    this.reset();
+                    refreshAll();
+                    showToast(`✅ Payment ${payment.paymentReference} recorded successfully`);
+                });
 
                 // Audit page
                 $('#auditSearch')?.addEventListener('input', debounce(renderAuditPage));
@@ -3062,10 +3281,12 @@
             window.viewContract = viewContract;
             window.approveVerification = approveVerification;
             window.completePayment = completePayment;
+            window.deletePayment = deletePayment;
             window.generateReport = generateReport;
             window.closeModal = closeModal;
             window.showToast = showToast;
             window.FarmerDetailEditor = FarmerDetailEditor;
+            window.openPaymentModal = openPaymentModal;
 
             document.addEventListener('DOMContentLoaded', init);
         })();
